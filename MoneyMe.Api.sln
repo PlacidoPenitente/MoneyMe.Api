@@ -3,9 +3,19 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.2.32630.192
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MoneyMe.Api", "MoneyMe.Api\MoneyMe.Api.csproj", "{82E4F1E3-0CCB-4A08-92CE-9F48589F31C3}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MoneyMe.Api", "MoneyMe.Api\MoneyMe.Api.csproj", "{82E4F1E3-0CCB-4A08-92CE-9F48589F31C3}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MoneyMe.Domain", "MoneyMe.Domain\MoneyMe.Domain.csproj", "{3F2AD2B7-EF0C-4EAE-B1AF-59AE82C7D1CC}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MoneyMe.Domain", "MoneyMe.Domain\MoneyMe.Domain.csproj", "{3F2AD2B7-EF0C-4EAE-B1AF-59AE82C7D1CC}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MoneyMe.Application", "MoneyMe.Application\MoneyMe.Application.csproj", "{1AF23A19-88C4-4F38-83BF-19C4815FD6C6}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MoneyMe.Application.Contracts", "MoneyMe.Application.Contracts\MoneyMe.Application.Contracts.csproj", "{F74226E9-96B4-4BCF-84AC-FABB43FAB568}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MoneyMe.Tests", "MoneyMe.Tests\MoneyMe.Tests.csproj", "{FE7BB2CF-36AA-4168-94AB-5D52C6D3AC70}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MoneyMe.Domain.Shared", "MoneyMe.Domain.Shared\MoneyMe.Domain.Shared.csproj", "{D58323B3-3AAF-41FE-B7F0-9512113E31E8}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MoneyMe.Database", "MoneyMe.Database\MoneyMe.Database.csproj", "{2A2D12C3-B539-474F-9C6D-6F13A89158D6}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -21,6 +31,26 @@ Global
 		{3F2AD2B7-EF0C-4EAE-B1AF-59AE82C7D1CC}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{3F2AD2B7-EF0C-4EAE-B1AF-59AE82C7D1CC}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{3F2AD2B7-EF0C-4EAE-B1AF-59AE82C7D1CC}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1AF23A19-88C4-4F38-83BF-19C4815FD6C6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1AF23A19-88C4-4F38-83BF-19C4815FD6C6}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1AF23A19-88C4-4F38-83BF-19C4815FD6C6}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1AF23A19-88C4-4F38-83BF-19C4815FD6C6}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F74226E9-96B4-4BCF-84AC-FABB43FAB568}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F74226E9-96B4-4BCF-84AC-FABB43FAB568}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F74226E9-96B4-4BCF-84AC-FABB43FAB568}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F74226E9-96B4-4BCF-84AC-FABB43FAB568}.Release|Any CPU.Build.0 = Release|Any CPU
+		{FE7BB2CF-36AA-4168-94AB-5D52C6D3AC70}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{FE7BB2CF-36AA-4168-94AB-5D52C6D3AC70}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{FE7BB2CF-36AA-4168-94AB-5D52C6D3AC70}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{FE7BB2CF-36AA-4168-94AB-5D52C6D3AC70}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D58323B3-3AAF-41FE-B7F0-9512113E31E8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D58323B3-3AAF-41FE-B7F0-9512113E31E8}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D58323B3-3AAF-41FE-B7F0-9512113E31E8}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D58323B3-3AAF-41FE-B7F0-9512113E31E8}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2A2D12C3-B539-474F-9C6D-6F13A89158D6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2A2D12C3-B539-474F-9C6D-6F13A89158D6}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2A2D12C3-B539-474F-9C6D-6F13A89158D6}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2A2D12C3-B539-474F-9C6D-6F13A89158D6}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

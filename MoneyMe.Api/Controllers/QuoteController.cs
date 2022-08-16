@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using MoneyMe.Application.Contracts;
 
 namespace MoneyMe.Api.Controllers
 {
@@ -6,8 +7,15 @@ namespace MoneyMe.Api.Controllers
     [Route("api/quote")]
     public class QuoteController : ControllerBase
     {
-        [HttpGet]
-        public IActionResult GetQuote()
+        private readonly IQuoteService _quoteService;
+
+        public QuoteController(IQuoteService quoteService)
+        {
+            _quoteService = quoteService;
+        }
+
+        [HttpPost]
+        public IActionResult RequestQuote()
         {
             return Ok("hello");
         }
