@@ -30,6 +30,7 @@ namespace MoneyMe.Api
             services.AddControllers();
 
             services.AddSingleton<IQuoteService, QuoteService>();
+            services.AddSingleton<ILoanService, LoanService>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

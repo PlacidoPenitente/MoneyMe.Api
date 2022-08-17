@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace MoneyMe.Database
+namespace MoneyMe.Infrastructure
 {
     public class Class1
     {

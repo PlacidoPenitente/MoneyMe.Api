@@ -2,7 +2,7 @@
 
 namespace MoneyMe.Domain.ApplicationAggregate
 {
-    public class Application : IAggregate<Guid>
+    public class Loan : IAggregate<Guid>
     {
         public Guid Id { get; }
         public DateTime DateAdded { get; }
