@@ -2,7 +2,13 @@
 {
     public class Term
     {
-        public int Month { get; }
-        public decimal Interest { get; }
+        public Term(int period, decimal interest)
+        {
+            Period = period;
+            MonthlyAmortization = interest;
+        }
+
+        public int Period { get; }
+        public decimal MonthlyAmortization { get; }
     }
 }
