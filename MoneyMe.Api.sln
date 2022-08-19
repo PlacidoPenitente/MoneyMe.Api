@@ -17,6 +17,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MoneyMe.Domain.Shared", "Mo
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MoneyMe.Infrastructure", "MoneyMe.Database\MoneyMe.Infrastructure.csproj", "{2A2D12C3-B539-474F-9C6D-6F13A89158D6}"
 EndProject
+Project("{54A90642-561A-4BB1-A94E-469ADEE60C69}") = "MoneyMe", "MoneyMe\MoneyMe.esproj", "{1C34256D-8EAA-4B80-9423-EE6DE224E94A}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -51,6 +53,12 @@ Global
 		{2A2D12C3-B539-474F-9C6D-6F13A89158D6}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{2A2D12C3-B539-474F-9C6D-6F13A89158D6}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{2A2D12C3-B539-474F-9C6D-6F13A89158D6}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1C34256D-8EAA-4B80-9423-EE6DE224E94A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1C34256D-8EAA-4B80-9423-EE6DE224E94A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1C34256D-8EAA-4B80-9423-EE6DE224E94A}.Debug|Any CPU.Deploy.0 = Debug|Any CPU
+		{1C34256D-8EAA-4B80-9423-EE6DE224E94A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1C34256D-8EAA-4B80-9423-EE6DE224E94A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1C34256D-8EAA-4B80-9423-EE6DE224E94A}.Release|Any CPU.Deploy.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

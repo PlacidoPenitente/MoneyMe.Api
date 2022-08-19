@@ -31,6 +31,15 @@ namespace MoneyMe.Api
 
             services.AddSingleton<IQuoteService, QuoteService>();
             services.AddSingleton<ILoanService, LoanService>();
+
+            services.AddCors(options =>
+            {
+                options.AddPolicy(name: "trakportal",
+                                  policy =>
+                                  {
+                                      policy.WithOrigins("http://localhost:4200").AllowAnyMethod().AllowAnyHeader().AllowCredentials();
+                                  });
+            });
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -40,6 +49,8 @@ namespace MoneyMe.Api
             {
                 app.UseDeveloperExceptionPage();
             }
+
+            app.UseCors("trakportal");
 
             app.UseHttpsRedirection();
 

@@ -8,14 +8,9 @@ namespace MoneyMe.Application
 {
     public class QuoteService : IQuoteService
     {
-        public QuoteService(CustomerFactory customerFactory)
+        public Task<string> RegisterQuote(QuoteRequestDto quoteDto)
         {
-
-        }
-
-        public Task<string> RequestQuote(QuoteRequestDto quoteDto)
-        {
-
+            return null;
         }
 
         public Task<string> RequestQuote(Guid quoteId)

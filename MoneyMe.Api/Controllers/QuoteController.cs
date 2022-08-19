@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using MoneyMe.Api.Requests;
 using MoneyMe.Application.Contracts;
 
 namespace MoneyMe.Api.Controllers
@@ -14,10 +15,10 @@ namespace MoneyMe.Api.Controllers
             _quoteService = quoteService;
         }
 
-        [HttpPost]
-        public IActionResult RequestQuote()
+        [HttpPost("request")]
+        public IActionResult RequestQuote([FromBody] QuoteRequest quoteRequest)
         {
-            return Ok("hello");
+            return Ok();
         }
     }
 }
