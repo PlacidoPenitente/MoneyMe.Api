@@ -5,10 +5,12 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="Crypto.AES" Version="1.0.4" />
     <PackageReference Include="Microsoft.EntityFrameworkCore" Version="3.1.28" />
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\MoneyMe.Application.Contracts\MoneyMe.Application.Contracts.csproj" />
     <ProjectReference Include="..\MoneyMe.Domain.Shared\MoneyMe.Domain.Shared.csproj" />
   </ItemGroup>
 

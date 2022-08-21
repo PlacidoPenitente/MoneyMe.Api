@@ -7,8 +7,6 @@ namespace MoneyMe.Domain.QuoteAggregate
 {
     public class Quote : IAggregate<Guid>
     {
-        private readonly HashSet<Fee> _fees;
-
         public Quote(
             Guid id,
             DateTime dateAdded,
@@ -28,11 +26,10 @@ namespace MoneyMe.Domain.QuoteAggregate
         public DateTime DateModified { get; private set; }
         public Guid CustomerId { get; private set; }
         public decimal LoanAmount { get; private set; }
-
         public int Terms { get; private set; }
         public decimal MonthlyPayment { get; private set; }
 
-        public void CalculateMonthlyPayment(Product product)
+        public void ApplyProductTerms(Product product)
         {
             Terms = product.Terms;
             MonthlyPayment = product.CalculateMonthlyPayment(LoanAmount);

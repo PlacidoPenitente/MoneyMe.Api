@@ -3,7 +3,7 @@ using MoneyMe.Domain.Repositories;
 using System;
 using System.Threading.Tasks;
 
-namespace MoneyMe.Infrastructure
+namespace MoneyMe.Infrastructure.Repositories
 {
     public class QuoteRepository : IQuoteRepository
     {
@@ -14,7 +14,7 @@ namespace MoneyMe.Infrastructure
 
         public async Task<Quote> GetAsync(Guid quoteId)
         {
-            var quote = new Quote(quoteId, DateTime.UtcNow, DateTime.UtcNow, Guid.NewGuid(), 5000, 6);
+            var quote = new Quote(quoteId, DateTime.UtcNow, DateTime.UtcNow, Guid.NewGuid(), 5000);
 
             return await Task.FromResult(quote);
         }

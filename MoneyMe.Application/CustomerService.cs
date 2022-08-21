@@ -20,7 +20,12 @@ namespace MoneyMe.Application
             _customerRepository = customerRepository;
         }
 
-        public async Task<CustomerDto> RegisterCustomer(CustomerDto customerDto)
+        public CustomerDto FindCustomerByEmail(string email)
+        {
+            return new CustomerDto();
+        }
+
+        public async Task RegisterCustomer(CustomerDto customerDto)
         {
             var customer = _customerFactory.Create(
                 customerDto.Title,
@@ -32,16 +37,12 @@ namespace MoneyMe.Application
 
             await _customerRepository.Add(customer);
 
-            return new CustomerDto
-            {
-                Id = customerDto.Id,
-                Title = customerDto.Title,
-                FirstName = customerDto.FirstName,
-                LastName = customerDto.LastName,
-                DateOfBirth = customerDto.DateOfBirth,
-                Mobile = customerDto.Mobile,
-                Email = customerDto.Email
-            };
+            customerDto.Id = customer.Id;
+        }
+
+        Task<CustomerDto> ICustomerService.RegisterCustomer(CustomerDto customerDto)
+        {
+            throw new NotImplementedException();
         }
     }
 }

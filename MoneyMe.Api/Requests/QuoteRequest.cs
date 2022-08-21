@@ -5,7 +5,7 @@ namespace MoneyMe.Api.Requests
     public class QuoteRequest
     {
         public decimal AmountRequired { get; set; }
-        public int Term { get; set; }
+        public int Terms { get; set; }
         public string Title { get; set; }
         public string FirstName { get; set; }
         public string LastName { get; set; }

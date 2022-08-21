@@ -6,8 +6,6 @@ namespace MoneyMe.Application.Contracts
 {
     public interface IQuoteService
     {
-        public Task<string> GenerateQuoteRedirectUrl(PartialQuoteDto quoteDto);
-        public Task<PartialQuoteDto> ContinueQuoteAsync(Guid quoteId);
-        Task<PartialQuoteDto> CalculateAsync(Guid quoteId, Guid productId);
+        Task<QuoteDto> CalculateAsync(PartialQuoteDto partialQuoteDto);
     }
 }

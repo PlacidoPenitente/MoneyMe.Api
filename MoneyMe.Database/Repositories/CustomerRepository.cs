@@ -2,7 +2,7 @@
 using MoneyMe.Domain.Repositories;
 using System.Threading.Tasks;
 
-namespace MoneyMe.Infrastructure
+namespace MoneyMe.Infrastructure.Repositories
 {
     public class CustomerRepository : ICustomerRepository
     {

@@ -10,7 +10,8 @@ using MoneyMe.Application;
 using MoneyMe.Application.Contracts;
 using MoneyMe.Domain.Factories;
 using MoneyMe.Domain.Repositories;
-using MoneyMe.Infrastructure;
+using MoneyMe.Infrastructure.Repositories;
+using MoneyMe.Infrastructure.Services;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -32,6 +33,9 @@ namespace MoneyMe.Api
         {
             services.AddControllers();
 
+            services.AddSingleton<IEmailService, EmailService>();
+            services.AddSingleton<ISecurityService, SecurityService>();
+
             services.AddSingleton<IQuoteFactory, QuoteFactory>();
             services.AddSingleton<ICustomerFactory, CustomerFactory>();
 
@@ -42,9 +46,10 @@ namespace MoneyMe.Api
             services.AddSingleton<IQuoteService, QuoteService>();
             services.AddSingleton<ILoanService, LoanService>();
 
+
             services.AddCors(options =>
             {
-                options.AddPolicy(name: "trakportal",
+                options.AddPolicy(name: "moneyme",
                                   policy =>
                                   {
                                       policy.WithOrigins("http://localhost:4200").AllowAnyMethod().AllowAnyHeader().AllowCredentials();
@@ -60,7 +65,7 @@ namespace MoneyMe.Api
                 app.UseDeveloperExceptionPage();
             }
 
-            app.UseCors("trakportal");
+            app.UseCors("moneyme");
 
             app.UseHttpsRedirection();
 
