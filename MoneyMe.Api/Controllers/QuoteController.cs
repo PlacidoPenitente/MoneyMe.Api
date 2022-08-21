@@ -34,16 +34,18 @@ namespace MoneyMe.Api.Controllers
                 Email = quoteRequest.Email
             };
 
+            var existingCustomer = _customerService.FindCustomerByEmail(quoteRequest.Email);
+
             var registeredCustomer = await _customerService.RegisterCustomer(customer);
 
-            var quoteDto = new QuoteDto
+            var partialQuoteDto = new PartialQuoteDto
             {
                 AmountRequired = quoteRequest.AmountRequired,
                 Terms = quoteRequest.Term,
                 CustomerId = registeredCustomer.Id
             };
 
-            var redirectUrl = await _quoteService.RequestQuoteAsync(quoteDto);
+            var redirectUrl = await _quoteService.GenerateQuoteRedirectUrl(partialQuoteDto);
 
             return Ok(redirectUrl);
         }

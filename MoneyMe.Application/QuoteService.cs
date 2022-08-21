@@ -20,24 +20,24 @@ namespace MoneyMe.Application
             _productRepository = productRepository;
         }
 
-        public async Task<string> RequestQuoteAsync(QuoteDto quoteDto)
+        public async Task<string> GenerateQuoteRedirectUrl(PartialQuoteDto partialQuoteDto)
         {
-            var product = await _productRepository.FindByNumberOfTerms(quoteDto.Terms);
+            var product = await _productRepository.FindByNumberOfTerms(partialQuoteDto.Terms);
 
-            var quote = _quoteFactory.Create(quoteDto.CustomerId, quoteDto.AmountRequired);
+            var quote = _quoteFactory.Create(partialQuoteDto.CustomerId, partialQuoteDto.AmountRequired);
 
-            quote.SelectProduct(product);
+            quote.CalculateMonthlyPayment(product);
 
             await _quoteRepository.AddAsync(quote);
 
             return await Task.FromResult($"http://localhost:5001/api/quote/continue/{quote.Id}");
         }
 
-        public async Task<QuoteDto> ContinueQuoteAsync(Guid quoteId)
+        public async Task<PartialQuoteDto> ContinueQuoteAsync(Guid quoteId)
         {
             var quote = await _quoteRepository.GetAsync(quoteId);
 
-            return new QuoteDto
+            return new PartialQuoteDto
             {
                 Id = quote.Id,
                 AmountRequired = quote.LoanAmount,
@@ -46,14 +46,14 @@ namespace MoneyMe.Application
             };
         }
 
-        public async Task<QuoteDto> CalculateAsync(Guid quoteId, Guid productId)
+        public async Task<PartialQuoteDto> CalculateAsync(Guid quoteId, Guid productId)
         {
             var quote = await _quoteRepository.GetAsync(quoteId);
             var product = await _productRepository.GetAsync(productId);
 
-            quote.SelectProduct(product);
+            quote.CalculateMonthlyPayment(product);
 
-            return new QuoteDto
+            return new PartialQuoteDto
             {
                 Id = quote.Id,
                 AmountRequired = quote.LoanAmount,

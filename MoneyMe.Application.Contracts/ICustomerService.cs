@@ -7,6 +7,7 @@ namespace MoneyMe.Application.Contracts
 {
     public interface ICustomerService
     {
+        CustomerDto FindCustomerByEmail(string email);
         Task<CustomerDto> RegisterCustomer(CustomerDto customerDto);
     }
 }

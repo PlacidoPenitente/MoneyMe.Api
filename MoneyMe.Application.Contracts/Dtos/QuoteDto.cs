@@ -2,7 +2,7 @@
 
 namespace MoneyMe.Application.Contracts.Dtos
 {
-    public class QuoteDto
+    public class PartialQuoteDto
     {
         public Guid Id { get; set; }
         public decimal AmountRequired { get; set; }

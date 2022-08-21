@@ -4,8 +4,4 @@
     <TargetFramework>netcoreapp3.1</TargetFramework>
   </PropertyGroup>
 
-  <ItemGroup>
-    <ProjectReference Include="..\MoneyMe.Domain\MoneyMe.Domain.csproj" />
-  </ItemGroup>
-
 </Project>

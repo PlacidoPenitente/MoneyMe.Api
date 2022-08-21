@@ -1,5 +1,8 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using Microsoft.VisualBasic;
+using MoneyMe.Domain.Shared;
 
 namespace MoneyMe.Domain.ProductAggregate
 {
@@ -10,14 +13,14 @@ namespace MoneyMe.Domain.ProductAggregate
             DateTime dateAdded,
             DateTime dateModified,
             string name,
-            decimal interestPerAnnum,
+            decimal interestRate,
             int terms)
         {
             Id = id;
             DateAdded = dateAdded;
             DateModified = dateModified;
             Name = name;
-            InterestRate = interestPerAnnum;
+            InterestRate = interestRate;
             Terms = terms;
         }
 
@@ -28,9 +31,10 @@ namespace MoneyMe.Domain.ProductAggregate
         public decimal InterestRate { get; }
         public int Terms { get; }
 
-        public decimal Calculate(decimal loanAmount)
+        public decimal CalculateMonthlyPayment(decimal loanAmount)
         {
             var pmt = Financial.Pmt(decimal.ToDouble(InterestRate) / 12, Terms, decimal.ToDouble(loanAmount));
+
             return Convert.ToDecimal(pmt);
         }
     }
