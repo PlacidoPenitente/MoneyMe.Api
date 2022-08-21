@@ -10,24 +10,27 @@ namespace MoneyMe.Domain.ProductAggregate
             DateTime dateAdded,
             DateTime dateModified,
             string name,
-            decimal interestPerAnnum)
+            decimal interestPerAnnum,
+            int terms)
         {
             Id = id;
             DateAdded = dateAdded;
             DateModified = dateModified;
             Name = name;
-            InterestPerAnnum = interestPerAnnum;
+            InterestRate = interestPerAnnum;
+            Terms = terms;
         }
 
         public Guid Id { get; }
         public DateTime DateAdded { get; }
         public DateTime DateModified { get; }
         public string Name { get; }
-        public decimal InterestPerAnnum { get; }
+        public decimal InterestRate { get; }
+        public int Terms { get; }
 
-        internal decimal Calculate(decimal loanAmount, int term)
+        public decimal Calculate(decimal loanAmount)
         {
-            var pmt = Financial.Pmt(decimal.ToDouble(InterestPerAnnum) / 12, term, decimal.ToDouble(loanAmount));
+            var pmt = Financial.Pmt(decimal.ToDouble(InterestRate) / 12, Terms, decimal.ToDouble(loanAmount));
             return Convert.ToDecimal(pmt);
         }
     }

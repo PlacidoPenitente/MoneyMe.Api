@@ -5,6 +5,7 @@ namespace MoneyMe.Domain.Repositories
 {
     public interface ICustomerRepository
     {
-        public Task<Customer> GetCustomerByName();
+        Task Add(Customer customer);
+        Task<Customer> GetCustomerByName();
     }
 }

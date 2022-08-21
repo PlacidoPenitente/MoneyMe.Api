@@ -8,6 +8,9 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using MoneyMe.Application;
 using MoneyMe.Application.Contracts;
+using MoneyMe.Domain.Factories;
+using MoneyMe.Domain.Repositories;
+using MoneyMe.Infrastructure;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -29,6 +32,13 @@ namespace MoneyMe.Api
         {
             services.AddControllers();
 
+            services.AddSingleton<IQuoteFactory, QuoteFactory>();
+            services.AddSingleton<ICustomerFactory, CustomerFactory>();
+
+            services.AddSingleton<IQuoteRepository, QuoteRepository>();
+            services.AddSingleton<ICustomerRepository, CustomerRepository>();
+
+            services.AddSingleton<ICustomerService, CustomerService>();
             services.AddSingleton<IQuoteService, QuoteService>();
             services.AddSingleton<ILoanService, LoanService>();
 

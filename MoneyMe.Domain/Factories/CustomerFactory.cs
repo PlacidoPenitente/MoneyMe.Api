@@ -1,7 +1,28 @@
-﻿namespace MoneyMe.Domain.Factories
-{
-    public class CustomerFactory
-    {
+﻿using MoneyMe.Domain.CustomerAggregate;
+using System;
 
+namespace MoneyMe.Domain.Factories
+{
+    public class CustomerFactory : ICustomerFactory
+    {
+        public Customer Create(
+            string title,
+            string firstName,
+            string lastName,
+            DateTime dateOfBirth,
+            string mobileNumber,
+            string emailAddress)
+        {
+            return new Customer(
+                Guid.NewGuid(),
+                DateTime.UtcNow,
+                DateTime.UtcNow,
+                title,
+                firstName,
+                lastName,
+                dateOfBirth,
+                mobileNumber,
+                emailAddress);
+        }
     }
 }

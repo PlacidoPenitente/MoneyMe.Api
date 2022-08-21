@@ -7,8 +7,7 @@ namespace MoneyMe.Domain.ApplicationAggregate
         public Guid Id { get; }
         public DateTime DateAdded { get; }
         public DateTime DateModified { get; }
-        public decimal FinanceAmount { get; }
-        public int Repayments { get; }
+        public Guid QuoteId { get; }
         public Guid CustomerId { get; }
     }
 }
