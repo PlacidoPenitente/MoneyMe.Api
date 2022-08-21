@@ -1,5 +1,7 @@
-﻿using MoneyMe.Domain.QuoteAggregate;
+﻿using Microsoft.EntityFrameworkCore;
+using MoneyMe.Domain.QuoteAggregate;
 using MoneyMe.Domain.Repositories;
+using MoneyMe.Infrastructure.Database;
 using System;
 using System.Threading.Tasks;
 
@@ -7,16 +9,29 @@ namespace MoneyMe.Infrastructure.Repositories
 {
     public class QuoteRepository : IQuoteRepository
     {
-        public Task AddAsync(Quote quote)
+        private readonly ApplicationDbContext _context;
+
+        public QuoteRepository(ApplicationDbContext context)
         {
-            return Task.CompletedTask;
+            _context = context;
         }
 
-        public async Task<Quote> GetAsync(Guid quoteId)
+        public async Task AddAsync(Quote quote)
         {
-            var quote = new Quote(quoteId, DateTime.UtcNow, DateTime.UtcNow, Guid.NewGuid(), 5000);
+            await _context.AddAsync(quote);
+        }
 
-            return await Task.FromResult(quote);
+        public async Task<Quote> GetAsync(Guid id)
+        {
+            return await _context.Quotes.SingleOrDefaultAsync(quote => quote.Id == id);
+        }
+
+        public async Task RemoveAsync(Guid id)
+        {
+            if (id == null) return;
+            var quoteToBeRemoved = await GetAsync(id);
+
+            _context.Remove(quoteToBeRemoved);
         }
     }
 }

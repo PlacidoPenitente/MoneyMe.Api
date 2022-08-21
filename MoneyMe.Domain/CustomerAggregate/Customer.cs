@@ -4,6 +4,11 @@ namespace MoneyMe.Domain.CustomerAggregate
 {
     public class Customer : IAggregate<Guid>
     {
+        private Customer()
+        {
+
+        }
+
         public Customer(
             Guid id,
             DateTime dateAdded,

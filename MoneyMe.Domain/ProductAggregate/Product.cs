@@ -8,6 +8,11 @@ namespace MoneyMe.Domain.ProductAggregate
 {
     public class Product : IAggregate<Guid>
     {
+        private Product()
+        {
+
+        }
+
         public Product(
             Guid id,
             DateTime dateAdded,

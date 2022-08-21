@@ -1,5 +1,7 @@
-﻿using MoneyMe.Domain.ProductAggregate;
+﻿using Microsoft.EntityFrameworkCore;
+using MoneyMe.Domain.ProductAggregate;
 using MoneyMe.Domain.Repositories;
+using MoneyMe.Infrastructure.Database;
 using System;
 using System.Threading.Tasks;
 
@@ -7,14 +9,34 @@ namespace MoneyMe.Infrastructure.Repositories
 {
     public class ProductRepository : IProductRepository
     {
-        public Task<Product> FindByNumberOfTerms(int terms)
+        private readonly ApplicationDbContext _context;
+
+        public ProductRepository(ApplicationDbContext context)
         {
-            return Task.FromResult(new Product(Guid.NewGuid(), DateTime.UtcNow, DateTime.UtcNow, "Product", 0.2m, terms));
+            _context = context;
         }
 
-        public Task<Product> GetAsync(Guid id)
+        public async Task AddAsync(Product product)
         {
-            return Task.FromResult(new Product(Guid.NewGuid(), DateTime.UtcNow, DateTime.UtcNow, "Product", 0.2m, 6));
+            await _context.AddAsync(product);
+        }
+
+        public async Task<Product> FindByNumberOfTerms(int terms)
+        {
+            return await _context.Products.SingleOrDefaultAsync(product => product.Terms == terms);
+        }
+
+        public async Task<Product> GetAsync(Guid id)
+        {
+            return await _context.Products.SingleOrDefaultAsync(product => product.Id == id);
+        }
+
+        public async Task RemoveAsync(Guid id)
+        {
+            if (id == null) return;
+            var productToBeRemoved = await GetAsync(id);
+
+            _context.Remove(productToBeRemoved);
         }
     }
 }

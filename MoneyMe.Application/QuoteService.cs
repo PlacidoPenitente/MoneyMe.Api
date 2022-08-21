@@ -1,5 +1,6 @@
 ﻿using MoneyMe.Application.Contracts;
 using MoneyMe.Application.Contracts.Dtos;
+using MoneyMe.Domain;
 using MoneyMe.Domain.Factories;
 using MoneyMe.Domain.Repositories;
 using System.Threading.Tasks;
@@ -11,15 +12,18 @@ namespace MoneyMe.Application
         private readonly IQuoteRepository _quoteRepository;
         private readonly IQuoteFactory _quoteFactory;
         private readonly IProductRepository _productRepository;
+        private readonly IUnitOfWork _unitOfWork;
 
         public QuoteService(
             IQuoteRepository quoteRepository,
             IQuoteFactory quoteFactory,
-            IProductRepository productRepository)
+            IProductRepository productRepository,
+            IUnitOfWork unitOfWork)
         {
             _quoteRepository = quoteRepository;
             _quoteFactory = quoteFactory;
             _productRepository = productRepository;
+            _unitOfWork = unitOfWork;
         }
 
         public async Task<QuoteDto> CalculateAsync(PartialQuoteDto partialQuoteDto)
@@ -30,7 +34,10 @@ namespace MoneyMe.Application
 
             quote.ApplyProductTerms(product);
 
-            await _quoteRepository.AddAsync(quote);
+            await using (_unitOfWork)
+            {
+                await _unitOfWork.ExecuteAsync(async () => await _quoteRepository.AddAsync(quote));
+            };
 
             return new QuoteDto
             {

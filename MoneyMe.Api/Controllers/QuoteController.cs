@@ -34,7 +34,7 @@ namespace MoneyMe.Api.Controllers
         [HttpPost("request")]
         public async Task<IActionResult> RequestQuoteAsync([FromBody] QuoteRequest quoteRequest)
         {
-            var customerDto = _customerService.FindCustomerByEmail(quoteRequest.Email);
+            var customerDto = await _customerService.FindCustomerByEmail(quoteRequest.Email);
 
             if (customerDto == null)
             {

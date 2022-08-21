@@ -1,5 +1,6 @@
 ﻿using MoneyMe.Application.Contracts;
 using MoneyMe.Application.Contracts.Dtos;
+using MoneyMe.Domain;
 using MoneyMe.Domain.CustomerAggregate;
 using MoneyMe.Domain.Factories;
 using MoneyMe.Domain.QuoteAggregate;
@@ -13,16 +14,31 @@ namespace MoneyMe.Application
     {
         private readonly ICustomerFactory _customerFactory;
         private readonly ICustomerRepository _customerRepository;
+        private readonly IUnitOfWork _unitOfWork;
 
-        public CustomerService(ICustomerFactory customerFactory, ICustomerRepository customerRepository)
+        public CustomerService(ICustomerFactory customerFactory, ICustomerRepository customerRepository, IUnitOfWork unitOfWork)
         {
             _customerFactory = customerFactory;
             _customerRepository = customerRepository;
+            _unitOfWork = unitOfWork;
         }
 
-        public CustomerDto FindCustomerByEmail(string email)
+        public async Task<CustomerDto> FindCustomerByEmail(string email)
         {
-            return new CustomerDto();
+            var customer = await _customerRepository.FindByEmailAsync(email);
+
+            return new CustomerDto
+            {
+                Id = customer.Id,
+                DateAdded = customer.DateAdded,
+                DateModified = customer.DateModified,
+                Title = customer.Title,
+                FirstName = customer.FirstName,
+                LastName = customer.LastName,
+                DateOfBirth = customer.DateOfBirth,
+                Mobile = customer.MobileNumber,
+                Email = customer.EmailAddress
+            };
         }
 
         public async Task RegisterCustomer(CustomerDto customerDto)
@@ -35,14 +51,13 @@ namespace MoneyMe.Application
                 customerDto.Mobile,
                 customerDto.Email);
 
-            await _customerRepository.Add(customer);
+
+            await using (_unitOfWork)
+            {
+                await _unitOfWork.ExecuteAsync(async () => await _customerRepository.AddAsync(customer));
+            };
 
             customerDto.Id = customer.Id;
-        }
-
-        Task<CustomerDto> ICustomerService.RegisterCustomer(CustomerDto customerDto)
-        {
-            throw new NotImplementedException();
         }
     }
 }
