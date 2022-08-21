@@ -2,14 +2,18 @@ using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using MoneyMe.Application;
 using MoneyMe.Application.Contracts;
+using MoneyMe.Domain;
 using MoneyMe.Domain.Factories;
 using MoneyMe.Domain.Repositories;
+using MoneyMe.Infrastructure;
+using MoneyMe.Infrastructure.Database;
 using MoneyMe.Infrastructure.Repositories;
 using MoneyMe.Infrastructure.Services;
 using System;
@@ -31,6 +35,9 @@ namespace MoneyMe.Api
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddDbContext<ApplicationDbContext>(options =>
+                    options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
+
             services.AddControllers();
 
             services.AddSingleton<IEmailService, EmailService>();
@@ -39,12 +46,15 @@ namespace MoneyMe.Api
             services.AddSingleton<IQuoteFactory, QuoteFactory>();
             services.AddSingleton<ICustomerFactory, CustomerFactory>();
 
-            services.AddSingleton<IQuoteRepository, QuoteRepository>();
-            services.AddSingleton<ICustomerRepository, CustomerRepository>();
+            services.AddScoped<IUnitOfWork, UnitOfWork>();
 
-            services.AddSingleton<ICustomerService, CustomerService>();
-            services.AddSingleton<IQuoteService, QuoteService>();
-            services.AddSingleton<ILoanService, LoanService>();
+            services.AddScoped<IProductRepository, ProductRepository>();
+            services.AddScoped<IQuoteRepository, QuoteRepository>();
+            services.AddScoped<ICustomerRepository, CustomerRepository>();
+
+            services.AddScoped<ICustomerService, CustomerService>();
+            services.AddScoped<IQuoteService, QuoteService>();
+            services.AddScoped<ILoanService, LoanService>();
 
 
             services.AddCors(options =>
@@ -55,6 +65,8 @@ namespace MoneyMe.Api
                                       policy.WithOrigins("http://localhost:4200").AllowAnyMethod().AllowAnyHeader().AllowCredentials();
                                   });
             });
+
+            services.AddSwaggerGen();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -76,6 +88,14 @@ namespace MoneyMe.Api
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllers();
+            });
+
+            app.UseSwagger();
+            app.UseSwaggerUI();
+            app.UseSwaggerUI(options =>
+            {
+                options.SwaggerEndpoint("/swagger/v1/swagger.json", "v1");
+                options.RoutePrefix = "api";
             });
         }
     }
