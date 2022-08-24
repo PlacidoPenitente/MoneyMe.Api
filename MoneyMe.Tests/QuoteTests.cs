@@ -7,6 +7,8 @@ using MoneyMe.Domain.QuoteAggregate;
 using MoneyMe.Domain.Repositories;
 using Moq;
 using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using Xunit;
 
@@ -14,63 +16,91 @@ namespace MoneyMe.Tests
 {
     public class QuoteTests
     {
-        private readonly Mock<QuoteService> _sut;
-
-        public Mock<IQuoteFactory> QuoteFactory { get; }
-        public Mock<IQuoteRepository> QuoteRepository { get; }
-        public Mock<IProductRepository> ProductRepository { get; }
-        public Mock<IUnitOfWork> UnitOfWork { get; }
-        public Quote Quote { get; }
-        public Product Product { get; }
-
         public QuoteTests()
         {
+            Products = new List<Product>
+            {
+                CreateProduct("Product A", 0.0949m, 3),
+                CreateProduct("Product B", 0.0949m, 6),
+                CreateProduct("Product C", 0.0949m, 12),
+                CreateProduct("Product D", 0.0949m, 24),
+            };
+
             QuoteFactory = new Mock<IQuoteFactory>();
             QuoteRepository = new Mock<IQuoteRepository>();
             ProductRepository = new Mock<IProductRepository>();
             UnitOfWork = new Mock<IUnitOfWork>();
-            Quote = CreateQuote();
-            Product = CreateProduct();
 
-            ProductRepository.Setup(x => x.FindByNumberOfTerms(24))
-                .ReturnsAsync(CreateProduct());
+            Sut = new Mock<QuoteService>(
+                QuoteRepository.Object,
+                QuoteFactory.Object,
+                ProductRepository.Object,
+                UnitOfWork.Object);
 
-            QuoteFactory.Setup(x => x.Create(It.IsAny<Guid>(), 5300)).Returns(Quote);
-
-            QuoteRepository.Setup(x => x.AddAsync(Quote));
-
-            UnitOfWork.Setup(x => x.ExecuteAsync(It.IsAny<Func<Task>>())).Returns(() => QuoteRepository.Object.AddAsync(Quote));
-
-            _sut = new Mock<QuoteService>(QuoteRepository.Object, QuoteFactory.Object, ProductRepository.Object, UnitOfWork.Object);
+            Setup();
         }
 
-        private Quote CreateQuote()
+        public Mock<QuoteService> Sut { get; }
+        public Mock<IQuoteFactory> QuoteFactory { get; }
+        public Mock<IQuoteRepository> QuoteRepository { get; }
+        public Mock<IProductRepository> ProductRepository { get; }
+        public Mock<IUnitOfWork> UnitOfWork { get; }
+        public IReadOnlyCollection<Product> Products { get; }
+
+        [Theory]
+        [InlineData(243.32, 5300, 24)]
+        [InlineData(472.87, 10300, 24)]
+        [InlineData(1764.49, 10300, 6)]
+        [InlineData(2133.30, 6300, 3)]
+        public async Task Should_CalculateAsync(decimal monthlyPayment, decimal loanAmount, int terms)
         {
-            return new Quote(Guid.NewGuid(), DateTime.UtcNow, DateTime.UtcNow, Guid.NewGuid(), 5300);
-        }
-
-        private Product CreateProduct()
-        {
-            return new Product(Guid.NewGuid(), DateTime.UtcNow, DateTime.UtcNow, "", 0.0949m, 24);
-        }
-
-        [Fact]
-        public async Task Should_CalculateAsync()
-        {
-            var partialQuote = new PartialQuoteDto() { Terms = 24, AmountRequired = 5300, CustomerId = Guid.NewGuid() };
-
-            var monthlyPayment = 243.32m;
-
-            var context = _sut.Object;
+            var partialQuote = new PartialQuoteDto() { Terms = terms, AmountRequired = loanAmount, CustomerId = Guid.NewGuid() };
+            var context = Sut.Object;
+            
             var quote = await context.CalculateAsync(partialQuote);
 
-            Assert.Equal(24, quote.Terms);
+            Assert.Equal(terms, quote.Terms);
             Assert.Equal(monthlyPayment, decimal.Round(quote.MonthlyPayment, 2));
 
             QuoteFactory.Verify(x => x.Create(It.IsAny<Guid>(), It.IsAny<decimal>()), Times.Once);
             ProductRepository.Verify(x => x.FindByNumberOfTerms(partialQuote.Terms), Times.Once);
             QuoteRepository.Verify(x => x.AddAsync(It.IsAny<Quote>()), Times.Once);
             UnitOfWork.Verify(x => x.ExecuteAsync(It.IsAny<Func<Task>>()), Times.Once);
+        }
+
+        private void Setup()
+        {
+            ProductRepository.Setup(x => x.FindByNumberOfTerms(It.IsAny<int>()))
+                            .ReturnsAsync((int terms) =>
+                            {
+                                return Products.FirstOrDefault(x => x.Terms == terms);
+                            });
+
+            QuoteFactory.Setup(x => x.Create(It.IsAny<Guid>(), It.IsAny<decimal>()))
+                .Returns((Guid id, decimal loanAmount) =>
+                {
+                    return CreateQuote(loanAmount);
+                });
+
+            Quote quoteToBeAdded = null;
+
+            QuoteRepository.Setup(x => x.AddAsync(It.IsAny<Quote>())).Returns((Quote quote) =>
+            {
+                quoteToBeAdded = quote;
+                return Task.CompletedTask;
+            });
+
+            UnitOfWork.Setup(x => x.ExecuteAsync(It.IsAny<Func<Task>>())).Returns(() => QuoteRepository.Object.AddAsync(quoteToBeAdded));
+        }
+
+        private Quote CreateQuote(decimal loanAmount)
+        {
+            return new Quote(Guid.NewGuid(), DateTime.UtcNow, DateTime.UtcNow, Guid.NewGuid(), loanAmount);
+        }
+
+        private Product CreateProduct(string productName, decimal interetestRate, int terms)
+        {
+            return new Product(Guid.NewGuid(), DateTime.UtcNow, DateTime.UtcNow, productName, interetestRate, terms);
         }
     }
 }
