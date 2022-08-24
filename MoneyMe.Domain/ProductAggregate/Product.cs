@@ -38,7 +38,7 @@ namespace MoneyMe.Domain.ProductAggregate
 
         public decimal CalculateMonthlyPayment(decimal loanAmount)
         {
-            var pmt = Financial.Pmt(decimal.ToDouble(InterestRate) / 12, Terms, decimal.ToDouble(loanAmount));
+            var pmt = Financial.Pmt(decimal.ToDouble(InterestRate) / 12, Terms, decimal.ToDouble(decimal.Negate(loanAmount)));
 
             return Convert.ToDecimal(pmt);
         }

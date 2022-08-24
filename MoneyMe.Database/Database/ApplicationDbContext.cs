@@ -2,9 +2,6 @@
 using MoneyMe.Domain.CustomerAggregate;
 using MoneyMe.Domain.ProductAggregate;
 using MoneyMe.Domain.QuoteAggregate;
-using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace MoneyMe.Infrastructure.Database
 {

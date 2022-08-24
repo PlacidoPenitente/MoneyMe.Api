@@ -1,10 +1,8 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using MoneyMe.Api.Requests;
 using MoneyMe.Api.Responses;
 using MoneyMe.Application.Contracts;
 using MoneyMe.Application.Contracts.Dtos;
-using MoneyMe.Infrastructure.Services;
 using System;
 using System.Threading.Tasks;
 
@@ -51,11 +49,11 @@ namespace MoneyMe.Api.Controllers
                 await _customerService.RegisterCustomer(customerDto);
             }
 
-            var quoteUrl = $"{customerDto.Id}|{quoteRequest.AmountRequired}|{quoteRequest.Terms}";
+            var quoteText = $"{customerDto.Id}|{quoteRequest.AmountRequired}|{quoteRequest.Terms}";
 
-            var encryptedQuoteUrl = _securityService.Encrypt(quoteUrl);
+            var encryptedQuoteText = _securityService.Encrypt(quoteText);
 
-            var redirectUrl = $"https://localhost:4200/quote/partial/{encryptedQuoteUrl}";
+            var redirectUrl = $"https://localhost:4200/quote/partial/{encryptedQuoteText}";
 
             await _emailService.SendRedirectUrlAsync(customerDto.Email, redirectUrl);
 

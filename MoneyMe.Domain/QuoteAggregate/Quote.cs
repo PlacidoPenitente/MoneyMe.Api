@@ -1,7 +1,5 @@
 ﻿using MoneyMe.Domain.ProductAggregate;
-using MoneyMe.Domain.Shared;
 using System;
-using System.Collections.Generic;
 
 namespace MoneyMe.Domain.QuoteAggregate
 {

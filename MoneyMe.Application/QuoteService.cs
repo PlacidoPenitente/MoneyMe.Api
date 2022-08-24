@@ -36,7 +36,10 @@ namespace MoneyMe.Application
 
             await using (_unitOfWork)
             {
-                await _unitOfWork.ExecuteAsync(async () => await _quoteRepository.AddAsync(quote));
+                await _unitOfWork.ExecuteAsync(async () =>
+                {
+                    await _quoteRepository.AddAsync(quote);
+                });
             };
 
             return new QuoteDto
