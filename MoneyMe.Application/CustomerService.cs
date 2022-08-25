@@ -27,6 +27,8 @@ namespace MoneyMe.Application
         {
             var customer = await _customerRepository.FindByEmailAsync(email);
 
+            if (customer == null) return null;
+
             return new CustomerDto
             {
                 Id = customer.Id,

@@ -7,6 +7,7 @@ namespace MoneyMe.Infrastructure.Services
     {
         public Task SendMessageAsync(string email, string url)
         {
+            System.Console.WriteLine(url);
             return Task.CompletedTask;
         }
     }

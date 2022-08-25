@@ -2,6 +2,7 @@
 using MoneyMe.Domain.Shared;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Linq;
 
 namespace MoneyMe.Domain.ApplicationAggregate
@@ -9,6 +10,11 @@ namespace MoneyMe.Domain.ApplicationAggregate
     public class Loan : IAggregate<Guid>
     {
         private readonly List<Term> _terms;
+
+        private Loan()
+        {
+
+        }
 
         public Loan(
             Guid id,
@@ -26,11 +32,12 @@ namespace MoneyMe.Domain.ApplicationAggregate
             _terms = terms;
         }
 
-        public Guid Id { get; }
-        public DateTime DateAdded { get; }
+        [Key]
+        public Guid Id { get; private set; }
+        public DateTime DateAdded { get; private set; }
         public DateTime DateModified { get; private set; }
-        public Guid CustomerId { get; }
-        public decimal LoanAmount { get; }
+        public Guid CustomerId { get; private set; }
+        public decimal LoanAmount { get; private set; }
         public IReadOnlyCollection<Term> Terms => _terms;
         public LoanStatus Status { get; private set; }
 

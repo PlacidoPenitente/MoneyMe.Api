@@ -45,13 +45,14 @@ namespace MoneyMe.Api
 
             services.AddSingleton<IQuoteFactory, QuoteFactory>();
             services.AddSingleton<ICustomerFactory, CustomerFactory>();
+            services.AddSingleton<ILoanFactory, LoanFactory>();
 
             services.AddScoped<IUnitOfWork, UnitOfWork>();
 
             services.AddScoped<IProductRepository, ProductRepository>();
             services.AddScoped<IQuoteRepository, QuoteRepository>();
             services.AddScoped<ICustomerRepository, CustomerRepository>();
-            services.AddScoped<ILoanRepository, LoanReposi>
+            services.AddScoped<ILoanRepository, LoanRepository>();
 
             services.AddScoped<ICustomerService, CustomerService>();
             services.AddScoped<IQuoteService, QuoteService>();

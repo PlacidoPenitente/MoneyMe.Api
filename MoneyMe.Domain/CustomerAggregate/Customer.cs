@@ -1,4 +1,5 @@
 ﻿using System;
+using System.ComponentModel.DataAnnotations;
 
 namespace MoneyMe.Domain.CustomerAggregate
 {
@@ -31,14 +32,15 @@ namespace MoneyMe.Domain.CustomerAggregate
             EmailAddress = emailAddress;
         }
 
-        public Guid Id { get; }
-        public DateTime DateAdded { get; }
-        public DateTime DateModified { get; }
-        public string Title { get; }
-        public string FirstName { get; }
-        public string LastName { get; }
-        public DateTime DateOfBirth { get; }
-        public string MobileNumber { get; }
-        public string EmailAddress { get; }
+        [Key]
+        public Guid Id { get; private set; }
+        public DateTime DateAdded { get; private set; }
+        public DateTime DateModified { get; private set; }
+        public string Title { get; private set; }
+        public string FirstName { get; private set; }
+        public string LastName { get; private set; }
+        public DateTime DateOfBirth { get; private set; }
+        public string MobileNumber { get; private set; }
+        public string EmailAddress { get; private set; }
     }
 }

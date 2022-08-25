@@ -1,8 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
+using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 using Microsoft.VisualBasic;
-using MoneyMe.Domain.Shared;
 
 namespace MoneyMe.Domain.ProductAggregate
 {
@@ -29,12 +28,16 @@ namespace MoneyMe.Domain.ProductAggregate
             Terms = terms;
         }
 
-        public Guid Id { get; }
-        public DateTime DateAdded { get; }
-        public DateTime DateModified { get; }
-        public string Name { get; }
-        public decimal InterestRate { get; }
-        public int Terms { get; }
+        [Key]
+        public Guid Id { get; private set; }
+        public DateTime DateAdded { get; private set; }
+        public DateTime DateModified { get; private set; }
+        public string Name { get; private set; }
+
+        [Column(TypeName = "decimal(5, 2)")]
+        public decimal InterestRate { get; private set; }
+
+        public int Terms { get; private set; }
 
         public decimal CalculateMonthlyPayment(decimal loanAmount)
         {
