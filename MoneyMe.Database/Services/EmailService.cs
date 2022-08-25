@@ -5,7 +5,7 @@ namespace MoneyMe.Infrastructure.Services
 {
     public class EmailService : IEmailService
     {
-        public Task SendRedirectUrlAsync(string email, string url)
+        public Task SendMessageAsync(string email, string url)
         {
             return Task.CompletedTask;
         }

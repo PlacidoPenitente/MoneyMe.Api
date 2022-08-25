@@ -23,7 +23,7 @@ namespace MoneyMe.Application
             _unitOfWork = unitOfWork;
         }
 
-        public async Task<CustomerDto> FindCustomerByEmail(string email)
+        public async Task<CustomerDto> FindCustomerByEmailAsync(string email)
         {
             var customer = await _customerRepository.FindByEmailAsync(email);
 
@@ -41,7 +41,25 @@ namespace MoneyMe.Application
             };
         }
 
-        public async Task RegisterCustomer(CustomerDto customerDto)
+        public async Task<CustomerDto> GetCustomerAsync(Guid customerId)
+        {
+            var customer = await _customerRepository.GetAsync(customerId);
+
+            return new CustomerDto
+            {
+                Id = customer.Id,
+                DateAdded = customer.DateAdded,
+                DateModified = customer.DateModified,
+                Title = customer.Title,
+                FirstName = customer.FirstName,
+                LastName = customer.LastName,
+                DateOfBirth = customer.DateOfBirth,
+                Mobile = customer.MobileNumber,
+                Email = customer.EmailAddress
+            };
+        }
+
+        public async Task RegisterCustomerAsync(CustomerDto customerDto)
         {
             var customer = _customerFactory.Create(
                 customerDto.Title,

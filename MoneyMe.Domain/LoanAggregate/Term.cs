@@ -1,4 +1,4 @@
-﻿namespace MoneyMe.Domain.Shared
+﻿namespace MoneyMe.Domain.LoanAggregate
 {
     public class Term
     {

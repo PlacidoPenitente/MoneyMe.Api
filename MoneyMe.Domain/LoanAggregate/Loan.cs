@@ -1,15 +1,22 @@
-﻿using MoneyMe.Domain.Shared;
+﻿using MoneyMe.Domain.LoanAggregate;
+using MoneyMe.Domain.Shared;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 
 namespace MoneyMe.Domain.ApplicationAggregate
 {
-    public class LoanAggregate : IAggregate<Guid>
+    public class Loan : IAggregate<Guid>
     {
         private readonly List<Term> _terms;
 
-        public LoanAggregate(Guid id, DateTime dateAdded, DateTime dateModified, Guid customerId, decimal loanAmount, List<Term> terms)
+        public Loan(
+            Guid id,
+            DateTime dateAdded,
+            DateTime dateModified,
+            Guid customerId,
+            decimal loanAmount,
+            List<Term> terms)
         {
             Id = id;
             DateAdded = dateAdded;

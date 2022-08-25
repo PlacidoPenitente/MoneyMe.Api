@@ -21,7 +21,7 @@ namespace MoneyMe.Infrastructure.Repositories
             await _context.AddAsync(product);
         }
 
-        public async Task<Product> FindByNumberOfTerms(int terms)
+        public async Task<Product> FindByNumberOfTermsAsync(int terms)
         {
             return await _context.Products.SingleOrDefaultAsync(product => product.Terms == terms);
         }

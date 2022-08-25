@@ -32,7 +32,7 @@ namespace MoneyMe.Api.Controllers
         [HttpPost("request")]
         public async Task<IActionResult> RequestQuoteAsync([FromBody] QuoteRequest quoteRequest)
         {
-            var customerDto = await _customerService.FindCustomerByEmail(quoteRequest.Email);
+            var customerDto = await _customerService.FindCustomerByEmailAsync(quoteRequest.Email);
 
             if (customerDto == null)
             {
@@ -46,14 +46,14 @@ namespace MoneyMe.Api.Controllers
                     Email = quoteRequest.Email
                 };
 
-                await _customerService.RegisterCustomer(customerDto);
+                await _customerService.RegisterCustomerAsync(customerDto);
             }
 
             var quoteText = $"{customerDto.Id}|{quoteRequest.AmountRequired}|{quoteRequest.Terms}";
             var encryptedQuoteText = _securityService.Encrypt(quoteText);
             var redirectUrl = $"https://localhost:4200/quote/partial/{encryptedQuoteText}";
 
-            await _emailService.SendRedirectUrlAsync(customerDto.Email, redirectUrl);
+            await _emailService.SendMessageAsync(customerDto.Email, redirectUrl);
 
             return Ok();
         }

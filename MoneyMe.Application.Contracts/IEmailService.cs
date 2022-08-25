@@ -4,6 +4,6 @@ namespace MoneyMe.Application.Contracts
 {
     public interface IEmailService
     {
-        Task SendRedirectUrlAsync(string email, string url);
+        Task SendMessageAsync(string email, string url);
     }
 }

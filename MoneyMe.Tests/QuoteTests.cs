@@ -63,14 +63,14 @@ namespace MoneyMe.Tests
             Assert.Equal(monthlyPayment, decimal.Round(quote.MonthlyPayment, 2));
 
             QuoteFactory.Verify(x => x.Create(It.IsAny<Guid>(), It.IsAny<decimal>()), Times.Once);
-            ProductRepository.Verify(x => x.FindByNumberOfTerms(partialQuote.Terms), Times.Once);
+            ProductRepository.Verify(x => x.FindByNumberOfTermsAsync(partialQuote.Terms), Times.Once);
             QuoteRepository.Verify(x => x.AddAsync(It.IsAny<Quote>()), Times.Once);
             UnitOfWork.Verify(x => x.ExecuteAsync(It.IsAny<Func<Task>>()), Times.Once);
         }
 
         private void Setup()
         {
-            ProductRepository.Setup(x => x.FindByNumberOfTerms(It.IsAny<int>()))
+            ProductRepository.Setup(x => x.FindByNumberOfTermsAsync(It.IsAny<int>()))
                             .ReturnsAsync((int terms) =>
                             {
                                 return Products.FirstOrDefault(x => x.Terms == terms);

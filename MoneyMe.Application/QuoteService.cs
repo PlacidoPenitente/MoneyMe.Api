@@ -28,7 +28,7 @@ namespace MoneyMe.Application
 
         public async Task<QuoteDto> CalculateAsync(PartialQuoteDto partialQuoteDto)
         {
-            var product = await _productRepository.FindByNumberOfTerms(partialQuoteDto.Terms);
+            var product = await _productRepository.FindByNumberOfTermsAsync(partialQuoteDto.Terms);
 
             var quote = _quoteFactory.Create(partialQuoteDto.CustomerId, partialQuoteDto.AmountRequired);
 

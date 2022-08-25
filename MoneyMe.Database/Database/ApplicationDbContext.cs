@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using MoneyMe.Domain.ApplicationAggregate;
 using MoneyMe.Domain.CustomerAggregate;
 using MoneyMe.Domain.ProductAggregate;
 using MoneyMe.Domain.QuoteAggregate;
@@ -12,5 +13,6 @@ namespace MoneyMe.Infrastructure.Database
         public DbSet<Customer> Customers { get; set; }
         public DbSet<Product> Products { get; set; }
         public DbSet<Quote> Quotes { get; set; }
+        public DbSet<Loan> Loans { get; set; }
     }
 }

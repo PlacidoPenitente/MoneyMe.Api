@@ -1,11 +1,13 @@
 ﻿using MoneyMe.Application.Contracts.Dtos;
+using System;
 using System.Threading.Tasks;
 
 namespace MoneyMe.Application.Contracts
 {
     public interface ICustomerService
     {
-        Task<CustomerDto> FindCustomerByEmail(string email);
-        Task RegisterCustomer(CustomerDto customerDto);
+        Task<CustomerDto> FindCustomerByEmailAsync(string email);
+        Task<CustomerDto> GetCustomerAsync(Guid customerId);
+        Task RegisterCustomerAsync(CustomerDto customerDto);
     }
 }

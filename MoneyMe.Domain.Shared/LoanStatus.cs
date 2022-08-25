@@ -1,4 +1,4 @@
-﻿namespace MoneyMe.Domain.ApplicationAggregate
+﻿namespace MoneyMe.Domain.Shared
 {
     public enum LoanStatus
     {

@@ -26,10 +26,12 @@ namespace MoneyMe.Domain.QuoteAggregate
         public decimal LoanAmount { get; private set; }
         public int Terms { get; private set; }
         public decimal MonthlyPayment { get; private set; }
+        public decimal InterestRate { get; private set; }
 
         public void ApplyProductTerms(Product product)
         {
             Terms = product.Terms;
+            InterestRate = product.InterestRate;
             MonthlyPayment = product.CalculateMonthlyPayment(LoanAmount);
         }
     }

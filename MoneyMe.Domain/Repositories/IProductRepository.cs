@@ -9,7 +9,7 @@ namespace MoneyMe.Domain.Repositories
     {
         Task AddAsync(Product product);
         Task<Product> GetAsync(Guid id);
-        public Task<Product> FindByNumberOfTerms(int terms);
+        public Task<Product> FindByNumberOfTermsAsync(int terms);
         Task RemoveAsync(Guid id);
     }
 }

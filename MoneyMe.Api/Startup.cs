@@ -51,6 +51,7 @@ namespace MoneyMe.Api
             services.AddScoped<IProductRepository, ProductRepository>();
             services.AddScoped<IQuoteRepository, QuoteRepository>();
             services.AddScoped<ICustomerRepository, CustomerRepository>();
+            services.AddScoped<ILoanRepository, LoanReposi>
 
             services.AddScoped<ICustomerService, CustomerService>();
             services.AddScoped<IQuoteService, QuoteService>();
