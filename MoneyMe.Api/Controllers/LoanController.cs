@@ -1,5 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using MoneyMe.Application.Contracts;
+using System;
+using System.Threading.Tasks;
 
 namespace MoneyMe.Api.Controllers
 {
@@ -15,9 +17,10 @@ namespace MoneyMe.Api.Controllers
         }
 
         [HttpPost("apply")]
-        public IActionResult Apply()
+        public async Task<IActionResult> ApplyAsync(Guid quoteId)
         {
-            return Ok("hello");
+            await _loanService.AppyAsync(quoteId);
+            return Ok();
         }
     }
 }

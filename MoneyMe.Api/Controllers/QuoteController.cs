@@ -50,9 +50,7 @@ namespace MoneyMe.Api.Controllers
             }
 
             var quoteText = $"{customerDto.Id}|{quoteRequest.AmountRequired}|{quoteRequest.Terms}";
-
             var encryptedQuoteText = _securityService.Encrypt(quoteText);
-
             var redirectUrl = $"https://localhost:4200/quote/partial/{encryptedQuoteText}";
 
             await _emailService.SendRedirectUrlAsync(customerDto.Email, redirectUrl);

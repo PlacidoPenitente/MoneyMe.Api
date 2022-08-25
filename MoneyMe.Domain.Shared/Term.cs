@@ -2,13 +2,15 @@
 {
     public class Term
     {
-        public Term(int period, decimal payment)
+        public Term(int period, decimal interest, decimal principal)
         {
             Period = period;
-            Payment = payment;
+            Interest = interest;
+            Principal = principal;
         }
 
         public int Period { get; }
-        public decimal Payment { get; }
+        public decimal Interest { get; }
+        public decimal Principal { get; }
     }
 }
