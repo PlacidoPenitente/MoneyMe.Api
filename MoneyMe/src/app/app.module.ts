@@ -20,12 +20,14 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatSliderModule } from '@angular/material/slider';
 import { MatCardModule } from '@angular/material/card';
 import { QuoteCalculatorComponent } from './quote-calculator/quote-calculator.component';
+import { QuoteSliderComponent } from './quote-slider/quote-slider.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     ThirdPartyComponent,
-    QuoteCalculatorComponent
+    QuoteCalculatorComponent,
+    QuoteSliderComponent
   ],
   imports: [
     BrowserModule,

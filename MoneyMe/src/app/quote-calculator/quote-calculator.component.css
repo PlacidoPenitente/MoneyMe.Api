@@ -32,14 +32,24 @@ mat-form-field {
 }
 
 mat-slider {
-    width: 73%;
+    width: 80%;
+    margin: 0px;
+    padding: 0px;
 }
 
 .range{
     display: flex;
     flex-direction: row;
+    width: 80%;
 }
 
 .range-spacing{
     flex-grow: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+button{
+    width: 80%;;
 }
