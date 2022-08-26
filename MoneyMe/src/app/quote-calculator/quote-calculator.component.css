@@ -1,8 +1,45 @@
 mat-card {
-    width: 400px;
+    width: 420px;
+    padding: 4ayy0px;
 }
 
 form {
     display: flex;
     flex-direction: column;
+}
+
+mat-card-title {
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 8px;
+    align-items: center;
+}
+
+mat-form-field {
+    margin: 5px;
+}
+
+.fields {
+    margin-top: 10px;
+    margin-bottom: 20px;
+}
+
+.amount-slider {
+    display: flex;
+    flex-direction: column-reverse;
+    margin-top: 30px;
+    width: 100%;
+}
+
+mat-slider {
+    width: 73%;
+}
+
+.range{
+    display: flex;
+    flex-direction: row;
+}
+
+.range-spacing{
+    flex-grow: 1;
 }

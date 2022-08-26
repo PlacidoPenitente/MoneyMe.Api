@@ -1,5 +1,6 @@
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
+import { MatSliderChange } from '@angular/material/slider';
 import { Quote } from 'src/quote.model';
 
 @Component({
@@ -9,17 +10,33 @@ import { Quote } from 'src/quote.model';
 })
 export class QuoteCalculatorComponent implements OnInit {
 
+
+  private _position: string = "10px";
+  public get position(): string {
+    return this._position;
+  }
+  public set position(v: string) {
+    this._position = v;
+  }
+
+
+  private _amount: number = 2100;
+  public get amount(): number {
+    return this._amount;
+  }
+  public set amount(v: number) {
+    this._amount = v;
+  }
+
+
   constructor(private httpClient: HttpClient) { }
 
   ngOnInit(): void {
   }
 
-  formatLabel(value: number) {
-    if (value >= 1000) {
-      return Math.round(value / 1000) + 'k';
-    }
-
-    return value;
+  onInputChange(event: MatSliderChange) {
+    this.position = ((((event.value ?? 0) / 100) * 280) + 10) + "px";
+    this.amount = (((event.value ?? 0) / 100) * (15000 - 2100)) + 2100
   }
 
   public async requestQuoteAsync(): Promise<void> {
