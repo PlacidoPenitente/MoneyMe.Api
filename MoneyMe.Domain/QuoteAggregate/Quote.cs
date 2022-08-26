@@ -26,13 +26,16 @@ namespace MoneyMe.Domain.QuoteAggregate
         public DateTime DateAdded { get; private set; }
         public DateTime DateModified { get; private set; }
         public Guid CustomerId { get; private set; }
+
+        [Column(TypeName = "decimal(5, 4)")]
         public decimal LoanAmount { get; private set; }
+
         public int Terms { get; private set; }
 
-        [Column(TypeName = "decimal(5, 2)")]
+        [Column(TypeName = "decimal(5, 4)")]
         public decimal MonthlyPayment { get; private set; }
 
-        [Column(TypeName = "decimal(5, 2)")]
+        [Column(TypeName = "decimal(5, 4)")]
         public decimal InterestRate { get; private set; }
 
         public void ApplyProductTerms(Product product)

@@ -3,6 +3,7 @@ using MoneyMe.Domain.Shared;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 
 namespace MoneyMe.Domain.ApplicationAggregate
@@ -37,7 +38,10 @@ namespace MoneyMe.Domain.ApplicationAggregate
         public DateTime DateAdded { get; private set; }
         public DateTime DateModified { get; private set; }
         public Guid CustomerId { get; private set; }
+
+        [Column(TypeName = "decimal(5, 4)")]
         public decimal LoanAmount { get; private set; }
+        
         public IReadOnlyCollection<Term> Terms => _terms;
         public LoanStatus Status { get; private set; }
 

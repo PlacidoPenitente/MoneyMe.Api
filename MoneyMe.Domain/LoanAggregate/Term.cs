@@ -18,10 +18,10 @@ namespace MoneyMe.Domain.LoanAggregate
 
         public int Period { get; private set; }
 
-        [Column(TypeName = "decimal(5, 2)")]
+        [Column(TypeName = "decimal(5, 4)")]
         public decimal Interest { get; private set; }
 
-        [Column(TypeName = "decimal(5, 2)")]
+        [Column(TypeName = "decimal(5, 4)")]
         public decimal Principal { get; private set; }
     }
 }

@@ -35,7 +35,7 @@ namespace MoneyMe.Infrastructure.Migrations
                         .HasColumnType("datetime2");
 
                     b.Property<decimal>("LoanAmount")
-                        .HasColumnType("decimal(18,2)");
+                        .HasColumnType("decimal(5,4)");
 
                     b.Property<int>("Status")
                         .HasColumnType("int");
@@ -93,7 +93,7 @@ namespace MoneyMe.Infrastructure.Migrations
                         .HasColumnType("datetime2");
 
                     b.Property<decimal>("InterestRate")
-                        .HasColumnType("decimal(5,2)");
+                        .HasColumnType("decimal(5,4)");
 
                     b.Property<string>("Name")
                         .HasColumnType("nvarchar(max)");
@@ -104,6 +104,44 @@ namespace MoneyMe.Infrastructure.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Products");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = new Guid("3327bc7f-9afd-4252-8892-0248f7df8909"),
+                            DateAdded = new DateTime(2022, 8, 26, 3, 1, 31, 90, DateTimeKind.Utc).AddTicks(4627),
+                            DateModified = new DateTime(2022, 8, 26, 3, 1, 31, 90, DateTimeKind.Utc).AddTicks(4642),
+                            InterestRate = 0m,
+                            Name = "Product A",
+                            Terms = 3
+                        },
+                        new
+                        {
+                            Id = new Guid("01ffa25b-bade-4080-8282-9b2a07bf2253"),
+                            DateAdded = new DateTime(2022, 8, 26, 3, 1, 31, 90, DateTimeKind.Utc).AddTicks(6783),
+                            DateModified = new DateTime(2022, 8, 26, 3, 1, 31, 90, DateTimeKind.Utc).AddTicks(6786),
+                            InterestRate = 0.0949m,
+                            Name = "Product B",
+                            Terms = 6
+                        },
+                        new
+                        {
+                            Id = new Guid("ec3e6de4-a5b0-422d-b4af-64be6797c17a"),
+                            DateAdded = new DateTime(2022, 8, 26, 3, 1, 31, 90, DateTimeKind.Utc).AddTicks(6857),
+                            DateModified = new DateTime(2022, 8, 26, 3, 1, 31, 90, DateTimeKind.Utc).AddTicks(6858),
+                            InterestRate = 0.0949m,
+                            Name = "Product C",
+                            Terms = 12
+                        },
+                        new
+                        {
+                            Id = new Guid("038e54ad-cde4-4e87-a758-06f3e6c58afd"),
+                            DateAdded = new DateTime(2022, 8, 26, 3, 1, 31, 90, DateTimeKind.Utc).AddTicks(6860),
+                            DateModified = new DateTime(2022, 8, 26, 3, 1, 31, 90, DateTimeKind.Utc).AddTicks(6860),
+                            InterestRate = 0.0949m,
+                            Name = "Product D",
+                            Terms = 24
+                        });
                 });
 
             modelBuilder.Entity("MoneyMe.Domain.QuoteAggregate.Quote", b =>
@@ -122,13 +160,13 @@ namespace MoneyMe.Infrastructure.Migrations
                         .HasColumnType("datetime2");
 
                     b.Property<decimal>("InterestRate")
-                        .HasColumnType("decimal(5,2)");
+                        .HasColumnType("decimal(5,4)");
 
                     b.Property<decimal>("LoanAmount")
-                        .HasColumnType("decimal(18,2)");
+                        .HasColumnType("decimal(5,4)");
 
                     b.Property<decimal>("MonthlyPayment")
-                        .HasColumnType("decimal(5,2)");
+                        .HasColumnType("decimal(5,4)");
 
                     b.Property<int>("Terms")
                         .HasColumnType("int");
@@ -151,13 +189,13 @@ namespace MoneyMe.Infrastructure.Migrations
                                 .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
                             b1.Property<decimal>("Interest")
-                                .HasColumnType("decimal(5,2)");
+                                .HasColumnType("decimal(5,4)");
 
                             b1.Property<int>("Period")
                                 .HasColumnType("int");
 
                             b1.Property<decimal>("Principal")
-                                .HasColumnType("decimal(5,2)");
+                                .HasColumnType("decimal(5,4)");
 
                             b1.HasKey("LoanId", "Id");
 

@@ -20,12 +20,12 @@ namespace MoneyMe.Infrastructure.Database
         {
             modelBuilder.Entity<Loan>().OwnsMany(x => x.Terms);
 
-            //modelBuilder.Entity<Product>().HasData(
-            //    new Product(Guid.NewGuid(), DateTime.UtcNow, DateTime.UtcNow, "Product A", 0, 3),
-            //    new Product(Guid.NewGuid(), DateTime.UtcNow, DateTime.UtcNow, "Product B", 0.0949m, 6),
-            //    new Product(Guid.NewGuid(), DateTime.UtcNow, DateTime.UtcNow, "Product C", 0.0949m, 12),
-            //    new Product(Guid.NewGuid(), DateTime.UtcNow, DateTime.UtcNow, "Product D", 0.0949m, 24)
-            //    );
+            modelBuilder.Entity<Product>().HasData(
+                new Product(Guid.NewGuid(), DateTime.UtcNow, DateTime.UtcNow, "Product A", 0, 3),
+                new Product(Guid.NewGuid(), DateTime.UtcNow, DateTime.UtcNow, "Product B", 0.0949m, 6),
+                new Product(Guid.NewGuid(), DateTime.UtcNow, DateTime.UtcNow, "Product C", 0.0949m, 12),
+                new Product(Guid.NewGuid(), DateTime.UtcNow, DateTime.UtcNow, "Product D", 0.0949m, 24)
+                );
         }
     }
 }
