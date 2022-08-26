@@ -1,0 +1,49 @@
+<mat-card>
+  <mat-card-title>Quote Calculator</mat-card-title>
+  <mat-card-content>
+    <form>
+      <mat-slider [displayWith]="formatLabel" thumbLabel tickInterval="1000" step="1000" min="0" max="100000">
+      </mat-slider>
+      <div>
+        <mat-form-field appearance="standard">
+          <mat-label>Amount Required</mat-label>
+          <input matInput placeholder="5000 (AUD)" />
+          <mat-hint>Hint</mat-hint>
+        </mat-form-field>
+        <mat-form-field appearance="standard">
+          <mat-label>Term</mat-label>
+          <input matInput placeholder="6 (months)" />
+          <mat-hint>Hint</mat-hint>
+        </mat-form-field>
+        <mat-form-field appearance="standard">
+          <mat-label>Title</mat-label>
+          <input matInput placeholder="Mr." />
+          <mat-hint>Hint</mat-hint>
+        </mat-form-field>
+        <mat-form-field appearance="standard">
+          <mat-label>First Name</mat-label>
+          <input matInput placeholder="Oliver" />
+          <mat-hint>Hint</mat-hint>
+        </mat-form-field>
+        <mat-form-field appearance="standard">
+          <mat-label>Last Name</mat-label>
+          <input matInput placeholder="Smith" />
+          <mat-hint>Hint</mat-hint>
+        </mat-form-field>
+        <mat-form-field appearance="standard">
+          <mat-label>Mobile</mat-label>
+          <input matInput placeholder=" +61412345678" />
+          <mat-hint>Hint</mat-hint>
+        </mat-form-field>
+        <mat-form-field appearance="standard">
+          <mat-label>Email</mat-label>
+          <input matInput placeholder="oliver.smith@gmail.com" />
+          <mat-hint>Hint</mat-hint>
+        </mat-form-field>
+      </div>
+      <button type="button" (click)="requestQuoteAsync()" mat-raised-button color="primary">
+        Calculate Quote
+      </button>
+    </form>
+  </mat-card-content>
+</mat-card>

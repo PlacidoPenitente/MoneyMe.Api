@@ -17,11 +17,15 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatSelectModule } from '@angular/material/select';
 import { MatRadioModule } from '@angular/material/radio';
 import { MatButtonModule } from '@angular/material/button';
+import { MatSliderModule } from '@angular/material/slider';
+import { MatCardModule } from '@angular/material/card';
+import { QuoteCalculatorComponent } from './quote-calculator/quote-calculator.component';
 
 @NgModule({
   declarations: [
     AppComponent,
-    ThirdPartyComponent
+    ThirdPartyComponent,
+    QuoteCalculatorComponent
   ],
   imports: [
     BrowserModule,
@@ -38,6 +42,8 @@ import { MatButtonModule } from '@angular/material/button';
     MatSelectModule,
     MatRadioModule,
     MatButtonModule,
+    MatSliderModule,
+    MatCardModule
   ],
   providers: [],
   bootstrap: [AppComponent]
