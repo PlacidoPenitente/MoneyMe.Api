@@ -19,15 +19,22 @@ export class QuoteCalculatorComponent implements OnInit {
     this._position = v;
   }
 
+  private _loanAmount: string = "$1,000";
+  public get loanAmount(): string {
+    return this._loanAmount;
+  }
+  public set loanAmount(v: string) {
+    this._loanAmount = v;
+  }
 
-  private _amount: number = 2100;
+
+  private _amount: number = 1000;
   public get amount(): number {
     return this._amount;
   }
   public set amount(v: number) {
     this._amount = v;
   }
-
 
   constructor(private httpClient: HttpClient) { }
 
@@ -36,7 +43,8 @@ export class QuoteCalculatorComponent implements OnInit {
 
   onInputChange(event: MatSliderChange) {
     this.position = ((((event.value ?? 0) / 100) * 280) + 10) + "px";
-    this.amount = (((event.value ?? 0) / 100) * (15000 - 2100)) + 2100
+    this.amount = (((event.value ?? 0) / 100) * (100000));
+    this.loanAmount = "$" + this._amount.toLocaleString();
   }
 
   public async requestQuoteAsync(): Promise<void> {
