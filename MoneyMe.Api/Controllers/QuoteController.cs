@@ -58,7 +58,7 @@ namespace MoneyMe.Api.Controllers
             return Ok();
         }
 
-        [HttpPost("continue")]
+        [HttpGet("continue")]
         public async Task<IActionResult> GetPartialQuote(string encryptedQuoteUrl)
         {
             var quoteUrl = _securityService.Decrypt(encryptedQuoteUrl);
