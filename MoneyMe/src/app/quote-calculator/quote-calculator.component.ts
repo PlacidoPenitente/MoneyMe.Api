@@ -10,6 +10,15 @@ import { Quote } from 'src/quote.model';
 })
 export class QuoteCalculatorComponent implements OnInit {
 
+  private _panelState: boolean = false;
+  public get panelState(): boolean {
+    return this._panelState;
+  }
+  public set panelState(v: boolean) {
+    this._panelState = v;
+  }
+
+
   private _position: string = "51.58px";
   public get position(): string {
     return this._position;

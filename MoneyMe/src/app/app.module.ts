@@ -21,6 +21,7 @@ import { MatSliderModule } from '@angular/material/slider';
 import { MatCardModule } from '@angular/material/card';
 import { QuoteCalculatorComponent } from './quote-calculator/quote-calculator.component';
 import { QuoteSliderComponent } from './quote-slider/quote-slider.component';
+import { MatExpansionModule } from '@angular/material/expansion';
 
 @NgModule({
   declarations: [
@@ -45,7 +46,8 @@ import { QuoteSliderComponent } from './quote-slider/quote-slider.component';
     MatRadioModule,
     MatButtonModule,
     MatSliderModule,
-    MatCardModule
+    MatCardModule,
+    MatExpansionModule
   ],
   providers: [],
   bootstrap: [AppComponent]

@@ -2,64 +2,67 @@
   <mat-card-title>Quote Calculator</mat-card-title>
   <mat-card-content>
     <form>
-      <div class="amount-slider">
-        <div class="slider-group">
-          <div style="display: block; height: 50px;">
-            <div class="slider-label" [style.left]="position"
-              style="position: absolute; width: 100px; height: 50px; background-color:#3f51b5; border-radius: 5px;">
-              <div style="width: 100%; height: 100%; display: flex; flex-direction: column; align-items: center;">
-                <div style="height: 100%; display: flex; flex-direction: row; align-items: center;">
-                  <h2 style="color: white; margin: 0px">{{loanAmount}}</h2>
-                </div>
-              </div>
-            </div>
+      <mat-accordion style="margin-bottom: 10px; margin-top: 10px;">
+        <mat-expansion-panel [expanded]="true">
+          <mat-expansion-panel-header>
+            <mat-panel-title>
+              Quote Details
+            </mat-panel-title>
+            <mat-panel-description>
+              $12,000 for 6 months
+            </mat-panel-description>
+          </mat-expansion-panel-header>
+          <div>
+            <mat-form-field>
+              <mat-label>Product</mat-label>
+              <mat-select>
+                <mat-option>Product A</mat-option>
+                <mat-option>Product B</mat-option>
+                <mat-option>Product C</mat-option>
+              </mat-select>
+            </mat-form-field>
+            <app-quote-slider [title]="'How much do you need?'" [maximum]="100000" [minimum]="1000"></app-quote-slider>
+            <app-quote-slider [title]="'How many payments?'" [maximum]="60" [minimum]="3"></app-quote-slider>
           </div>
-          <div style="width:100%; display: flex; flex-direction: column; align-items: center;">
-            <mat-slider (input)="onInputChange($event)" [value]="sliderValue" tickInterval="10" step="1" min="1"
-              max="100">
-            </mat-slider>
-            <div class="range">
-              <label>$1,000</label>
-              <div class="range-spacing">
-                <label style="font-weight: bold;">How much do you need?</label>
-              </div>
-              <label>$100,000</label>
-            </div>
+        </mat-expansion-panel>
+        <mat-expansion-panel (opened)="panelState = true" (closed)="panelState = false">
+          <mat-expansion-panel-header>
+            <mat-panel-title>
+              User Information
+            </mat-panel-title>
+            <mat-panel-description>
+              Mr. Jay Mark Estrera
+            </mat-panel-description>
+          </mat-expansion-panel-header>
+          <div class="fields">
+            <mat-form-field appearance="standard">
+              <mat-label>Title</mat-label>
+              <input matInput placeholder="Mr." />
+              <mat-hint>Hint</mat-hint>
+            </mat-form-field>
+            <mat-form-field appearance="standard">
+              <mat-label>First Name</mat-label>
+              <input matInput placeholder="Oliver" />
+              <mat-hint>Hint</mat-hint>
+            </mat-form-field>
+            <mat-form-field appearance="standard">
+              <mat-label>Last Name</mat-label>
+              <input matInput placeholder="Smith" />
+              <mat-hint>Hint</mat-hint>
+            </mat-form-field>
+            <mat-form-field appearance="standard">
+              <mat-label>Mobile</mat-label>
+              <input matInput placeholder=" +61412345678" />
+              <mat-hint>Hint</mat-hint>
+            </mat-form-field>
+            <mat-form-field appearance="standard">
+              <mat-label>Email</mat-label>
+              <input matInput placeholder="oliver.smith@gmail.com" />
+              <mat-hint>Hint</mat-hint>
+            </mat-form-field>
           </div>
-        </div>
-      </div>
-      <div class="fields">
-        <mat-form-field appearance="standard">
-          <mat-label>Term</mat-label>
-          <input matInput placeholder="6 (months)" />
-          <mat-hint>Hint</mat-hint>
-        </mat-form-field>
-        <mat-form-field appearance="standard">
-          <mat-label>Title</mat-label>
-          <input matInput placeholder="Mr." />
-          <mat-hint>Hint</mat-hint>
-        </mat-form-field>
-        <mat-form-field appearance="standard">
-          <mat-label>First Name</mat-label>
-          <input matInput placeholder="Oliver" />
-          <mat-hint>Hint</mat-hint>
-        </mat-form-field>
-        <mat-form-field appearance="standard">
-          <mat-label>Last Name</mat-label>
-          <input matInput placeholder="Smith" />
-          <mat-hint>Hint</mat-hint>
-        </mat-form-field>
-        <mat-form-field appearance="standard">
-          <mat-label>Mobile</mat-label>
-          <input matInput placeholder=" +61412345678" />
-          <mat-hint>Hint</mat-hint>
-        </mat-form-field>
-        <mat-form-field appearance="standard">
-          <mat-label>Email</mat-label>
-          <input matInput placeholder="oliver.smith@gmail.com" />
-          <mat-hint>Hint</mat-hint>
-        </mat-form-field>
-      </div>
+        </mat-expansion-panel>
+      </mat-accordion>
       <div style="display: flex; flex-direction: column; align-items: center;">
         <button type="button" (click)="requestQuoteAsync()" mat-raised-button color="primary">
           Calculate Quote
