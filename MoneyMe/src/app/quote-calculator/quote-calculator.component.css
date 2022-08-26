@@ -1,6 +1,6 @@
 mat-card {
     width: 464px;
-    font-family: Arial, Helvetica, sans-serif;
+    font-family: 'primary';
 }
 
 form {
@@ -39,8 +39,22 @@ mat-expansion-panel {
     margin-bottom: 5px;
 }
 
+.mat-expansion-panel-header {
+    font-family: 'secondary';
+}
+
 button{
-    font-family: Arial, Helvetica, sans-serif;
+    font-family: 'primary';
     background-color: #bcee00 !important;
     color: black !important;
+}
+
+@font-face {
+  font-family: 'primary';
+  src: url('https://fonts.gstatic.com/s/lato/v23/S6u9w4BMUTPHh6UVSwiPGQ.woff2') format('woff2');
+}
+
+@font-face {
+    font-family: 'secondary';
+    src: url('https://fonts.gstatic.com/s/lato/v23/S6u8w4BMUTPHjxsAXC-q.woff2') format('woff2');
 }

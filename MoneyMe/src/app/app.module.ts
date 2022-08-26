@@ -22,13 +22,15 @@ import { MatCardModule } from '@angular/material/card';
 import { QuoteCalculatorComponent } from './quote-calculator/quote-calculator.component';
 import { QuoteSliderComponent } from './quote-slider/quote-slider.component';
 import { MatExpansionModule } from '@angular/material/expansion';
+import { LoanApplicationComponent } from './loan-application/loan-application.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     ThirdPartyComponent,
     QuoteCalculatorComponent,
-    QuoteSliderComponent
+    QuoteSliderComponent,
+    LoanApplicationComponent
   ],
   imports: [
     BrowserModule,
