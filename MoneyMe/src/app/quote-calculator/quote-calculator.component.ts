@@ -1,5 +1,6 @@
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
+import { FormGroup } from '@angular/forms';
 import { Quote } from 'src/quote.model';
 
 @Component({
@@ -8,6 +9,14 @@ import { Quote } from 'src/quote.model';
   styleUrls: ['./quote-calculator.component.css']
 })
 export class QuoteCalculatorComponent implements OnInit {
+
+  private _formGroup: FormGroup = new FormGroup({});
+  public get formGroup(): FormGroup {
+    return this._formGroup;
+  }
+  public set formGroup(v: FormGroup) {
+    this._formGroup = v;
+  }
 
   private _panelState: boolean = false;
   public get panelState(): boolean {
@@ -49,6 +58,11 @@ export class QuoteCalculatorComponent implements OnInit {
   }
 
   public async requestQuoteAsync(): Promise<void> {
+    this.formGroup.markAllAsTouched();
+    this.formGroup.updateValueAndValidity();
+
+    if (this.formGroup.invalid) return;
+
     var quote = new Quote();
     quote.AmountRequired = 5000;
     quote.Term = 6;

@@ -1,38 +1,49 @@
-<div class="fields">
+<form [formGroup]="formGroup" class="fields">
     <mat-form-field>
         <mat-label>Title</mat-label>
-        <mat-select>
+        <mat-select formControlName="title">
             <mat-option [value]="1">Mr.</mat-option>
             <mat-option [value]="2">Ms.</mat-option>
             <mat-option [value]="3">Mrs.</mat-option>
         </mat-select>
+        <mat-error *ngIf="formGroup.controls['title'].hasError('required')">Title is required.</mat-error>
     </mat-form-field>
     <mat-form-field appearance="standard">
         <mat-label>First Name</mat-label>
-        <input matInput placeholder="Oliver" />
-        <mat-error>Email address is required.</mat-error>
+        <input formControlName="firstName" matInput placeholder="Oliver" />
+        <mat-error *ngIf="formGroup.controls['firstName'].hasError('pattern')">First name is invalid.</mat-error>
+        <mat-error *ngIf="formGroup.controls['firstName'].hasError('required')">First name is required.</mat-error>
     </mat-form-field>
     <mat-form-field appearance="standard">
         <mat-label>Last Name</mat-label>
-        <input matInput placeholder="Smith" />
-        <mat-error>Email address is required.</mat-error>
+        <input formControlName="lastName" matInput placeholder="Smith" />
+        <mat-error *ngIf="formGroup.controls['lastName'].hasError('pattern')">Last name is invalid.</mat-error>
+        <mat-error *ngIf="formGroup.controls['lastName'].hasError('required')">Last name is required.</mat-error>
     </mat-form-field>
     <mat-form-field appearance="standard">
         <mat-label>Date of Birth</mat-label>
-        <input matInput [matDatepicker]="picker">
+        <input formControlName="dateOfBirth" [min]="minDate" [max]="maxDate" matInput [matDatepicker]="picker"
+            placeholder="01/26/1990">
         <mat-hint>MM/DD/YYYY</mat-hint>
         <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
         <mat-datepicker #picker></mat-datepicker>
-        <mat-error>Email address is required.</mat-error>
-    </mat-form-field>
-    <mat-form-field appearance="standard">
-        <mat-label>Mobile</mat-label>
-        <input matInput placeholder=" +61412345678" />
-        <mat-error>Email address is required.</mat-error>
+        <mat-error *ngIf="formGroup.controls['dateOfBirth'].hasError('pattern')">Date of birth is invalid.</mat-error>
+        <mat-error *ngIf="formGroup.controls['dateOfBirth'].hasError('required')">Date of birth is required.</mat-error>
+        <mat-error *ngIf="formGroup.controls['dateOfBirth'].hasError('matDatepickerMin')">Birthdate is invalid.
+        </mat-error>
+        <mat-error *ngIf="formGroup.controls['dateOfBirth'].hasError('matDatepickerMax')">Must be at least 18 years old.
+        </mat-error>
     </mat-form-field>
     <mat-form-field appearance="standard">
         <mat-label>Email</mat-label>
-        <input matInput placeholder="oliver.smith@gmail.com" />
-        <mat-error>Email address is required.</mat-error>
+        <input formControlName="email" matInput placeholder="oliver.smith@gmail.com" />
+        <mat-error *ngIf="formGroup.controls['email'].hasError('email')">Email is invalid.</mat-error>
+        <mat-error *ngIf="formGroup.controls['email'].hasError('required')">Email address is required.</mat-error>
     </mat-form-field>
-</div>
+    <mat-form-field appearance="standard">
+        <mat-label>Mobile</mat-label>
+        <input formControlName="mobile" matInput placeholder=" +61412345678" />
+        <mat-error *ngIf="formGroup.controls['mobile'].hasError('pattern')">Mobile is invalid.</mat-error>
+        <mat-error *ngIf="formGroup.controls['mobile'].hasError('required')">Mobile is required.</mat-error>
+    </mat-form-field>
+</form>

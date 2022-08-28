@@ -5,11 +5,6 @@ mat-card {
     color: #8A8A8A;
 }
 
-form {
-    display: flex;
-    flex-direction: column;
-}
-
 mat-card-title {
     display: flex;
     flex-direction: column;
@@ -21,6 +16,10 @@ mat-card-title {
 
 .mat-expansion-panel:not([class*=mat-elevation-z]) {
     box-shadow: none;
+}
+
+.mat-accordion>.mat-expansion-panel-spacing:last-child {
+    margin-bottom: 5px;
 }
 
 mat-expansion-panel {
@@ -69,16 +68,29 @@ button{
     background-color: #00D1CF;
 }
 
+::ng-deep .mat-form-field.mat-invalid .mat-form-field-underline {
+    background-color: #f44336;
+}
+
+::ng-deep .mat-form-field-appearance-legacy.mat-form-field-invalid:not(.mat-focused) .mat-form-field-ripple {
+    background-color: #f44336;
+    height: 1.5px !important;
+}
+
 ::ng-deep .mat-form-field.mat-focused.mat-primary .mat-select-arrow {
     color: #00D1CF;
 }
 
 ::ng-deep .mat-form-field .mat-select-placeholder {
-    font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+    font-family: 'primary';
 }
 
 ::ng-deep .mat-primary .mat-option.mat-selected:not(.mat-option-disabled) {
     color: black;
+}
+
+::ng-deep .mat-datepicker-toggle-active {
+    color: #00D1CF;
 }
 
 @font-face {
