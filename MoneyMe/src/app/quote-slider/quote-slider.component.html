@@ -1,24 +1,25 @@
 <div class="amount-slider">
-    <div class="slider-group">
+    <div #slider class="slider-group">
         <div style="display: block; height: 50px;">
             <div class="slider-label" [style.left]="position"
-                style="position: absolute; width: 100px; height: 50px; background-color:#FF4081; border-radius: 5px;">
+                style="position: absolute; width: 100px; height: 50px; background-color:#00D1CF; border-radius: 5px;">
                 <div style="width: 100%; height: 100%; display: flex; flex-direction: column; align-items: center;">
                     <div style="height: 100%; display: flex; flex-direction: row; align-items: center;">
-                        <h2 style="color: white; margin: 0px">{{current}}</h2>
+                        <h3 style="color: white; margin: 0px">{{current}}</h3>
                     </div>
                 </div>
             </div>
         </div>
         <div style="width:100%; display: flex; flex-direction: column; align-items: center;">
-            <mat-slider (input)="onInputChange($event)" tickInterval="10" step="1" min="1" max="100">
+            <mat-slider [value]="initial" (input)="onInputChange($event)" [step]="step" min="0"
+                [max]="maximumPercentage">
             </mat-slider>
             <div class="range">
-                <label [innerText]="minimum"></label>
+                <label [innerText]="format(minimum)"></label>
                 <div class="range-spacing">
                     <label style="font-weight: bold;" [innerText]="title"></label>
                 </div>
-                <label [innerText]="maximum"></label>
+                <label [innerText]="format(maximum)"></label>
             </div>
         </div>
     </div>

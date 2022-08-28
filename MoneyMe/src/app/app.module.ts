@@ -23,6 +23,9 @@ import { QuoteCalculatorComponent } from './quote-calculator/quote-calculator.co
 import { QuoteSliderComponent } from './quote-slider/quote-slider.component';
 import { MatExpansionModule } from '@angular/material/expansion';
 import { LoanApplicationComponent } from './loan-application/loan-application.component';
+import { UserFormComponent } from './user-form/user-form.component';
+import { UserInformationComponent } from './user-information/user-information.component';
+import { FinanceDetailsComponent } from './finance-details/finance-details.component';
 
 @NgModule({
   declarations: [
@@ -30,7 +33,10 @@ import { LoanApplicationComponent } from './loan-application/loan-application.co
     ThirdPartyComponent,
     QuoteCalculatorComponent,
     QuoteSliderComponent,
-    LoanApplicationComponent
+    LoanApplicationComponent,
+    UserFormComponent,
+    UserInformationComponent,
+    FinanceDetailsComponent
   ],
   imports: [
     BrowserModule,

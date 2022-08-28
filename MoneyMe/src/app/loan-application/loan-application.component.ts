@@ -18,4 +18,8 @@ export class LoanApplicationComponent implements OnInit {
   ngOnInit(): void {
   }
 
+  public async applyForLoanAsync(): Promise<void> {
+
+  }
+
 }

@@ -1,6 +1,8 @@
 mat-card {
-    width: 464px;
+    max-width: 500px;
+    margin: 5%;
     font-family: 'primary';
+    color: #8A8A8A;
 }
 
 form {
@@ -13,20 +15,8 @@ mat-card-title {
     flex-direction: column;
     margin-bottom: 8px;
     align-items: center;
-}
-
-mat-form-field {
-    margin: 5px;
-}
-
-.fields {
-    margin-top: 10px;
-    margin-bottom: 20px;
-}
-
-button{
-    width: 70%;
-    background-color: #bcee00;
+    font-size: xx-large;
+    padding: 10px;
 }
 
 .mat-expansion-panel:not([class*=mat-elevation-z]) {
@@ -34,9 +24,10 @@ button{
 }
 
 mat-expansion-panel {
-    border-color: #EEEEEE;
+    border-color: #00D1CF;
     border-style: dashed;
     margin-bottom: 5px;
+    border-width: 1px;
 }
 
 .mat-expansion-panel-header {
@@ -44,9 +35,13 @@ mat-expansion-panel {
 }
 
 button{
+    width: 60%;
     font-family: 'primary';
-    background-color: #bcee00 !important;
-    color: black !important;
+    background-color: #00D1CF !important;
+    color: white !important;
+    box-shadow: none !important;
+    height: 40px;
+    font-size: large;
 }
 
 @font-face {

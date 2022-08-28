@@ -8,8 +8,7 @@
             <mat-panel-title>
               Quote Details
             </mat-panel-title>
-            <mat-panel-description>
-              $12,000 for 6 months
+            <mat-panel-description [textContent]="format(loanAmount) + ' for '+ formatAmortization(terms)">
             </mat-panel-description>
           </mat-expansion-panel-header>
           <div>
@@ -21,8 +20,12 @@
                 <mat-option>Product C</mat-option>
               </mat-select>
             </mat-form-field>
-            <app-quote-slider [title]="'How much do you need?'" [maximum]="100000" [minimum]="1000"></app-quote-slider>
-            <app-quote-slider [title]="'How many payments?'" [maximum]="60" [minimum]="3"></app-quote-slider>
+            <app-quote-slider [(currentValue)]="loanAmount" [format]="format" [title]="'How much do you need?'"
+              [maximum]="15000" [minimum]="2100">
+            </app-quote-slider>
+            <app-quote-slider [(currentValue)]="terms" [format]="formatAmortization" [title]="'For how long?'"
+              [maximum]="60" [minimum]="3">
+            </app-quote-slider>
           </div>
         </mat-expansion-panel>
         <mat-expansion-panel (opened)="panelState = true" (closed)="panelState = false">
@@ -34,40 +37,14 @@
               Mr. Jay Mark Estrera
             </mat-panel-description>
           </mat-expansion-panel-header>
-          <div class="fields">
-            <mat-form-field appearance="standard">
-              <mat-label>Title</mat-label>
-              <input matInput placeholder="Mr." />
-              <mat-hint>Hint</mat-hint>
-            </mat-form-field>
-            <mat-form-field appearance="standard">
-              <mat-label>First Name</mat-label>
-              <input matInput placeholder="Oliver" />
-              <mat-hint>Hint</mat-hint>
-            </mat-form-field>
-            <mat-form-field appearance="standard">
-              <mat-label>Last Name</mat-label>
-              <input matInput placeholder="Smith" />
-              <mat-hint>Hint</mat-hint>
-            </mat-form-field>
-            <mat-form-field appearance="standard">
-              <mat-label>Mobile</mat-label>
-              <input matInput placeholder=" +61412345678" />
-              <mat-hint>Hint</mat-hint>
-            </mat-form-field>
-            <mat-form-field appearance="standard">
-              <mat-label>Email</mat-label>
-              <input matInput placeholder="oliver.smith@gmail.com" />
-              <mat-hint>Hint</mat-hint>
-            </mat-form-field>
-          </div>
+          <app-user-form></app-user-form>
         </mat-expansion-panel>
       </mat-accordion>
       <div style="display: flex; flex-direction: column; align-items: center;">
-        <button type="button" (click)="requestQuoteAsync()" mat-raised-button color="primary">
+        <button type="button" (click)="requestQuoteAsync()" mat-flat-button color="primary">
           Calculate Quote
         </button>
-        <small style="margin: 10px;">
+        <small style="margin: 10px; color: gray;">
           Quote does not affect your credit score.
         </small>
       </div>

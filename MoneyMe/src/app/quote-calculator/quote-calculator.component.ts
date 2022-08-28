@@ -1,6 +1,5 @@
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
-import { MatSliderChange } from '@angular/material/slider';
 import { Quote } from 'src/quote.model';
 
 @Component({
@@ -18,53 +17,27 @@ export class QuoteCalculatorComponent implements OnInit {
     this._panelState = v;
   }
 
-
-  private _position: string = "51.58px";
-  public get position(): string {
-    return this._position;
-  }
-  public set position(v: string) {
-    this._position = v;
-  }
-
-  private _loanAmount: string = "$1,000";
-  public get loanAmount(): string {
+  private _loanAmount!: number;
+  public get loanAmount(): number {
     return this._loanAmount;
   }
-  public set loanAmount(v: string) {
+  public set loanAmount(v: number) {
     this._loanAmount = v;
   }
 
-  private _amount: number = 1000;
-  public get amount(): number {
-    return this._amount;
+  private _terms!: number;
+  public get terms(): number {
+    return this._terms;
   }
-  public set amount(v: number) {
-    this._amount = v;
-  }
-
-  private _sliderValue!: number;
-  public get sliderValue(): number {
-    return this._sliderValue;
-  }
-  public set sliderValue(v: number) {
-    this._sliderValue = v;
+  public set terms(v: number) {
+    this._terms = v;
   }
 
   constructor(private httpClient: HttpClient) { }
 
   ngOnInit(): void {
-    this.amount = 5000;
-    this.loanAmount = "$" + this.amount.toLocaleString();
-    this.sliderValue = (5000 / 100000) * 100;
-    this.position = ((5000 / 100000) * 320) + 16 + "px";
-  }
-
-  onInputChange(event: MatSliderChange) {
-    this.position = ((((event.value ?? 0) / 100) * 320)) + 16 + "px";
-
-    this.amount = (((event.value ?? 0) / 100) * (100000));
-    this.loanAmount = "$" + this.amount.toLocaleString();
+    this.loanAmount = 5000;
+    this.terms = 24;
   }
 
   public async requestQuoteAsync(): Promise<void> {
@@ -84,5 +57,13 @@ export class QuoteCalculatorComponent implements OnInit {
       })
     });
     redirectUrlObservable.subscribe({ next: (redirectUrl) => console.log("first") });
+  }
+
+  public format(value: number): string {
+    return "$" + value.toLocaleString();
+  }
+
+  public formatAmortization(value: number): string {
+    return value + " months";
   }
 }
