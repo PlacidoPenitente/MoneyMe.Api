@@ -63,7 +63,7 @@ mat-slider {
 
 ::ng-deep .mat-slider-thumb, ::ng-deep .mat-slider-focus-ring {
     background-color: white !important;
-    border-color: #E9E9E9 !important;
+    border-color: #DDDDDD !important;
 }
 
 ::ng-deep .mat-slider-track-background {
