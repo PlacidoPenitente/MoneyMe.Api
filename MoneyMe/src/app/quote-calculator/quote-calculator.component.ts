@@ -17,6 +17,14 @@ export class QuoteCalculatorComponent implements OnInit {
     this._panelState = v;
   }
 
+  private _product!: string;
+  public get product(): string {
+    return this._product;
+  }
+  public set product(v: string) {
+    this._product = v;
+  }
+
   private _loanAmount!: number;
   public get loanAmount(): number {
     return this._loanAmount;

@@ -1,27 +1,38 @@
 <div class="fields">
-    <mat-form-field appearance="standard">
+    <mat-form-field>
         <mat-label>Title</mat-label>
-        <input matInput placeholder="Mr." />
-        <mat-hint>Hint</mat-hint>
+        <mat-select>
+            <mat-option [value]="1">Mr.</mat-option>
+            <mat-option [value]="2">Ms.</mat-option>
+            <mat-option [value]="3">Mrs.</mat-option>
+        </mat-select>
     </mat-form-field>
     <mat-form-field appearance="standard">
         <mat-label>First Name</mat-label>
         <input matInput placeholder="Oliver" />
-        <mat-hint>Hint</mat-hint>
+        <mat-error>Email address is required.</mat-error>
     </mat-form-field>
     <mat-form-field appearance="standard">
         <mat-label>Last Name</mat-label>
         <input matInput placeholder="Smith" />
-        <mat-hint>Hint</mat-hint>
+        <mat-error>Email address is required.</mat-error>
+    </mat-form-field>
+    <mat-form-field appearance="standard">
+        <mat-label>Date of Birth</mat-label>
+        <input matInput [matDatepicker]="picker">
+        <mat-hint>MM/DD/YYYY</mat-hint>
+        <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+        <mat-datepicker #picker></mat-datepicker>
+        <mat-error>Email address is required.</mat-error>
     </mat-form-field>
     <mat-form-field appearance="standard">
         <mat-label>Mobile</mat-label>
         <input matInput placeholder=" +61412345678" />
-        <mat-hint>Hint</mat-hint>
+        <mat-error>Email address is required.</mat-error>
     </mat-form-field>
     <mat-form-field appearance="standard">
         <mat-label>Email</mat-label>
         <input matInput placeholder="oliver.smith@gmail.com" />
-        <mat-hint>Hint</mat-hint>
+        <mat-error>Email address is required.</mat-error>
     </mat-form-field>
 </div>

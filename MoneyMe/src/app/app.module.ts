@@ -7,6 +7,7 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { ThirdPartyComponent } from './third-party/third-party.component';
 
 import { CommonModule } from '@angular/common';
+import { FormsModule } from '@angular/forms';
 import { MatNativeDateModule } from '@angular/material/core';
 import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatFormFieldModule } from '@angular/material/form-field';
@@ -43,6 +44,7 @@ import { FinanceDetailsComponent } from './finance-details/finance-details.compo
     HttpClientModule,
     BrowserAnimationsModule,
     CommonModule,
+    FormsModule,
     MatTableModule,
     MatSortModule,
     MatFormFieldModule,

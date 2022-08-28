@@ -3,7 +3,7 @@
   <mat-card-content>
     <form>
       <mat-accordion style="margin-bottom: 10px; margin-top: 10px;">
-        <mat-expansion-panel [expanded]="true">
+        <mat-expansion-panel>
           <mat-expansion-panel-header>
             <mat-panel-title>
               Quote Details
@@ -14,10 +14,10 @@
           <div>
             <mat-form-field>
               <mat-label>Product</mat-label>
-              <mat-select>
-                <mat-option>Product A</mat-option>
-                <mat-option>Product B</mat-option>
-                <mat-option>Product C</mat-option>
+              <mat-select [(ngModel)]="product">
+                <mat-option [value]="1">Product A</mat-option>
+                <mat-option [value]="2">Product B</mat-option>
+                <mat-option [value]="3">Product C</mat-option>
               </mat-select>
             </mat-form-field>
             <app-quote-slider [(currentValue)]="loanAmount" [format]="format" [title]="'How much do you need?'"
@@ -28,7 +28,7 @@
             </app-quote-slider>
           </div>
         </mat-expansion-panel>
-        <mat-expansion-panel (opened)="panelState = true" (closed)="panelState = false">
+        <mat-expansion-panel (opened)="panelState = true" (closed)="panelState = false" expanded="true">
           <mat-expansion-panel-header>
             <mat-panel-title>
               Your Information

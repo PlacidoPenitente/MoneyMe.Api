@@ -1,5 +1,5 @@
 mat-card {
-    max-width: 500px;
+    max-width: 521px;
     margin: 5%;
     font-family: 'primary';
     color: #8A8A8A;
@@ -42,6 +42,43 @@ button{
     box-shadow: none !important;
     height: 40px;
     font-size: large;
+}
+
+::ng-deep .mat-input-element {
+    caret-color: #8A8A8A;
+    color: black !important;
+}
+
+::ng-deep .mat-form-field-label {
+    color: #8A8A8A;
+}
+
+::ng-deep .mat-form-field {
+    font-family: 'Primary';
+}
+
+::ng-deep .mat-form-field.mat-focused .mat-form-field-label {
+    color: #00D1CF;
+}
+
+::ng-deep .mat-form-field .mat-form-field-ripple {
+    background-color: #8A8A8A;
+}
+
+::ng-deep .mat-form-field.mat-focused .mat-form-field-ripple {
+    background-color: #00D1CF;
+}
+
+::ng-deep .mat-form-field.mat-focused.mat-primary .mat-select-arrow {
+    color: #00D1CF;
+}
+
+::ng-deep .mat-form-field .mat-select-placeholder {
+    font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+}
+
+::ng-deep .mat-primary .mat-option.mat-selected:not(.mat-option-disabled) {
+    color: black;
 }
 
 @font-face {
