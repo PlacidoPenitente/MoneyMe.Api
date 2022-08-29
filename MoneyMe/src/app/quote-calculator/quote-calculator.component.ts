@@ -1,6 +1,7 @@
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
 import { FormGroup } from '@angular/forms';
+import { ActivatedRoute } from '@angular/router';
 import { Quote } from 'src/quote.model';
 
 @Component({
@@ -50,7 +51,7 @@ export class QuoteCalculatorComponent implements OnInit {
     this._terms = v;
   }
 
-  constructor(private httpClient: HttpClient) { }
+  constructor(private httpClient: HttpClient, private _activatedRoute: ActivatedRoute) { }
 
   ngOnInit(): void {
     this.loanAmount = 5000;

@@ -5,6 +5,6 @@ namespace MoneyMe.Domain.Factories
 {
     public interface IQuoteFactory
     {
-        Quote Create(Guid customerId, decimal loanAmount);
+        Quote Create(Guid customerId, decimal loanAmount, int term);
     }
 }

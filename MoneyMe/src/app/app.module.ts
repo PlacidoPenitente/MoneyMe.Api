@@ -27,6 +27,7 @@ import { LoanApplicationComponent } from './loan-application/loan-application.co
 import { UserFormComponent } from './user-form/user-form.component';
 import { UserInformationComponent } from './user-information/user-information.component';
 import { FinanceDetailsComponent } from './finance-details/finance-details.component';
+import { AppRoutingModule } from './app-routing.module';
 
 @NgModule({
   declarations: [
@@ -58,7 +59,8 @@ import { FinanceDetailsComponent } from './finance-details/finance-details.compo
     MatButtonModule,
     MatSliderModule,
     MatCardModule,
-    MatExpansionModule
+    MatExpansionModule,
+    AppRoutingModule
   ],
   providers: [],
   bootstrap: [AppComponent]

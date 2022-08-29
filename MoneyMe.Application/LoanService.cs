@@ -12,23 +12,33 @@ namespace MoneyMe.Application
 {
     public class LoanService : ILoanService
     {
+        private readonly IProductRepository _productRepository;
         private readonly IQuoteRepository _quoteRepository;
         private readonly ILoanFactory _loanFactory;
         private readonly ILoanRepository _loanRepository;
         private readonly IUnitOfWork _unitOfWork;
 
-        public LoanService(IQuoteRepository quoteRepository, ILoanFactory loanFactory, ILoanRepository loanRepository, IUnitOfWork unitOfWork)
+        public LoanService(
+            IProductRepository productRepository,
+            IQuoteRepository quoteRepository,
+            ILoanFactory loanFactory,
+            ILoanRepository loanRepository,
+            IUnitOfWork unitOfWork)
         {
+            _productRepository = productRepository;
             _quoteRepository = quoteRepository;
             _loanFactory = loanFactory;
             _loanRepository = loanRepository;
             _unitOfWork = unitOfWork;
         }
 
-        public async Task<LoanDto> ApplyAsync(Guid quoteId)
+        public async Task<LoanDto> ApplyAsync(Guid quoteId, Guid productId)
         {
             var quote = await _quoteRepository.GetAsync(quoteId);
-            var loan = _loanFactory.Create(quote.CustomerId, quote.LoanAmount, quote.Terms, quote.MonthlyPayment, quote.InterestRate);
+
+            var product = await _productRepository.GetAsync(productId);
+
+            var loan = _loanFactory.Create(quote.CustomerId, quote.LoanAmount, quote.Term, quote.InterestRate, quote.MonthlyAmotization);
 
             using (_unitOfWork)
             {

@@ -6,6 +6,6 @@ namespace MoneyMe.Application.Contracts
 {
     public interface ILoanService
     {
-        Task<LoanDto> ApplyAsync(Guid quoteId);
+        Task<LoanDto> ApplyAsync(Guid quoteId, Guid productId);
     }
 }

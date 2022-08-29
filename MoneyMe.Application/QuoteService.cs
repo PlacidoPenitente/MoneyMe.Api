@@ -28,9 +28,9 @@ namespace MoneyMe.Application
 
         public async Task<QuoteDto> CalculateAsync(PartialQuoteDto partialQuoteDto)
         {
-            var product = await _productRepository.FindByNumberOfTermsAsync(partialQuoteDto.Terms);
+            var product = await _productRepository.GetAsync(partialQuoteDto.ProductId);
 
-            var quote = _quoteFactory.Create(partialQuoteDto.CustomerId, partialQuoteDto.AmountRequired);
+            var quote = _quoteFactory.Create(partialQuoteDto.CustomerId, partialQuoteDto.AmountRequired, partialQuoteDto.Term);
 
             quote.ApplyProductTerms(product);
 
@@ -49,8 +49,8 @@ namespace MoneyMe.Application
                 DateModified = quote.DateModified,
                 CustomerId = quote.CustomerId,
                 LoanAmount = quote.LoanAmount,
-                Terms = quote.Terms,
-                MonthlyPayment = quote.MonthlyPayment
+                Terms = quote.Term,
+                MonthlyPayment = 100
             };
         }
     }

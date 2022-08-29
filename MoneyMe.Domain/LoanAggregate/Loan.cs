@@ -23,14 +23,14 @@ namespace MoneyMe.Domain.ApplicationAggregate
             DateTime dateModified,
             Guid customerId,
             decimal loanAmount,
-            List<Term> terms)
+            IReadOnlyCollection<Term> terms)
         {
             Id = id;
             DateAdded = dateAdded;
             DateModified = dateModified;
             CustomerId = customerId;
             LoanAmount = loanAmount;
-            _terms = terms;
+            _terms = terms.ToList();
         }
 
         [Key]

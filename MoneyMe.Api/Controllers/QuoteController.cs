@@ -3,7 +3,6 @@ using MoneyMe.Api.Requests;
 using MoneyMe.Api.Responses;
 using MoneyMe.Application.Contracts;
 using MoneyMe.Application.Contracts.Dtos;
-using System;
 using System.Threading.Tasks;
 
 namespace MoneyMe.Api.Controllers
@@ -49,13 +48,13 @@ namespace MoneyMe.Api.Controllers
                 await _customerService.RegisterCustomerAsync(customerDto);
             }
 
-            var quoteText = $"{customerDto.Email}|{quoteRequest.AmountRequired}|{quoteRequest.Terms}";
+            var quoteText = $"{customerDto.Email}|{quoteRequest.AmountRequired}|{quoteRequest.Term}";
             var encryptedQuoteText = _securityService.Encrypt(quoteText);
             var redirectUrl = $"https://localhost:4200/quote/partial/{encryptedQuoteText}";
 
             await _emailService.SendMessageAsync(customerDto.Email, redirectUrl);
 
-            return Ok();
+            return Ok(redirectUrl);
         }
 
         [HttpGet("continue")]
@@ -64,11 +63,11 @@ namespace MoneyMe.Api.Controllers
             var quoteUrl = _securityService.Decrypt(encryptedQuoteUrl);
 
             var quoteUrlSections = quoteUrl.Split('|');
-            var custopmerEmail = quoteUrlSections[0];
+            var customerEmail = quoteUrlSections[0];
             var amountRequired = decimal.Parse(quoteUrlSections[1]);
             var terms = int.Parse(quoteUrlSections[2]);
 
-            var customer = await _customerService.FindCustomerByEmailAsync(custopmerEmail);
+            var customer = await _customerService.FindCustomerByEmailAsync(customerEmail);
 
             var response = new
             {

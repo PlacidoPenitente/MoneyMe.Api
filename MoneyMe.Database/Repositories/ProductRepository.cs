@@ -3,6 +3,7 @@ using MoneyMe.Domain.ProductAggregate;
 using MoneyMe.Domain.Repositories;
 using MoneyMe.Infrastructure.Database;
 using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace MoneyMe.Infrastructure.Repositories
@@ -21,9 +22,9 @@ namespace MoneyMe.Infrastructure.Repositories
             await _context.AddAsync(product);
         }
 
-        public async Task<Product> FindByNumberOfTermsAsync(int terms)
+        public async Task<IReadOnlyCollection<Product>> GetAllAsync()
         {
-            return await _context.Products.SingleOrDefaultAsync(product => product.Terms == terms);
+            return await _context.Products.ToListAsync();
         }
 
         public async Task<Product> GetAsync(Guid id)

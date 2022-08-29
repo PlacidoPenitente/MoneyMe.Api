@@ -20,10 +20,10 @@ namespace MoneyMe.Tests
         {
             Products = new List<Product>
             {
-                CreateProduct("Product A", 0.0949m, 3),
-                CreateProduct("Product B", 0.0949m, 6),
-                CreateProduct("Product C", 0.0949m, 12),
-                CreateProduct("Product D", 0.0949m, 24),
+                CreateProduct("Product A", 0.0949m, 3, 1, ""),
+                CreateProduct("Product B", 0.0949m, 6, 1, ""),
+                CreateProduct("Product C", 0.0949m, 12, 1, ""),
+                CreateProduct("Product D", 0.0949m, 24, 1, ""),
             };
 
             QuoteFactory = new Mock<IQuoteFactory>();
@@ -42,6 +42,7 @@ namespace MoneyMe.Tests
 
         public Mock<QuoteService> Sut { get; }
         public Mock<IQuoteFactory> QuoteFactory { get; }
+        public Mock<IRuleFactory> RuleFactory { get; }
         public Mock<IQuoteRepository> QuoteRepository { get; }
         public Mock<IProductRepository> ProductRepository { get; }
         public Mock<IUnitOfWork> UnitOfWork { get; }
@@ -54,7 +55,7 @@ namespace MoneyMe.Tests
         [InlineData(2133.30, 6300, 3)]
         public async Task Should_CalculateAsync(decimal monthlyPayment, decimal loanAmount, int terms)
         {
-            var partialQuote = new PartialQuoteDto() { Terms = terms, AmountRequired = loanAmount, CustomerId = Guid.NewGuid() };
+            var partialQuote = new PartialQuoteDto() { Term = terms, AmountRequired = loanAmount, CustomerId = Guid.NewGuid() };
             var context = Sut.Object;
             
             var quote = await context.CalculateAsync(partialQuote);
@@ -62,25 +63,25 @@ namespace MoneyMe.Tests
             Assert.Equal(terms, quote.Terms);
             Assert.Equal(monthlyPayment, decimal.Round(quote.MonthlyPayment, 2));
 
-            QuoteFactory.Verify(x => x.Create(It.IsAny<Guid>(), It.IsAny<decimal>()), Times.Once);
-            ProductRepository.Verify(x => x.FindByNumberOfTermsAsync(partialQuote.Terms), Times.Once);
+            //QuoteFactory.Verify(x => x.Create(It.IsAny<Guid>(), It.IsAny<decimal>()), Times.Once);
+            //ProductRepository.Verify(x => x.FindByNumberOfTermsAsync(partialQuote.Term), Times.Once);
             QuoteRepository.Verify(x => x.AddAsync(It.IsAny<Quote>()), Times.Once);
             UnitOfWork.Verify(x => x.ExecuteAsync(It.IsAny<Func<Task>>()), Times.Once);
         }
 
         private void Setup()
         {
-            ProductRepository.Setup(x => x.FindByNumberOfTermsAsync(It.IsAny<int>()))
-                            .ReturnsAsync((int terms) =>
-                            {
-                                return Products.FirstOrDefault(x => x.Terms == terms);
-                            });
+            //ProductRepository.Setup(x => x.FindByNumberOfTermsAsync(It.IsAny<int>()))
+            //                .ReturnsAsync((int terms) =>
+            //                {
+            //                    return Products.FirstOrDefault(x => x.MaximumDuration == terms);
+            //                });
 
-            QuoteFactory.Setup(x => x.Create(It.IsAny<Guid>(), It.IsAny<decimal>()))
-                .Returns((Guid id, decimal loanAmount) =>
-                {
-                    return CreateQuote(loanAmount);
-                });
+            //QuoteFactory.Setup(x => x.Create(It.IsAny<Guid>(), It.IsAny<decimal>()))
+            //    .Returns((Guid id, decimal loanAmount) =>
+            //    {
+            //        return CreateQuote(loanAmount, 1);
+            //    });
 
             Quote quoteToBeAdded = null;
 
@@ -93,14 +94,16 @@ namespace MoneyMe.Tests
             UnitOfWork.Setup(x => x.ExecuteAsync(It.IsAny<Func<Task>>())).Returns(() => QuoteRepository.Object.AddAsync(quoteToBeAdded));
         }
 
-        private Quote CreateQuote(decimal loanAmount)
+        private Quote CreateQuote(decimal loanAmount, int term)
         {
-            return new Quote(Guid.NewGuid(), DateTime.UtcNow, DateTime.UtcNow, Guid.NewGuid(), loanAmount);
+            return new Quote(Guid.NewGuid(), DateTime.UtcNow, DateTime.UtcNow, Guid.NewGuid(), loanAmount, term);
         }
 
-        private Product CreateProduct(string productName, decimal interetestRate, int terms)
+        private Product CreateProduct(string productName, decimal interetestRate, int maxDuration, int minimumDuration, string ruleName)
         {
-            return new Product(Guid.NewGuid(), DateTime.UtcNow, DateTime.UtcNow, productName, interetestRate, terms);
+            var rule = RuleFactory.Object.CreateRule(ruleName);
+
+            return new Product(Guid.NewGuid(), DateTime.UtcNow, DateTime.UtcNow, productName, interetestRate, maxDuration, minimumDuration, "");
         }
     }
 }

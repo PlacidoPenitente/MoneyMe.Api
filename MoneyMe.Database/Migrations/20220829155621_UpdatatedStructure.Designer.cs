@@ -10,8 +10,8 @@ using MoneyMe.Infrastructure.Database;
 namespace MoneyMe.Infrastructure.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20220826025735_InitialMigration")]
-    partial class InitialMigration
+    [Migration("20220829155621_UpdatatedStructure")]
+    partial class UpdatatedStructure
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -37,7 +37,7 @@ namespace MoneyMe.Infrastructure.Migrations
                         .HasColumnType("datetime2");
 
                     b.Property<decimal>("LoanAmount")
-                        .HasColumnType("decimal(18,2)");
+                        .HasColumnType("decimal(5,4)");
 
                     b.Property<int>("Status")
                         .HasColumnType("int");
@@ -97,11 +97,17 @@ namespace MoneyMe.Infrastructure.Migrations
                     b.Property<decimal>("InterestRate")
                         .HasColumnType("decimal(5,4)");
 
+                    b.Property<int>("MaximumDuration")
+                        .HasColumnType("int");
+
+                    b.Property<int>("MinimumDuration")
+                        .HasColumnType("int");
+
                     b.Property<string>("Name")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("Terms")
-                        .HasColumnType("int");
+                    b.Property<string>("Rule")
+                        .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
 
@@ -110,39 +116,36 @@ namespace MoneyMe.Infrastructure.Migrations
                     b.HasData(
                         new
                         {
-                            Id = new Guid("a3dd17d8-26fa-43e9-8bf9-7e7896c135e4"),
-                            DateAdded = new DateTime(2022, 8, 26, 2, 57, 35, 361, DateTimeKind.Utc).AddTicks(8093),
-                            DateModified = new DateTime(2022, 8, 26, 2, 57, 35, 361, DateTimeKind.Utc).AddTicks(8104),
+                            Id = new Guid("26e4541a-2ee6-4834-8f93-ed7ddfcffedb"),
+                            DateAdded = new DateTime(2022, 8, 29, 15, 56, 21, 412, DateTimeKind.Utc).AddTicks(3360),
+                            DateModified = new DateTime(2022, 8, 29, 15, 56, 21, 412, DateTimeKind.Utc).AddTicks(3380),
                             InterestRate = 0m,
+                            MaximumDuration = 3,
+                            MinimumDuration = 1,
                             Name = "Product A",
-                            Terms = 3
+                            Rule = "InterestFreeRule"
                         },
                         new
                         {
-                            Id = new Guid("aefefad7-ff28-4f28-b00e-a0f6b0c4a3ed"),
-                            DateAdded = new DateTime(2022, 8, 26, 2, 57, 35, 362, DateTimeKind.Utc).AddTicks(164),
-                            DateModified = new DateTime(2022, 8, 26, 2, 57, 35, 362, DateTimeKind.Utc).AddTicks(168),
+                            Id = new Guid("d9ad31d7-83c6-4085-a2d3-233037a27eb1"),
+                            DateAdded = new DateTime(2022, 8, 29, 15, 56, 21, 412, DateTimeKind.Utc).AddTicks(9214),
+                            DateModified = new DateTime(2022, 8, 29, 15, 56, 21, 412, DateTimeKind.Utc).AddTicks(9236),
                             InterestRate = 0.0949m,
+                            MaximumDuration = 12,
+                            MinimumDuration = 6,
                             Name = "Product B",
-                            Terms = 6
+                            Rule = "FirstTwoMonthsInterestFreeRule"
                         },
                         new
                         {
-                            Id = new Guid("e4c9fdfc-6c82-4c94-8bc9-7b2b7da09643"),
-                            DateAdded = new DateTime(2022, 8, 26, 2, 57, 35, 362, DateTimeKind.Utc).AddTicks(243),
-                            DateModified = new DateTime(2022, 8, 26, 2, 57, 35, 362, DateTimeKind.Utc).AddTicks(244),
+                            Id = new Guid("50ffc053-1243-4aee-b5cc-5bf8f9946c85"),
+                            DateAdded = new DateTime(2022, 8, 29, 15, 56, 21, 412, DateTimeKind.Utc).AddTicks(9457),
+                            DateModified = new DateTime(2022, 8, 29, 15, 56, 21, 412, DateTimeKind.Utc).AddTicks(9459),
                             InterestRate = 0.0949m,
+                            MaximumDuration = 36,
+                            MinimumDuration = 18,
                             Name = "Product C",
-                            Terms = 12
-                        },
-                        new
-                        {
-                            Id = new Guid("93e12c92-a5e9-4b24-845c-f8c8301d1053"),
-                            DateAdded = new DateTime(2022, 8, 26, 2, 57, 35, 362, DateTimeKind.Utc).AddTicks(246),
-                            DateModified = new DateTime(2022, 8, 26, 2, 57, 35, 362, DateTimeKind.Utc).AddTicks(247),
-                            InterestRate = 0.0949m,
-                            Name = "Product D",
-                            Terms = 24
+                            Rule = "NoInterestFreeRule"
                         });
                 });
 
@@ -165,12 +168,9 @@ namespace MoneyMe.Infrastructure.Migrations
                         .HasColumnType("decimal(5,4)");
 
                     b.Property<decimal>("LoanAmount")
-                        .HasColumnType("decimal(18,2)");
-
-                    b.Property<decimal>("MonthlyPayment")
                         .HasColumnType("decimal(5,4)");
 
-                    b.Property<int>("Terms")
+                    b.Property<int>("Term")
                         .HasColumnType("int");
 
                     b.HasKey("Id");
@@ -201,13 +201,45 @@ namespace MoneyMe.Infrastructure.Migrations
 
                             b1.HasKey("LoanId", "Id");
 
-                            b1.ToTable("Term");
+                            b1.ToTable("Loans_Terms");
 
                             b1.WithOwner()
                                 .HasForeignKey("LoanId");
                         });
 
                     b.Navigation("Terms");
+                });
+
+            modelBuilder.Entity("MoneyMe.Domain.QuoteAggregate.Quote", b =>
+                {
+                    b.OwnsMany("MoneyMe.Domain.LoanAggregate.Term", "MonthlyAmotization", b1 =>
+                        {
+                            b1.Property<Guid>("QuoteId")
+                                .HasColumnType("uniqueidentifier");
+
+                            b1.Property<int>("Id")
+                                .ValueGeneratedOnAdd()
+                                .HasColumnType("int")
+                                .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                            b1.Property<decimal>("Interest")
+                                .HasColumnType("decimal(5,4)");
+
+                            b1.Property<int>("Period")
+                                .HasColumnType("int");
+
+                            b1.Property<decimal>("Principal")
+                                .HasColumnType("decimal(5,4)");
+
+                            b1.HasKey("QuoteId", "Id");
+
+                            b1.ToTable("Quotes_MonthlyAmotization");
+
+                            b1.WithOwner()
+                                .HasForeignKey("QuoteId");
+                        });
+
+                    b.Navigation("MonthlyAmotization");
                 });
 #pragma warning restore 612, 618
         }

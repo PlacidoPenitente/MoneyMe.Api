@@ -21,10 +21,10 @@ namespace MoneyMe.Api.Controllers
         }
 
         [HttpPost("apply")]
-        public async Task<IActionResult> ApplyAsync(Guid quoteId, Guid customerId)
+        public async Task<IActionResult> ApplyAsync(Guid quoteId, Guid customerId, Guid productId)
         {
             var customer = await _customerService.GetCustomerAsync(customerId);
-            var loanDto = await _loanService.ApplyAsync(quoteId);
+            var loanDto = await _loanService.ApplyAsync(quoteId, productId);
 
             await _emailService.SendMessageAsync(customer.Email, $"{loanDto.Id}");
             

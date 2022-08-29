@@ -1,5 +1,7 @@
 ﻿using MoneyMe.Domain.ApplicationAggregate;
+using MoneyMe.Domain.LoanAggregate;
 using System;
+using System.Collections.Generic;
 
 namespace MoneyMe.Domain.Factories
 {
@@ -9,7 +11,7 @@ namespace MoneyMe.Domain.Factories
             Guid customerId,
             decimal loanAmount,
             int terms,
-            decimal monthlyPayment,
-            decimal interestRate);
+            decimal interestRate,
+            IReadOnlyCollection<Term> monthlyAmortization);
     }
 }
