@@ -34,12 +34,12 @@ namespace MoneyMe.Domain.QuoteAggregate
 
         public Guid CustomerId { get; private set; }
 
-        [Column(TypeName = "decimal(5, 4)")]
+        [Column(TypeName = "decimal(18, 4)")]
         public decimal LoanAmount { get; private set; }
 
         public int Term { get; private set; }
 
-        [Column(TypeName = "decimal(5, 4)")]
+        [Column(TypeName = "decimal(18, 4)")]
         public decimal InterestRate { get; private set; }
 
         public IReadOnlyCollection<Term> MonthlyAmotization { get; set; }

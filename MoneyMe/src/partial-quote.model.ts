@@ -15,11 +15,19 @@ export class PartialQuote {
         this._amountRequired = v;
     }
 
-    private _terms: number = 0;
-    public get terms(): number {
-        return this._terms;
+    private _productId: string = "";
+    public get productId(): string {
+        return this._productId;
     }
-    public set terms(v: number) {
-        this._terms = v;
+    public set productId(v: string) {
+        this._productId = v;
+    }
+
+    private _term: number = 0;
+    public get term(): number {
+        return this._term;
+    }
+    public set term(v: number) {
+        this._term = v;
     }
 }

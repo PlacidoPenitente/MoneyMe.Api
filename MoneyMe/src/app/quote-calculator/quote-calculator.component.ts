@@ -54,7 +54,7 @@ export class QuoteCalculatorComponent implements OnInit, AfterViewInit {
   }
   public set selectedProduct(v: Product) {
     this._selectedProduct = v;
-    this.updateTermSlider(this.partialQuote.terms, this.sliderValue, v.minimumDuration, v.maximumDuration);
+    this.updateTermSlider(this.partialQuote.term, this.sliderValue, v.minimumDuration, v.maximumDuration);
   }
 
   private _loanAmount!: number;
@@ -92,7 +92,8 @@ export class QuoteCalculatorComponent implements OnInit, AfterViewInit {
             {
               next: partialQuote => {
                 this.partialQuote = partialQuote;
-                this.selectedProduct = this.products.find(p => p.minimumDuration <= this.partialQuote.terms && p.maximumDuration >= this.partialQuote.terms) || products[products.length - 1];
+                console.log(partialQuote.term)
+                this.selectedProduct = this.products.find(p => p.minimumDuration <= this.partialQuote.term && p.maximumDuration >= this.partialQuote.term) || products[products.length - 1];
                 this.updateSlider(partialQuote.amountRequired, this.sliderValue);
 
                 this.httpClient.get<Customer>(`https://localhost:5001/api/customer/${this.partialQuote.customerId}`).subscribe(
@@ -143,16 +144,19 @@ export class QuoteCalculatorComponent implements OnInit, AfterViewInit {
     if (this.formGroup.invalid) return;
 
     var quote = new Quote();
-    quote.AmountRequired = this.loanAmount;
-    quote.Term = this.term;
-    quote.Title = this.formGroup.get('title')?.value;
+    quote.AmountRequired = this.loanAmount ?? this.partialQuote.amountRequired;
+    console.log(this.partialQuote.term)
+    quote.Term = this.term || this.partialQuote.term;
+    quote.Title = this.titles[this.formGroup.get('title')?.value];
     quote.FirstName = this.formGroup.get('firstName')?.value;
     quote.LastName = this.formGroup.get('lastName')?.value;
     quote.DateOfBirth = this.formGroup.get('dateOfBirth')?.value;
     quote.Mobile = this.formGroup.get('mobile')?.value;
     quote.Email = this.formGroup.get('email')?.value;
 
-    var redirectUrlObservable = await this.httpClient.post<string>("http://localhost:5001/api/quote/calculate", quote, {
+    this.partialQuote.productId = this.selectedProduct.id;
+
+    var redirectUrlObservable = await this.httpClient.post<Quote>("https://localhost:5001/api/quote/calculate", this.partialQuote, {
       headers: new HttpHeaders({
         'Content-Type': 'application/json'
       })

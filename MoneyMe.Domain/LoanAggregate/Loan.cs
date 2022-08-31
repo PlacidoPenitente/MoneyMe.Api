@@ -39,7 +39,7 @@ namespace MoneyMe.Domain.ApplicationAggregate
         public DateTime DateModified { get; private set; }
         public Guid CustomerId { get; private set; }
 
-        [Column(TypeName = "decimal(5, 4)")]
+        [Column(TypeName = "decimal(18, 4)")]
         public decimal LoanAmount { get; private set; }
         
         public IReadOnlyCollection<Term> Terms => _terms;

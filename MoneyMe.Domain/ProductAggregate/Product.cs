@@ -48,7 +48,7 @@ namespace MoneyMe.Domain.ProductAggregate
 
         public string Name { get; private set; }
 
-        [Column(TypeName = "decimal(5, 4)")]
+        [Column(TypeName = "decimal(18, 4)")]
         public decimal InterestRate { get; private set; }
 
         public int MaximumDuration { get; private set; }

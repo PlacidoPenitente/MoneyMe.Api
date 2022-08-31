@@ -59,14 +59,14 @@ namespace MoneyMe.Api.Controllers
         }
 
         [HttpGet("continue/{encryptedQuoteUrl}")]
-        public async Task<IActionResult> GetPartialQuote([FromRoute]string encryptedQuoteUrl)
+        public async Task<IActionResult> GetPartialQuote([FromRoute] string encryptedQuoteUrl)
         {
             var quoteUrl = _securityService.Decrypt(WebUtility.UrlDecode(encryptedQuoteUrl));
 
             var quoteUrlSections = quoteUrl.Split('|');
             var customerEmail = quoteUrlSections[0];
             var amountRequired = decimal.Parse(quoteUrlSections[1]);
-            var terms = int.Parse(quoteUrlSections[2]);
+            var term = int.Parse(quoteUrlSections[2]);
 
             var customer = await _customerService.FindCustomerByEmailAsync(customerEmail);
 
@@ -74,14 +74,14 @@ namespace MoneyMe.Api.Controllers
             {
                 CustomerId = customer.Id,
                 AmountRequired = amountRequired,
-                Terms = terms,
+                Term = term,
             };
 
             return Ok(response);
         }
 
         [HttpPost("calculate")]
-        public async Task<IActionResult> CalculateQuoteAsync(PartialQuoteDto partialQuoteDto)
+        public async Task<IActionResult> CalculateQuoteAsync([FromBody] PartialQuoteDto partialQuoteDto)
         {
             var quoteDto = await _quoteService.CalculateAsync(partialQuoteDto);
 
