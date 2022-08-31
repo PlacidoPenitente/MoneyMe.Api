@@ -1,7 +1,10 @@
 import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { Component, OnInit } from '@angular/core';
+import { AfterViewInit, ChangeDetectorRef, Component, OnInit } from '@angular/core';
 import { FormGroup } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
+import { Customer } from 'src/customer.model';
+import { PartialQuote } from 'src/partial-quote.model';
+import { Product } from 'src/product.model';
 import { Quote } from 'src/quote.model';
 
 @Component({
@@ -9,7 +12,9 @@ import { Quote } from 'src/quote.model';
   templateUrl: './quote-calculator.component.html',
   styleUrls: ['./quote-calculator.component.css']
 })
-export class QuoteCalculatorComponent implements OnInit {
+export class QuoteCalculatorComponent implements OnInit, AfterViewInit {
+
+  private titles: string[] = ['Mr.', 'Ms.', 'Mrs.'];
 
   private _formGroup: FormGroup = new FormGroup({});
   public get formGroup(): FormGroup {
@@ -27,12 +32,29 @@ export class QuoteCalculatorComponent implements OnInit {
     this._panelState = v;
   }
 
-  private _product!: string;
-  public get product(): string {
-    return this._product;
+  private _products!: Product[];
+  public get products(): Product[] {
+    return this._products;
   }
-  public set product(v: string) {
-    this._product = v;
+  public set products(v: Product[]) {
+    this._products = v;
+  }
+
+  private _partialQuote: PartialQuote = new PartialQuote();
+  public get partialQuote(): PartialQuote {
+    return this._partialQuote;
+  }
+  public set partialQuote(v: PartialQuote) {
+    this._partialQuote = v;
+  }
+
+  private _selectedProduct: Product = new Product();
+  public get selectedProduct(): Product {
+    return this._selectedProduct;
+  }
+  public set selectedProduct(v: Product) {
+    this._selectedProduct = v;
+    this.updateTermSlider(this.partialQuote.terms, this.sliderValue, v.minimumDuration, v.maximumDuration);
   }
 
   private _loanAmount!: number;
@@ -43,19 +65,75 @@ export class QuoteCalculatorComponent implements OnInit {
     this._loanAmount = v;
   }
 
-  private _terms!: number;
-  public get terms(): number {
-    return this._terms;
+  private _term!: number;
+  public get term(): number {
+    return this._term;
   }
-  public set terms(v: number) {
-    this._terms = v;
+  public set term(v: number) {
+    this._term = v;
   }
 
-  constructor(private httpClient: HttpClient, private _activatedRoute: ActivatedRoute) { }
+  constructor(private httpClient: HttpClient, private _activatedRoute: ActivatedRoute, private changeDetectorRef: ChangeDetectorRef) {
+
+  }
+  ngAfterViewInit(): void {
+    this.changeDetectorRef.detectChanges();
+  }
 
   ngOnInit(): void {
-    this.loanAmount = 5000;
-    this.terms = 24;
+    this.httpClient.get<Product[]>(`https://localhost:5001/api/product/all`).subscribe(
+      {
+        next: products => {
+          this.products = products;
+
+          var quoteUrl = this._activatedRoute.snapshot.paramMap.get('encryptedQuoteUrl') || '';
+
+          this.httpClient.get<PartialQuote>(`https://localhost:5001/api/quote/continue/${encodeURIComponent(quoteUrl)}`).subscribe(
+            {
+              next: partialQuote => {
+                this.partialQuote = partialQuote;
+                this.selectedProduct = this.products.find(p => p.minimumDuration <= this.partialQuote.terms && p.maximumDuration >= this.partialQuote.terms) || products[products.length - 1];
+                this.updateSlider(partialQuote.amountRequired, this.sliderValue);
+
+                this.httpClient.get<Customer>(`https://localhost:5001/api/customer/${this.partialQuote.customerId}`).subscribe(
+                  {
+                    next: customer => {
+                      this.formGroup.patchValue({ 'title': this.titles.indexOf(customer.title) + 1 });
+                      this.formGroup.patchValue({ 'firstName': customer.firstName });
+                      this.formGroup.patchValue({ 'lastName': customer.lastName });
+                      this.formGroup.patchValue({ 'dateOfBirth': customer.dateOfBirth });
+                      this.formGroup.patchValue({ 'mobile': customer.mobile });
+                      this.formGroup.patchValue({ 'email': customer.email });
+                    }
+                  });
+              }
+            });
+        }
+      });
+  }
+
+  private _updateSlider!: Function;
+  public get updateSlider(): Function {
+    return this._updateSlider;
+  }
+  public set updateSlider(v: Function) {
+    this._updateSlider = v;
+  }
+
+  private _updateTermSlider!: Function;
+  public get updateTermSlider(): Function {
+    return this._updateTermSlider;
+  }
+  public set updateTermSlider(v: Function) {
+    this._updateTermSlider = v;
+  }
+
+  private _sliderValue!: string;
+  public get sliderValue(): string {
+    return this._sliderValue;
+  }
+  public set sliderValue(v: string) {
+    this._sliderValue = v;
   }
 
   public async requestQuoteAsync(): Promise<void> {
@@ -65,16 +143,16 @@ export class QuoteCalculatorComponent implements OnInit {
     if (this.formGroup.invalid) return;
 
     var quote = new Quote();
-    quote.AmountRequired = 5000;
-    quote.Term = 6;
-    quote.Title = "Mr.";
-    quote.FirstName = "Jay Mark";
-    quote.LastName = "Estrera";
-    quote.DateOfBirth = new Date(Date.parse("06/15/1995"));
-    quote.Mobile = "+6412345678";
-    quote.Email = "jaymark.estrera@gmail.com";
+    quote.AmountRequired = this.loanAmount;
+    quote.Term = this.term;
+    quote.Title = this.formGroup.get('title')?.value;
+    quote.FirstName = this.formGroup.get('firstName')?.value;
+    quote.LastName = this.formGroup.get('lastName')?.value;
+    quote.DateOfBirth = this.formGroup.get('dateOfBirth')?.value;
+    quote.Mobile = this.formGroup.get('mobile')?.value;
+    quote.Email = this.formGroup.get('email')?.value;
 
-    var redirectUrlObservable = await this.httpClient.post<string>("https://localhost:5001/api/quote/request", quote, {
+    var redirectUrlObservable = await this.httpClient.post<string>("http://localhost:5001/api/quote/calculate", quote, {
       headers: new HttpHeaders({
         'Content-Type': 'application/json'
       })
@@ -83,7 +161,7 @@ export class QuoteCalculatorComponent implements OnInit {
   }
 
   public format(value: number): string {
-    return "$" + value.toLocaleString();
+    return ("$" + value).toLocaleString();
   }
 
   public formatAmortization(value: number): string {

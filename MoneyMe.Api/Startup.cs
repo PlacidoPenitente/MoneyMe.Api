@@ -57,6 +57,7 @@ namespace MoneyMe.Api
             services.AddScoped<ICustomerService, CustomerService>();
             services.AddScoped<IQuoteService, QuoteService>();
             services.AddScoped<ILoanService, LoanService>();
+            services.AddScoped<IProductService, ProductService>();
 
 
             services.AddCors(options =>

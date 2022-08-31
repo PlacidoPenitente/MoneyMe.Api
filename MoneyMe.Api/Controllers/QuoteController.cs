@@ -3,6 +3,7 @@ using MoneyMe.Api.Requests;
 using MoneyMe.Api.Responses;
 using MoneyMe.Application.Contracts;
 using MoneyMe.Application.Contracts.Dtos;
+using System.Net;
 using System.Threading.Tasks;
 
 namespace MoneyMe.Api.Controllers
@@ -50,17 +51,17 @@ namespace MoneyMe.Api.Controllers
 
             var quoteText = $"{customerDto.Email}|{quoteRequest.AmountRequired}|{quoteRequest.Term}";
             var encryptedQuoteText = _securityService.Encrypt(quoteText);
-            var redirectUrl = $"https://localhost:4200/quote/partial/{encryptedQuoteText}";
+            var redirectUrl = $"http://localhost:4200/quote/{WebUtility.UrlEncode(encryptedQuoteText)}";
 
             await _emailService.SendMessageAsync(customerDto.Email, redirectUrl);
 
             return Ok(redirectUrl);
         }
 
-        [HttpGet("continue")]
-        public async Task<IActionResult> GetPartialQuote(string encryptedQuoteUrl)
+        [HttpGet("continue/{encryptedQuoteUrl}")]
+        public async Task<IActionResult> GetPartialQuote([FromRoute]string encryptedQuoteUrl)
         {
-            var quoteUrl = _securityService.Decrypt(encryptedQuoteUrl);
+            var quoteUrl = _securityService.Decrypt(WebUtility.UrlDecode(encryptedQuoteUrl));
 
             var quoteUrlSections = quoteUrl.Split('|');
             var customerEmail = quoteUrlSections[0];

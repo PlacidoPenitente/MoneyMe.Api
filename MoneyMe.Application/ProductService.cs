@@ -20,7 +20,7 @@ namespace MoneyMe.Application
         public async Task<IReadOnlyCollection<ProductDto>> GetAllProductsAsync()
         {
             var products = await _productRepository.GetAllAsync();
-            return products.Select(ToProductDto).ToList();
+            return products.Select(ToProductDto).OrderBy(product => product.Name).ToList();
         }
 
         private ProductDto ToProductDto(Product product)

@@ -1,5 +1,9 @@
+import { HttpClient } from '@angular/common/http';
 import { AfterViewChecked, AfterViewInit, ChangeDetectorRef, Component, EventEmitter, Input, OnInit, Output, ViewChild } from '@angular/core';
 import { MatSliderChange } from '@angular/material/slider';
+import { ActivatedRoute } from '@angular/router';
+import { PartialQuote } from 'src/partial-quote.model';
+import { Product } from 'src/product.model';
 
 @Component({
   selector: 'app-quote-slider',
@@ -10,7 +14,27 @@ export class QuoteSliderComponent implements OnInit, AfterViewInit {
 
   @ViewChild('slider') private slider!: any;
 
-  @Output() currentValueChange = new EventEmitter<number>();
+  @Output() updateSliderChange = new EventEmitter<Function>();
+
+  private _updateSlider!: Function;
+  @Input()
+  public get updateSlider(): Function {
+    return this._updateSlider;
+  }
+  public set updateSlider(v: Function) {
+    this._updateSlider = v;
+  }
+
+  @Output() sliderValueChange = new EventEmitter<string>();
+
+  private _sliderValue!: string;
+  @Input()
+  public get sliderValue(): string {
+    return this._sliderValue;
+  }
+  public set sliderValue(v: string) {
+    this._sliderValue = v;
+  }
 
   private _position!: string
   @Input()
@@ -36,6 +60,8 @@ export class QuoteSliderComponent implements OnInit, AfterViewInit {
   public set initial(v: number) {
     this._initial = v;
   }
+
+  @Output() currentValueChange = new EventEmitter<number>();
 
   private _currentValue!: number;
   @Input()
@@ -114,13 +140,57 @@ export class QuoteSliderComponent implements OnInit, AfterViewInit {
     this._factor = v;
   }
 
-  constructor(private changeDetectorRef: ChangeDetectorRef) {
+  private _product!: Product;
+  @Input()
+  public get product(): Product {
+    return this._product;
+  }
+  public set product(v: Product) {
+    this._product = v;
+  }
+
+  private _partialQuote!: PartialQuote;
+  @Input()
+  public get partialQuote(): PartialQuote {
+    return this._partialQuote;
+  }
+  public set partialQuote(v: PartialQuote) {
+    this._partialQuote = v;
+  }
+
+  constructor(private httpCient: HttpClient, private activatedRoute: ActivatedRoute, private changeDetectorRef: ChangeDetectorRef) {
   }
 
   ngAfterViewInit(): void {
-    var initialPercentage = ((this.currentValue - (Math.round((this.minimum) / this.factor) * this.factor)) / this.factor);
+    var initialPercentage = ((this.partialQuote.amountRequired - (Math.round((this.minimum) / this.factor) * this.factor)) / this.factor);
     this.initial = initialPercentage;
     this.updateSliderValue(this.initial, this.slider.nativeElement.offsetWidth);
+
+    this.updateSliderChange.emit((x: number, y: string, min: number, max: number) => {
+      if (x < min) {
+        x = min;
+      }
+
+      if (min != null && max != null) {
+        this.minimum = min;
+        this.maximum = max;
+        this.minimumPercentage = this.minimum / this.maximum;
+
+        this.factor = 100;
+
+        if (this.maximum < 100) {
+          this.factor = 1
+        }
+
+        this.maximumPercentage = ((this.maximum - this.minimum) / this.factor);
+      }
+
+      var z = ((x - (Math.round((min ?? this.minimum) / this.factor) * this.factor)) / this.factor);
+      this.initial = z;
+      this.updateSliderValue(z, y);
+    });
+
+    this.sliderValueChange.emit(this.slider.nativeElement.offsetWidth);
     this.changeDetectorRef.detectChanges();
   }
 
@@ -141,7 +211,6 @@ export class QuoteSliderComponent implements OnInit, AfterViewInit {
   }
 
   updateSliderValue(value: number, parentWidth: string) {
-
     var width = Number(parentWidth) + 48;
     var maxWidth = Number(parentWidth) + 48 - 82 + 17.5;
     var padding = maxWidth * .1;
@@ -177,6 +246,5 @@ export class QuoteSliderComponent implements OnInit, AfterViewInit {
       this.currentValue = actualValue + Math.round((this.minimum) / this.factor) * this.factor;
       this.current = this.format(this.currentValue);
     }
-
   }
 }

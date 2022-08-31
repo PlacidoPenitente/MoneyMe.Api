@@ -3,32 +3,33 @@
   <mat-card-content>
     <div class="form">
       <mat-accordion style="margin-bottom: 10px; margin-top: 10px;">
-        <mat-expansion-panel>
+        <mat-expansion-panel expanded="true">
           <mat-expansion-panel-header>
             <mat-panel-title>
               Quote Details
             </mat-panel-title>
-            <mat-panel-description [textContent]="format(loanAmount) + ' for '+ formatAmortization(terms)">
+            <mat-panel-description
+              [textContent]="format(partialQuote.amountRequired) + ' for '+ formatAmortization(partialQuote.terms)">
             </mat-panel-description>
           </mat-expansion-panel-header>
           <div>
             <mat-form-field>
               <mat-label>Product</mat-label>
-              <mat-select [(ngModel)]="product">
-                <mat-option [value]="1">Product A</mat-option>
-                <mat-option [value]="2">Product B</mat-option>
-                <mat-option [value]="3">Product C</mat-option>
+              <mat-select [(ngModel)]="selectedProduct">
+                <mat-option *ngFor="let product of products" [value]="product">{{product.name}}</mat-option>
               </mat-select>
             </mat-form-field>
-            <app-quote-slider [(currentValue)]="loanAmount" [format]="format" [title]="'How much do you need?'"
-              [maximum]="15000" [minimum]="2100">
+            <app-quote-slider [(updateSlider)]="updateSlider" [(sliderValue)]="sliderValue"
+              [(currentValue)]="loanAmount" [partialQuote]="partialQuote" [format]="format"
+              [title]="'How much do you need?'" [maximum]="15000" [minimum]="2100">
             </app-quote-slider>
-            <app-quote-slider [(currentValue)]="terms" [format]="formatAmortization" [title]="'For how long?'"
-              [maximum]="60" [minimum]="3">
+            <app-quote-slider [(updateSlider)]="updateTermSlider" [(sliderValue)]="sliderValue" [(currentValue)]="term"
+              [partialQuote]="partialQuote" [format]="formatAmortization" [title]="'For how long?'"
+              [maximum]="selectedProduct.maximumDuration" [minimum]="selectedProduct.minimumDuration">
             </app-quote-slider>
           </div>
         </mat-expansion-panel>
-        <mat-expansion-panel (opened)="panelState = true" (closed)="panelState = false" expanded="true">
+        <mat-expansion-panel (opened)="panelState = true" (closed)="panelState = false">
           <mat-expansion-panel-header>
             <mat-panel-title>
               Your Information

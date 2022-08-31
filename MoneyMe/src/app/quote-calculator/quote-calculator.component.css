@@ -33,6 +33,10 @@ mat-expansion-panel {
     font-family: 'secondary';
 }
 
+::ng-deep .mat-select-value-text {
+    font-family: 'primary';
+}
+
 button{
     width: 60%;
     font-family: 'primary';
