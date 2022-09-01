@@ -8,8 +8,7 @@
             <mat-panel-title>
               Quote Details
             </mat-panel-title>
-            <mat-panel-description
-              [textContent]="format(partialQuote.amountRequired) + ' for '+ formatAmortization(partialQuote.term)">
+            <mat-panel-description>
             </mat-panel-description>
           </mat-expansion-panel-header>
           <div>
@@ -34,9 +33,6 @@
             <mat-panel-title>
               Your Information
             </mat-panel-title>
-            <mat-panel-description>
-              Mr. Jay Mark Estrera
-            </mat-panel-description>
           </mat-expansion-panel-header>
           <app-user-form [formGroup]="formGroup"></app-user-form>
         </mat-expansion-panel>

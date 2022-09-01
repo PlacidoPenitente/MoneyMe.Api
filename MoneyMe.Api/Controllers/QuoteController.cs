@@ -3,6 +3,7 @@ using MoneyMe.Api.Requests;
 using MoneyMe.Api.Responses;
 using MoneyMe.Application.Contracts;
 using MoneyMe.Application.Contracts.Dtos;
+using System;
 using System.Net;
 using System.Threading.Tasks;
 
@@ -58,10 +59,10 @@ namespace MoneyMe.Api.Controllers
             return Ok(redirectUrl);
         }
 
-        [HttpGet("continue/{encryptedQuoteUrl}")]
-        public async Task<IActionResult> GetPartialQuote([FromRoute] string encryptedQuoteUrl)
+        [HttpPost("continue")]
+        public async Task<IActionResult> GetPartialQuote([FromBody] ContinueQuoteRequest continueQuoteRequest)
         {
-            var quoteUrl = _securityService.Decrypt(WebUtility.UrlDecode(encryptedQuoteUrl));
+            var quoteUrl = _securityService.Decrypt(WebUtility.UrlDecode(continueQuoteRequest.EncryptedQuoteUrl));
 
             var quoteUrlSections = quoteUrl.Split('|');
             var customerEmail = quoteUrlSections[0];
@@ -90,10 +91,27 @@ namespace MoneyMe.Api.Controllers
                 Id = quoteDto.Id,
                 AmountRequired = quoteDto.LoanAmount,
                 Terms = quoteDto.Terms,
-                CustomerId = quoteDto.CustomerId
+                CustomerId = quoteDto.CustomerId,
+                Monthly = quoteDto.MonthlyPayment
             };
 
             return Ok(response);
+        }
+
+        [HttpGet("{id}")]
+        public async Task<IActionResult> GetQuoteAsync(Guid id)
+        {
+            var quote = await _quoteService.GetQuoteAsync(id);
+
+            return Ok(new QuoteResponse
+            {
+                Id = quote.Id,
+                AmountRequired = quote.LoanAmount,
+                CustomerId = quote.CustomerId,
+                Monthly = quote.MonthlyPayment,
+                Fee = 0,
+                Terms = quote.Terms
+            });
         }
     }
 }

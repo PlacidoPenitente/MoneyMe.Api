@@ -3,6 +3,8 @@ using MoneyMe.Application.Contracts.Dtos;
 using MoneyMe.Domain;
 using MoneyMe.Domain.Factories;
 using MoneyMe.Domain.Repositories;
+using System;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace MoneyMe.Application
@@ -51,6 +53,22 @@ namespace MoneyMe.Application
                 LoanAmount = quote.LoanAmount,
                 Terms = quote.Term,
                 MonthlyPayment = 100
+            };
+        }
+
+        public async Task<QuoteDto> GetQuoteAsync(Guid id)
+        {
+            var quote = await _quoteRepository.GetAsync(id);
+
+            return new QuoteDto
+            {
+                Id = id,
+                DateAdded = quote.DateAdded,
+                DateModified = quote.DateModified,
+                CustomerId = quote.CustomerId,
+                LoanAmount = quote.LoanAmount,
+                MonthlyPayment = quote.MonthlyAmotization.Average(x => x.Principal + x.Interest),
+                Terms = quote.Term
             };
         }
     }

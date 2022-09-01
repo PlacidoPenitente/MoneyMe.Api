@@ -1,8 +1,9 @@
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { AfterViewInit, ChangeDetectorRef, Component, OnInit } from '@angular/core';
 import { FormGroup } from '@angular/forms';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { Customer } from 'src/customer.model';
+import { LoanApplication } from 'src/loan-applicatiom.model';
 import { PartialQuote } from 'src/partial-quote.model';
 import { Product } from 'src/product.model';
 import { Quote } from 'src/quote.model';
@@ -73,7 +74,7 @@ export class QuoteCalculatorComponent implements OnInit, AfterViewInit {
     this._term = v;
   }
 
-  constructor(private httpClient: HttpClient, private _activatedRoute: ActivatedRoute, private changeDetectorRef: ChangeDetectorRef) {
+  constructor(private httpClient: HttpClient, private router: Router, private _activatedRoute: ActivatedRoute, private changeDetectorRef: ChangeDetectorRef) {
 
   }
   ngAfterViewInit(): void {
@@ -86,9 +87,12 @@ export class QuoteCalculatorComponent implements OnInit, AfterViewInit {
         next: products => {
           this.products = products;
 
-          var quoteUrl = this._activatedRoute.snapshot.paramMap.get('encryptedQuoteUrl') || '';
-
-          this.httpClient.get<PartialQuote>(`https://localhost:5001/api/quote/continue/${encodeURIComponent(quoteUrl)}`).subscribe(
+          var encryptedQuoteUrl = this._activatedRoute.snapshot.paramMap.get('encryptedQuoteUrl') || '';
+          this.httpClient.post<PartialQuote>(`https://localhost:5001/api/quote/continue`, { "encryptedQuoteUrl": encodeURIComponent(encryptedQuoteUrl) }, {
+            headers: new HttpHeaders({
+              'Content-Type': 'application/json'
+            })
+          }).subscribe(
             {
               next: partialQuote => {
                 this.partialQuote = partialQuote;
@@ -156,12 +160,12 @@ export class QuoteCalculatorComponent implements OnInit, AfterViewInit {
 
     this.partialQuote.productId = this.selectedProduct.id;
 
-    var redirectUrlObservable = await this.httpClient.post<Quote>("https://localhost:5001/api/quote/calculate", this.partialQuote, {
+    var redirectUrlObservable = await this.httpClient.post<LoanApplication>("https://localhost:5001/api/quote/calculate", this.partialQuote, {
       headers: new HttpHeaders({
         'Content-Type': 'application/json'
       })
     });
-    redirectUrlObservable.subscribe({ next: (redirectUrl) => console.log("first") });
+    redirectUrlObservable.subscribe({ next: loanApplication => this.router.navigateByUrl('apply/' + loanApplication.id) });
   }
 
   public format(value: number): string {

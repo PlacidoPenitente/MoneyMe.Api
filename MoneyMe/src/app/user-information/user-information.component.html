@@ -1,1 +1,26 @@
-<p>user-information works!</p>
+<div>
+    <div>
+        <div style="display: flex; flex-direction: row; width: 100%;">
+            <h3>Your information</h3>
+            <div style="flex-grow: 1;"></div>
+            <a mat-flat-button disableRipple>Edit</a>
+        </div>
+        <table>
+            <tr>
+                <td>Name</td>
+                <td style="width: 324px;"></td>
+                <td class="user-info">{{name}}</td>
+            </tr>
+            <tr>
+                <td>Mobile</td>
+                <td></td>
+                <td class="user-info">{{mobile}}</td>
+            </tr>
+            <tr>
+                <td>Email</td>
+                <td></td>
+                <td class="user-info">{{email}}</td>
+            </tr>
+        </table>
+    </div>
+</div>

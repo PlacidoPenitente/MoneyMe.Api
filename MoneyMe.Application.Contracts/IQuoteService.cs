@@ -7,5 +7,6 @@ namespace MoneyMe.Application.Contracts
     public interface IQuoteService
     {
         Task<QuoteDto> CalculateAsync(PartialQuoteDto partialQuoteDto);
+        Task<QuoteDto> GetQuoteAsync(Guid id);
     }
 }

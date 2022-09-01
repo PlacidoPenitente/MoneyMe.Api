@@ -1,0 +1,55 @@
+mat-card {
+    max-width: 520px;
+    margin: 5%;
+    font-family: 'primary';
+    color: #8A8A8A;
+}
+
+.content {
+    padding: 28px;
+}
+
+mat-card-title {
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 8px;
+    align-items: center;
+    font-size: xx-large;
+    padding: 10px;
+}
+
+button{
+    width: 60%;
+    font-family: 'primary';
+    background-color: #4FD135 !important;
+    color: white !important;
+    box-shadow: none !important;
+    height: 40px;
+    font-size: large;
+}
+
+small {
+    font-family: 'default';
+    text-align: center;
+    margin: 20px 45px !important;
+}
+
+@font-face {
+  font-family: 'primary';
+  src: url('https://fonts.gstatic.com/s/lato/v23/S6u9w4BMUTPHh6UVSwiPGQ.woff2') format('woff2');
+}
+
+@font-face {
+    font-family: 'secondary';
+    src: url('https://fonts.gstatic.com/s/lato/v23/S6u8w4BMUTPHjxsAXC-q.woff2') format('woff2');
+}
+
+@font-face {
+    font-family: 'default';
+    src: url('https://fonts.gstatic.com/s/lato/v23/S6uyw4BMUTPHjx4wXg.woff2') format('woff2');
+}
+
+@font-face {
+    font-family: 'thin';
+    src: url('https://fonts.gstatic.com/s/lato/v23/S6u9w4BMUTPHh7USSwiPGQ.woff2') format('woff2');
+}

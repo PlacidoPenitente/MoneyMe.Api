@@ -1,0 +1,25 @@
+.user-info {
+    text-align: end;
+}
+
+h3 {
+    color: #777777;
+    font-size: x-large;
+    font-family: 'default';
+    margin-bottom: 0px;
+}
+
+a {
+    align-self: center;
+    font-size: medium;
+    text-align: end;
+    padding-right: 3px;
+    color: #00D1CF;
+}
+
+td {
+    font-size: medium;
+    align-self: center;
+    font-family: 'default';
+    padding-bottom: 8px;
+}

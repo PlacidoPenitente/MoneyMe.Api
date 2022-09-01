@@ -1,78 +1,24 @@
 <mat-card>
-    <mat-card-title>Quote Calculator</mat-card-title>
+    <mat-card-title>Your quote</mat-card-title>
     <mat-card-content>
-        <form>
-            <mat-accordion style="margin-bottom: 10px; margin-top: 10px;">
-                <mat-expansion-panel [expanded]="true">
-                    <mat-expansion-panel-header>
-                        <mat-panel-title>
-                            Quote Details
-                        </mat-panel-title>
-                        <mat-panel-description>
-                            $12,000 for 6 months
-                        </mat-panel-description>
-                    </mat-expansion-panel-header>
-                    <div>
-                        <mat-form-field>
-                            <mat-label>Product</mat-label>
-                            <mat-select>
-                                <mat-option>Product A</mat-option>
-                                <mat-option>Product B</mat-option>
-                                <mat-option>Product C</mat-option>
-                            </mat-select>
-                        </mat-form-field>
-                        <app-quote-slider [title]="'How much do you need?'" [maximum]="100000" [minimum]="1000">
-                        </app-quote-slider>
-                        <app-quote-slider [title]="'How many payments?'" [maximum]="60" [minimum]="3">
-                        </app-quote-slider>
-                    </div>
-                </mat-expansion-panel>
-                <mat-expansion-panel (opened)="panelState = true" (closed)="panelState = false">
-                    <mat-expansion-panel-header>
-                        <mat-panel-title>
-                            Your Information
-                        </mat-panel-title>
-                        <mat-panel-description>
-                            Mr. Jay Mark Estrera
-                        </mat-panel-description>
-                    </mat-expansion-panel-header>
-                    <div class="fields">
-                        <mat-form-field appearance="standard">
-                            <mat-label>Title</mat-label>
-                            <input matInput placeholder="Mr." />
-                            <mat-hint>Hint</mat-hint>
-                        </mat-form-field>
-                        <mat-form-field appearance="standard">
-                            <mat-label>First Name</mat-label>
-                            <input matInput placeholder="Oliver" />
-                            <mat-hint>Hint</mat-hint>
-                        </mat-form-field>
-                        <mat-form-field appearance="standard">
-                            <mat-label>Last Name</mat-label>
-                            <input matInput placeholder="Smith" />
-                            <mat-hint>Hint</mat-hint>
-                        </mat-form-field>
-                        <mat-form-field appearance="standard">
-                            <mat-label>Mobile</mat-label>
-                            <input matInput placeholder=" +61412345678" />
-                            <mat-hint>Hint</mat-hint>
-                        </mat-form-field>
-                        <mat-form-field appearance="standard">
-                            <mat-label>Email</mat-label>
-                            <input matInput placeholder="oliver.smith@gmail.com" />
-                            <mat-hint>Hint</mat-hint>
-                        </mat-form-field>
-                    </div>
-                </mat-expansion-panel>
-            </mat-accordion>
-            <div style="display: flex; flex-direction: column; align-items: center;">
-                <button type="button" (click)="applyForLoanAsync()" mat-raised-button color="primary">
-                    Calculate Quote
-                </button>
-                <small style="margin: 10px;">
-                    Quote does not affect your credit score.
-                </small>
-            </div>
-        </form>
+        <div class="content">
+            <app-user-information [name]="customer.firstName + ' '+ customer.lastName" [email]="customer.email"
+                [mobile]="customer.mobile"></app-user-information>
+            <app-finance-details [amortization]="'$'+loanApplication.monthly.toLocaleString()"
+                [amount]="'$'+loanApplication.amountRequired.toLocaleString()"></app-finance-details>
+        </div>
+        <div style="display: flex; flex-direction: column; align-items: center;">
+            <button type="button" mat-flat-button color="primary">
+                Apply now
+            </button>
+            <small style="color: gray;">
+                Total repayment ${{loanApplication.amountRequired.toLocaleString()}}, made up of an establishment fee of
+                ${{loanApplication.fee.toLocaleString()}}, interest of
+                ${{loanApplication.amountRequired.toLocaleString()}}. The repayment
+                amount is
+                based on variables selected, is subject to our assessment and sustaianbility, and other important terms
+                and conditions apply.
+            </small>
+        </div>
     </mat-card-content>
 </mat-card>
