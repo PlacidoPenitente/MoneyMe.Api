@@ -47,6 +47,10 @@ button{
     font-size: large;
 }
 
+::ng-deep .mat-option-text {
+    font-family: 'primary';
+}
+
 ::ng-deep .mat-input-element {
     caret-color: #8A8A8A;
     color: black !important;
@@ -60,7 +64,7 @@ button{
     font-family: 'Primary';
 }
 
-::ng-deep .mat-form-field.mat-focused .mat-form-field-label {
+::ng-deep .mat-form-field.mat-focused .mat-form-field-label:not(.mat-form-field.mat-form-field-invalid .mat-form-field-label) {
     color: #00D1CF;
 }
 
@@ -68,7 +72,7 @@ button{
     background-color: #8A8A8A;
 }
 
-::ng-deep .mat-form-field.mat-focused .mat-form-field-ripple {
+::ng-deep .mat-form-field.mat-focused .mat-form-field-ripple:not(.mat-form-field.mat-form-field-invalid .mat-form-field-ripple) {
     background-color: #00D1CF;
 }
 
