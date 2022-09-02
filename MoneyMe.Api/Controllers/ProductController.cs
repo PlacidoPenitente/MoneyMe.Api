@@ -1,5 +1,8 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using MoneyMe.Application.Contracts;
+using Serilog.Core;
+using System;
+using System.Net;
 using System.Threading.Tasks;
 
 namespace MoneyMe.Api.Controllers
@@ -9,17 +12,27 @@ namespace MoneyMe.Api.Controllers
     public class ProductController : ControllerBase
     {
         private readonly IProductService _productService;
+        private readonly Logger _logger;
 
-        public ProductController(IProductService productService)
+        public ProductController(IProductService productService, Logger logger)
         {
             _productService = productService;
+            _logger = logger;
         }
 
         [HttpGet("all")]
         public async Task<IActionResult> GetAllAsync()
         {
-            var products = await _productService.GetAllProductsAsync();
-            return Ok(products);
+            try
+            {
+                var products = await _productService.GetAllProductsAsync();
+                return Ok(products);
+            }
+            catch (Exception ex)
+            {
+                _logger.Error(ex.Message);
+                return StatusCode((int)HttpStatusCode.InternalServerError, "Unable to retrieve products.");
+            }
         }
     }
 }

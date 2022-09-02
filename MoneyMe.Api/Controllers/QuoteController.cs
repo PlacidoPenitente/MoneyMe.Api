@@ -1,8 +1,11 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Options;
 using MoneyMe.Api.Requests;
 using MoneyMe.Api.Responses;
+using MoneyMe.Api.Validations;
 using MoneyMe.Application.Contracts;
 using MoneyMe.Application.Contracts.Dtos;
+using Serilog.Core;
 using System;
 using System.Net;
 using System.Threading.Tasks;
@@ -17,101 +20,147 @@ namespace MoneyMe.Api.Controllers
         private readonly ICustomerService _customerService;
         private readonly IEmailService _emailService;
         private readonly ISecurityService _securityService;
+        private readonly MoneyMeSettings _moneyMeSettings;
+        private readonly Logger _logger;
 
         public QuoteController(
             IQuoteService quoteService,
             ICustomerService customerService,
             IEmailService emailService,
-            ISecurityService securityService)
+            ISecurityService securityService,
+            IOptions<MoneyMeSettings> options,
+            Logger logger)
         {
             _quoteService = quoteService;
             _customerService = customerService;
             _emailService = emailService;
             _securityService = securityService;
+            _moneyMeSettings = options.Value;
+            _logger = logger;
         }
 
         [HttpPost("request")]
         public async Task<IActionResult> RequestQuoteAsync([FromBody] QuoteRequest quoteRequest)
         {
-            var customerDto = await _customerService.FindCustomerByEmailAsync(quoteRequest.Email);
-
-            if (customerDto == null)
+            if (!quoteRequest.IsValid(_moneyMeSettings))
             {
-                customerDto = new CustomerDto
-                {
-                    Title = quoteRequest.Title,
-                    FirstName = quoteRequest.FirstName,
-                    LastName = quoteRequest.LastName,
-                    DateOfBirth = quoteRequest.DateOfBirth,
-                    Mobile = quoteRequest.Mobile,
-                    Email = quoteRequest.Email
-                };
-
-                await _customerService.RegisterCustomerAsync(customerDto);
+                return BadRequest();
             }
 
-            var quoteText = $"{customerDto.Email}|{quoteRequest.AmountRequired}|{quoteRequest.Term}";
-            var encryptedQuoteText = _securityService.Encrypt(quoteText);
-            var redirectUrl = $"http://localhost:4200/quote/{WebUtility.UrlEncode(encryptedQuoteText)}";
+            try
+            {
+                var customerDto = await _customerService.FindCustomerByEmailAsync(quoteRequest.Email);
 
-            await _emailService.SendMessageAsync(customerDto.Email, redirectUrl);
+                if (customerDto == null)
+                {
+                    customerDto = new CustomerDto
+                    {
+                        Title = quoteRequest.Title,
+                        FirstName = quoteRequest.FirstName,
+                        LastName = quoteRequest.LastName,
+                        DateOfBirth = quoteRequest.DateOfBirth.Value,
+                        Mobile = quoteRequest.Mobile,
+                        Email = quoteRequest.Email
+                    };
 
-            return Ok(redirectUrl);
+                    await _customerService.RegisterCustomerAsync(customerDto);
+                }
+
+                var quoteText = $"{customerDto.Email}|{quoteRequest.AmountRequired}|{quoteRequest.Term}";
+                var encryptedQuoteText = _securityService.Encrypt(quoteText);
+                var redirectUrl = $"http://localhost:4200/quote/{WebUtility.UrlEncode(encryptedQuoteText)}";
+
+                await _emailService.SendMessageAsync(customerDto.Email, redirectUrl);
+
+                return Ok(redirectUrl);
+            }
+            catch (Exception ex)
+            {
+                _logger.Error(ex.Message);
+                return StatusCode((int)HttpStatusCode.InternalServerError, "Failed to generate quote url.");
+            }
         }
 
         [HttpPost("continue")]
         public async Task<IActionResult> GetPartialQuote([FromBody] ContinueQuoteRequest continueQuoteRequest)
         {
-            var quoteUrl = _securityService.Decrypt(WebUtility.UrlDecode(continueQuoteRequest.EncryptedQuoteUrl));
+            if (continueQuoteRequest == null || string.IsNullOrWhiteSpace(continueQuoteRequest.EncryptedQuoteUrl))
+                return BadRequest();
 
-            var quoteUrlSections = quoteUrl.Split('|');
-            var customerEmail = quoteUrlSections[0];
-            var amountRequired = decimal.Parse(quoteUrlSections[1]);
-            var term = int.Parse(quoteUrlSections[2]);
-
-            var customer = await _customerService.FindCustomerByEmailAsync(customerEmail);
-
-            var response = new
+            try
             {
-                CustomerId = customer.Id,
-                AmountRequired = amountRequired,
-                Term = term,
-            };
+                var quoteUrl = _securityService.Decrypt(WebUtility.UrlDecode(continueQuoteRequest.EncryptedQuoteUrl));
 
-            return Ok(response);
+                var quoteUrlSections = quoteUrl.Split('|');
+                var customerEmail = quoteUrlSections[0];
+                var amountRequired = decimal.Parse(quoteUrlSections[1]);
+                var term = int.Parse(quoteUrlSections[2]);
+
+                var customer = await _customerService.FindCustomerByEmailAsync(customerEmail);
+
+                var response = new
+                {
+                    CustomerId = customer.Id,
+                    AmountRequired = amountRequired,
+                    Term = term,
+                };
+
+                return Ok(response);
+            }
+            catch (Exception ex)
+            {
+                _logger.Error(ex.Message);
+                return StatusCode((int)HttpStatusCode.InternalServerError, "Failed to retrieve quote request.");
+            }
         }
 
         [HttpPost("calculate")]
         public async Task<IActionResult> CalculateQuoteAsync([FromBody] PartialQuoteDto partialQuoteDto)
         {
-            var quoteDto = await _quoteService.CalculateAsync(partialQuoteDto);
-
-            var response = new QuoteResponse
+            try
             {
-                Id = quoteDto.Id,
-                AmountRequired = quoteDto.LoanAmount,
-                Terms = quoteDto.Terms,
-                CustomerId = quoteDto.CustomerId,
-                Monthly = quoteDto.MonthlyPayment
-            };
+                var quoteDto = await _quoteService.CalculateAsync(partialQuoteDto);
 
-            return Ok(response);
+                var response = new QuoteResponse
+                {
+                    Id = quoteDto.Id,
+                    AmountRequired = quoteDto.LoanAmount,
+                    Terms = quoteDto.Terms,
+                    CustomerId = quoteDto.CustomerId,
+                    Monthly = quoteDto.MonthlyPayment
+                };
+
+                return Ok(response);
+            }
+            catch (Exception ex)
+            {
+                _logger.Error(ex.Message);
+                return StatusCode((int)HttpStatusCode.InternalServerError, "Quote calculation failed.");
+            }
         }
 
         [HttpGet("{id}")]
         public async Task<IActionResult> GetQuoteAsync(Guid id)
         {
-            var quote = await _quoteService.GetQuoteAsync(id);
-
-            return Ok(new QuoteResponse
+            try
             {
-                Id = quote.Id,
-                AmountRequired = quote.LoanAmount,
-                CustomerId = quote.CustomerId,
-                Monthly = quote.MonthlyPayment,
-                Fee = 0,
-                Terms = quote.Terms
-            });
+                var quote = await _quoteService.GetQuoteAsync(id);
+
+                return Ok(new QuoteResponse
+                {
+                    Id = quote.Id,
+                    AmountRequired = quote.LoanAmount,
+                    CustomerId = quote.CustomerId,
+                    Monthly = quote.MonthlyPayment,
+                    Fee = 0,
+                    Terms = quote.Terms
+                });
+            }
+            catch (Exception ex)
+            {
+                _logger.Error(ex.Message);
+                return StatusCode((int)HttpStatusCode.InternalServerError, "Unable to retrieve quote.");
+            }
         }
     }
 }

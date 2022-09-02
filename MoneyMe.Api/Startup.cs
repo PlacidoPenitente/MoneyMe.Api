@@ -16,6 +16,7 @@ using MoneyMe.Infrastructure;
 using MoneyMe.Infrastructure.Database;
 using MoneyMe.Infrastructure.Repositories;
 using MoneyMe.Infrastructure.Services;
+using Serilog;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -40,6 +41,11 @@ namespace MoneyMe.Api
 
             services.AddControllers();
 
+            services.Configure<MoneyMeSettings>(Configuration.GetSection(nameof(MoneyMeSettings)));
+
+            var logger = new LoggerConfiguration().WriteTo.File("log.txt").CreateLogger();
+            services.AddSingleton(logger);
+
             services.AddSingleton<IEmailService, EmailService>();
             services.AddSingleton<ISecurityService, SecurityService>();
 
@@ -58,7 +64,6 @@ namespace MoneyMe.Api
             services.AddScoped<IQuoteService, QuoteService>();
             services.AddScoped<ILoanService, LoanService>();
             services.AddScoped<IProductService, ProductService>();
-
 
             services.AddCors(options =>
             {
