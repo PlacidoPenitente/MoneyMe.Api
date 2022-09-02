@@ -1,4 +1,5 @@
 ﻿using MoneyMe.Api.Requests;
+using MoneyMe.Application.Contracts;
 using System;
 
 namespace MoneyMe.Api.Validations

@@ -1,4 +1,5 @@
-﻿using MoneyMe.Application.Contracts;
+﻿using Microsoft.Extensions.Options;
+using MoneyMe.Application.Contracts;
 using System;
 using System.IO;
 using System.Security.Cryptography;
@@ -8,13 +9,21 @@ namespace MoneyMe.Infrastructure.Services
 {
     public class SecurityService : ISecurityService
     {
-        private const string Key = "m0n3ym3_r3dir3ct";
+        private readonly string _key;
+
+        private readonly MoneyMeSettings _moneyMeSettings;
+
+        public SecurityService(IOptions<MoneyMeSettings> options)
+        {
+            _moneyMeSettings = options.Value;
+            _key = _moneyMeSettings.Secret;
+        }
 
         public string Encrypt(string text)
         {
             using Aes aes = Aes.Create();
-            aes.Key = Encoding.ASCII.GetBytes(Key);
-            aes.IV = Encoding.ASCII.GetBytes(Key);
+            aes.Key = Encoding.ASCII.GetBytes(_key);
+            aes.IV = Encoding.ASCII.GetBytes(_key);
 
             byte[] encrypted = EncryptStringToBytes_Aes(text, aes.Key, aes.IV);
             return Convert.ToBase64String(encrypted);
@@ -23,8 +32,8 @@ namespace MoneyMe.Infrastructure.Services
         public string Decrypt(string encryptedText)
         {
             using Aes aes = Aes.Create();
-            aes.Key = Encoding.ASCII.GetBytes(Key);
-            aes.IV = Encoding.ASCII.GetBytes(Key);
+            aes.Key = Encoding.ASCII.GetBytes(_key);
+            aes.IV = Encoding.ASCII.GetBytes(_key);
 
             return DecryptStringFromBytes_Aes(Convert.FromBase64String(encryptedText), aes.Key, aes.IV);
         }
