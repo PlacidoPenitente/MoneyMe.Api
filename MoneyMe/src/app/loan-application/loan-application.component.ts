@@ -1,6 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { Customer } from 'src/customer.model';
 import { LoanApplication } from 'src/loan-applicatiom.model';
 import { Quote } from 'src/quote.model';
@@ -28,7 +28,7 @@ export class LoanApplicationComponent implements OnInit {
     this._customer = v;
   }
 
-  constructor(private httpClient: HttpClient, private _activatedRoute: ActivatedRoute) { }
+  constructor(private httpClient: HttpClient, private _activatedRoute: ActivatedRoute, private router: Router) { }
 
   ngOnInit(): void {
     var quoteId = this._activatedRoute.snapshot.paramMap.get('id') || '';
@@ -37,12 +37,15 @@ export class LoanApplicationComponent implements OnInit {
       {
         next: loanApplication => {
           this.loanApplication = loanApplication;
-          console.log(this.loanApplication.amountRequired)
           this.httpClient.get<Customer>(`https://localhost:5001/api/customer/${loanApplication.customerId}`).subscribe({
             next: customer => this.customer = customer
           });
         }
       });
+  }
+
+  public editQuote(quoteId: string, userId: string) {
+    this.router.navigateByUrl('quote/' + quoteId)
   }
 
   public async applyForLoanAsync(): Promise<void> {

@@ -1,9 +1,7 @@
 ﻿using MoneyMe.Application.Contracts;
 using MoneyMe.Application.Contracts.Dtos;
 using MoneyMe.Domain;
-using MoneyMe.Domain.CustomerAggregate;
 using MoneyMe.Domain.Factories;
-using MoneyMe.Domain.QuoteAggregate;
 using MoneyMe.Domain.Repositories;
 using System;
 using System.Threading.Tasks;
@@ -38,8 +36,8 @@ namespace MoneyMe.Application
                 FirstName = customer.FirstName,
                 LastName = customer.LastName,
                 DateOfBirth = customer.DateOfBirth,
-                Mobile = customer.MobileNumber,
-                Email = customer.EmailAddress
+                MobileNumber = customer.MobileNumber,
+                EmailAddress = customer.EmailAddress
             };
         }
 
@@ -56,8 +54,8 @@ namespace MoneyMe.Application
                 FirstName = customer.FirstName,
                 LastName = customer.LastName,
                 DateOfBirth = customer.DateOfBirth,
-                Mobile = customer.MobileNumber,
-                Email = customer.EmailAddress
+                MobileNumber = customer.MobileNumber,
+                EmailAddress = customer.EmailAddress
             };
         }
 
@@ -68,8 +66,8 @@ namespace MoneyMe.Application
                 customerDto.FirstName,
                 customerDto.LastName,
                 customerDto.DateOfBirth,
-                customerDto.Mobile,
-                customerDto.Email);
+                customerDto.MobileNumber,
+                customerDto.EmailAddress);
 
 
             await using (_unitOfWork)
@@ -78,6 +76,26 @@ namespace MoneyMe.Application
             };
 
             customerDto.Id = customer.Id;
+        }
+
+        public async Task<CustomerDto> UpdateCustomerAsync(CustomerDto customerDto)
+        {
+            await using (_unitOfWork)
+            {
+                return await _unitOfWork.ExecuteAsync(async () =>
+                {
+                    var customer = await _customerRepository.GetAsync(customerDto.Id);
+
+                    customer.ChangeTitle(customerDto.Title);
+                    customer.ChangeFirstName(customerDto.FirstName);
+                    customer.ChangeLastName(customerDto.LastName);
+                    customer.ChangeDateOfBirth(customerDto.DateOfBirth);
+                    customer.ChangeMobileNumber(customerDto.MobileNumber);
+                    customer.ChangeEmailAddress(customerDto.EmailAddress);
+
+                    return customerDto;
+                });
+            };
         }
     }
 }

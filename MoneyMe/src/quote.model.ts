@@ -1,10 +1,10 @@
 export class Quote {
-    private amountRequired!: number;
-    public get AmountRequired(): number {
-        return this.amountRequired;
+    private loanAmount!: number;
+    public get LoanAmount(): number {
+        return this.loanAmount;
     }
-    public set AmountRequired(v: number) {
-        this.amountRequired = v;
+    public set LoanAmount(v: number) {
+        this.loanAmount = v;
     }
 
     private term!: number;
@@ -47,19 +47,19 @@ export class Quote {
         this.dateOfBirth = v;
     }
 
-    private mobile!: string;
-    public get Mobile(): string {
-        return this.mobile;
+    private mobileNumber!: string;
+    public get MobileNumber(): string {
+        return this.mobileNumber;
     }
-    public set Mobile(v: string) {
-        this.mobile = v;
+    public set MobileNumber(v: string) {
+        this.mobileNumber = v;
     }
 
-    private email!: string;
-    public get Email(): string {
-        return this.email;
+    private emailAddress!: string;
+    public get EmailAddress(): string {
+        return this.emailAddress;
     }
-    public set Email(v: string) {
-        this.email = v;
+    public set EmailAddress(v: string) {
+        this.emailAddress = v;
     }
 }

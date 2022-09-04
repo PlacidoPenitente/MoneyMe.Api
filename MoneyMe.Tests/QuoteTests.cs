@@ -55,12 +55,12 @@ namespace MoneyMe.Tests
         [InlineData(2133.30, 6300, 3)]
         public async Task Should_CalculateAsync(decimal monthlyPayment, decimal loanAmount, int terms)
         {
-            var partialQuote = new PartialQuoteDto() { Term = terms, AmountRequired = loanAmount, CustomerId = Guid.NewGuid() };
+            var partialQuote = new PartialQuoteDto() { Term = terms, LoanAmount = loanAmount, CustomerId = Guid.NewGuid() };
             var context = Sut.Object;
             
             var quote = await context.CalculateAsync(partialQuote);
 
-            Assert.Equal(terms, quote.Terms);
+            Assert.Equal(terms, quote.Term);
             Assert.Equal(monthlyPayment, decimal.Round(quote.MonthlyPayment, 2));
 
             //QuoteFactory.Verify(x => x.Create(It.IsAny<Guid>(), It.IsAny<decimal>()), Times.Once);

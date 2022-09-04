@@ -25,6 +25,16 @@ export class FinanceDetailsComponent implements OnInit {
     this._amortization = v;
   }
 
+  private _term!: number;
+  @Input()
+  public get term(): number {
+    return this._term;
+  }
+  public set term(v: number) {
+    this._term = v;
+  }
+
+
   constructor() { }
 
   ngOnInit(): void {

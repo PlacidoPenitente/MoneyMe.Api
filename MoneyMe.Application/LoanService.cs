@@ -38,7 +38,9 @@ namespace MoneyMe.Application
 
             var product = await _productRepository.GetAsync(productId);
 
-            var loan = _loanFactory.Create(quote.CustomerId, quote.LoanAmount, quote.Term, quote.InterestRate, quote.MonthlyAmotization);
+            var monthlyAmortization = product.CalculateMonthlyAmortization(quote.LoanAmount, quote.Term);
+
+            var loan = _loanFactory.Create(quote.CustomerId, quote.LoanAmount, quote.Term, quote.Interest, monthlyAmortization);
 
             using (_unitOfWork)
             {
@@ -50,18 +52,18 @@ namespace MoneyMe.Application
                 Id = loan.Id,
                 DateAdded = loan.DateAdded,
                 DateModified = loan.DateModified,
-                Terms = loan.Terms.Select(CreateTermDto).ToList(),
+                PeriodicPayments = loan.MonthlyAmortization.Select(CreateTermDto).ToList(),
                 Status = loan.Status
             };
         }
 
-        private TermDto CreateTermDto(Term term)
+        private PeriodicPaymentDto CreateTermDto(Payment periodicPayment)
         {
-            return new TermDto
+            return new PeriodicPaymentDto
             {
-                Interest = term.Interest,
-                Period = term.Period,
-                Principal = term.Principal
+                Interest = periodicPayment.Interest,
+                Period = periodicPayment.Period,
+                Principal = periodicPayment.Principal
             };
         }
     }

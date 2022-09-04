@@ -30,7 +30,7 @@ namespace MoneyMe.Api.Controllers
             }
             catch (Exception ex)
             {
-                _logger.Error(ex.Message);
+                _logger.Error(ex.StackTrace);
                 return StatusCode((int)HttpStatusCode.InternalServerError, "Unable to retrieve products.");
             }
         }

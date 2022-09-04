@@ -2,14 +2,14 @@
 
 namespace MoneyMe.Domain.LoanAggregate
 {
-    public class Term
+    public class Payment
     {
-        private Term()
+        private Payment()
         {
 
         }
 
-        public Term(int period, decimal interest, decimal principal)
+        public Payment(int period, decimal interest, decimal principal)
         {
             Period = period;
             Interest = interest;
@@ -18,10 +18,10 @@ namespace MoneyMe.Domain.LoanAggregate
 
         public int Period { get; private set; }
 
-        [Column(TypeName = "decimal(18, 4)")]
+        [Column(TypeName = "decimal(18, 2)")]
         public decimal Interest { get; private set; }
 
-        [Column(TypeName = "decimal(18, 4)")]
+        [Column(TypeName = "decimal(18, 2)")]
         public decimal Principal { get; private set; }
     }
 }

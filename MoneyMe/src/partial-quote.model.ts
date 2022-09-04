@@ -7,12 +7,12 @@ export class PartialQuote {
         this._customerId = v;
     }
 
-    private _amountRequired: number = 0;
-    public get amountRequired(): number {
-        return this._amountRequired;
+    private _loanAmount: number = 0;
+    public get loanAmount(): number {
+        return this._loanAmount;
     }
-    public set amountRequired(v: number) {
-        this._amountRequired = v;
+    public set loanAmount(v: number) {
+        this._loanAmount = v;
     }
 
     private _productId: string = "";

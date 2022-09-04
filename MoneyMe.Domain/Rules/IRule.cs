@@ -8,6 +8,6 @@ namespace MoneyMe.Domain.Rules
     {
         string Name { get; }
 
-        IReadOnlyCollection<Term> GenerateTerms(decimal loanAmount, int terms, decimal interestRate, decimal monthlyPayment);
+        IReadOnlyCollection<Payment> GenerateMonthlyAmortization(decimal loanAmount, int term, decimal interestRate, decimal monthlyPayment);
     }
 }

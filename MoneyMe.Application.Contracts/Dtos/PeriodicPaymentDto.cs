@@ -1,6 +1,6 @@
 ﻿namespace MoneyMe.Application.Contracts.Dtos
 {
-    public class TermDto
+    public class PeriodicPaymentDto
     {
         public int Period { get; set; }
         public decimal Interest { get; set; }

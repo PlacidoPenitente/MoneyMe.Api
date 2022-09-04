@@ -12,7 +12,7 @@ namespace MoneyMe.Application.Contracts.Dtos
         public DateTime DateModified { get; set; }
         public Guid CustomerId { get; }
         public decimal LoanAmount { get; }
-        public IReadOnlyCollection<TermDto> Terms { get; set; }
+        public IReadOnlyCollection<PeriodicPaymentDto> PeriodicPayments { get; set; }
         public LoanStatus Status { get; set; }
     }
 }

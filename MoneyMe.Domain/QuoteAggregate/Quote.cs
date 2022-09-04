@@ -4,6 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.Linq;
 
 namespace MoneyMe.Domain.QuoteAggregate
 {
@@ -34,20 +35,42 @@ namespace MoneyMe.Domain.QuoteAggregate
 
         public Guid CustomerId { get; private set; }
 
-        [Column(TypeName = "decimal(18, 4)")]
+        public Guid ProductId { get; private set; }
+
+        [Column(TypeName = "decimal(18, 2)")]
         public decimal LoanAmount { get; private set; }
 
         public int Term { get; private set; }
 
-        [Column(TypeName = "decimal(18, 4)")]
-        public decimal InterestRate { get; private set; }
+        [Column(TypeName = "decimal(18, 2)")]
+        public decimal Interest { get; private set; }
 
-        public IReadOnlyCollection<Term> MonthlyAmotization { get; set; }
+        [Column(TypeName = "decimal(18, 2)")]
+        public decimal Fee { get; private set; }
 
-        public void ApplyProductTerms(Product product)
+        [Column(TypeName = "decimal(18, 2)")]
+        public decimal MonthlyPayment { get; private set; }
+
+        public void ChangeTerm(int term)
         {
-            InterestRate = product.InterestRate;
-            MonthlyAmotization = product.CalculateMonthlyAmortization(LoanAmount, Term);
+            Term = term;
+
+            DateModified = DateTime.UtcNow;
+        }
+
+        public void ApplyProductTerm(Product product)
+        {
+            ProductId = product.Id;
+
+            Fee = product.GetTotalFee();
+
+            var payments = product.CalculateMonthlyAmortization(LoanAmount, Term);
+
+            Interest = payments.Sum(payment => payment.Interest);
+
+            MonthlyPayment = payments.Average(payment => payment.Interest + payment.Principal);
+
+            DateModified = DateTime.UtcNow;
         }
     }
 }

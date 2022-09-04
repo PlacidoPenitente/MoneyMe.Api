@@ -9,5 +9,6 @@ namespace MoneyMe.Application.Contracts
         Task<CustomerDto> FindCustomerByEmailAsync(string email);
         Task<CustomerDto> GetCustomerAsync(Guid customerId);
         Task RegisterCustomerAsync(CustomerDto customerDto);
+        Task<CustomerDto> UpdateCustomerAsync(CustomerDto customerDto);
     }
 }

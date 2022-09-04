@@ -6,15 +6,15 @@ namespace MoneyMe.Api.Validations
 {
     public static class Validation
     {
-        public static bool IsValid(this QuoteRequest quoteRequest, MoneyMeSettings moneyMeSettings)
+        public static bool IsValid(this QuoteRequest quoteRequest, Settings moneyMeSettings)
         {
             if (string.IsNullOrWhiteSpace(quoteRequest.FirstName) ||
                     string.IsNullOrWhiteSpace(quoteRequest.LastName) ||
                     string.IsNullOrWhiteSpace(quoteRequest.Mobile) ||
                     string.IsNullOrWhiteSpace(quoteRequest.Email) ||
                     !quoteRequest.DateOfBirth.HasValue ||
-                    quoteRequest.AmountRequired < moneyMeSettings.MinimumLoanAmount ||
-                    quoteRequest.AmountRequired > moneyMeSettings.MaximumLoanAmount ||
+                    quoteRequest.LoanAmount < moneyMeSettings.MinimumLoanAmount ||
+                    quoteRequest.LoanAmount > moneyMeSettings.MaximumLoanAmount ||
                     quoteRequest.Term < 1 ||
                     !quoteRequest.IsAgeAccepted())
             {

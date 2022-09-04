@@ -17,14 +17,14 @@ export class ThirdPartyComponent implements OnInit {
 
   public async requestQuoteAsync(): Promise<void> {
     var quote = new Quote();
-    quote.AmountRequired = 5000;
+    quote.LoanAmount = 5000;
     quote.Term = 6;
     quote.Title = "Mr.";
     quote.FirstName = "Jay Mark";
     quote.LastName = "Estrera";
     quote.DateOfBirth = new Date(Date.parse("06/15/1995"));
-    quote.Mobile = "+6412345678";
-    quote.Email = "jaymark.estrera@gmail.com";
+    quote.MobileNumber = "+6412345678";
+    quote.EmailAddress = "jaymark.estrera@gmail.com";
 
     var redirectUrlObservable = await this.httpClient.post<string>("https://localhost:5001/api/quote/request", quote, {
       headers: new HttpHeaders({

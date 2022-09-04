@@ -10,8 +10,8 @@ namespace MoneyMe.Domain.Factories
         Loan Create(
             Guid customerId,
             decimal loanAmount,
-            int terms,
+            int term,
             decimal interestRate,
-            IReadOnlyCollection<Term> monthlyAmortization);
+            IReadOnlyCollection<Payment> monthlyAmortization);
     }
 }

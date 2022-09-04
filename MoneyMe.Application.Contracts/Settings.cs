@@ -1,6 +1,6 @@
 ﻿namespace MoneyMe.Application.Contracts
 {
-    public class MoneyMeSettings
+    public class Settings
     {
         public decimal MinimumLoanAmount { get; set; }
         public decimal MaximumLoanAmount { get; set; }

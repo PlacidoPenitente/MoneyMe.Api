@@ -35,7 +35,7 @@ namespace MoneyMe.Infrastructure.Migrations
                         .HasColumnType("datetime2");
 
                     b.Property<decimal>("LoanAmount")
-                        .HasColumnType("decimal(18,4)");
+                        .HasColumnType("decimal(18,2)");
 
                     b.Property<int>("Status")
                         .HasColumnType("int");
@@ -114,34 +114,34 @@ namespace MoneyMe.Infrastructure.Migrations
                     b.HasData(
                         new
                         {
-                            Id = new Guid("dec7dae9-3bfd-4d33-bb96-7aadf03108e0"),
-                            DateAdded = new DateTime(2022, 8, 31, 23, 49, 47, 76, DateTimeKind.Utc).AddTicks(2358),
-                            DateModified = new DateTime(2022, 8, 31, 23, 49, 47, 76, DateTimeKind.Utc).AddTicks(2373),
+                            Id = new Guid("a42f8f96-340f-40e7-aeb8-d6e946219f84"),
+                            DateAdded = new DateTime(2022, 9, 2, 18, 43, 52, 158, DateTimeKind.Utc).AddTicks(6349),
+                            DateModified = new DateTime(2022, 9, 2, 18, 43, 52, 158, DateTimeKind.Utc).AddTicks(6366),
                             InterestRate = 0m,
-                            MaximumDuration = 3,
+                            MaximumDuration = 5,
                             MinimumDuration = 1,
                             Name = "Product A",
                             Rule = "InterestFreeRule"
                         },
                         new
                         {
-                            Id = new Guid("2bab52b9-6ecc-49b1-8db8-c1bc9715c4a0"),
-                            DateAdded = new DateTime(2022, 8, 31, 23, 49, 47, 76, DateTimeKind.Utc).AddTicks(5871),
-                            DateModified = new DateTime(2022, 8, 31, 23, 49, 47, 76, DateTimeKind.Utc).AddTicks(5875),
+                            Id = new Guid("97638063-1911-4afa-9b62-4dbe94a0c7e3"),
+                            DateAdded = new DateTime(2022, 9, 2, 18, 43, 52, 159, DateTimeKind.Utc).AddTicks(161),
+                            DateModified = new DateTime(2022, 9, 2, 18, 43, 52, 159, DateTimeKind.Utc).AddTicks(165),
                             InterestRate = 0.0949m,
-                            MaximumDuration = 12,
+                            MaximumDuration = 9,
                             MinimumDuration = 6,
                             Name = "Product B",
                             Rule = "FirstTwoMonthsInterestFreeRule"
                         },
                         new
                         {
-                            Id = new Guid("bfb6a1fb-94c6-4346-be58-96b58bcf1ce8"),
-                            DateAdded = new DateTime(2022, 8, 31, 23, 49, 47, 76, DateTimeKind.Utc).AddTicks(5979),
-                            DateModified = new DateTime(2022, 8, 31, 23, 49, 47, 76, DateTimeKind.Utc).AddTicks(5980),
+                            Id = new Guid("af224dce-e165-49c4-aa0b-decf373f7d4f"),
+                            DateAdded = new DateTime(2022, 9, 2, 18, 43, 52, 159, DateTimeKind.Utc).AddTicks(281),
+                            DateModified = new DateTime(2022, 9, 2, 18, 43, 52, 159, DateTimeKind.Utc).AddTicks(281),
                             InterestRate = 0.0949m,
                             MaximumDuration = 36,
-                            MinimumDuration = 18,
+                            MinimumDuration = 10,
                             Name = "Product C",
                             Rule = "NoInterestFreeRule"
                         });
@@ -162,11 +162,20 @@ namespace MoneyMe.Infrastructure.Migrations
                     b.Property<DateTime>("DateModified")
                         .HasColumnType("datetime2");
 
-                    b.Property<decimal>("InterestRate")
-                        .HasColumnType("decimal(18,4)");
+                    b.Property<decimal>("Fee")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<decimal>("Interest")
+                        .HasColumnType("decimal(18,2)");
 
                     b.Property<decimal>("LoanAmount")
-                        .HasColumnType("decimal(18,4)");
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<decimal>("MonthlyPayment")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<Guid>("ProductId")
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<int>("Term")
                         .HasColumnType("int");
@@ -178,7 +187,7 @@ namespace MoneyMe.Infrastructure.Migrations
 
             modelBuilder.Entity("MoneyMe.Domain.ApplicationAggregate.Loan", b =>
                 {
-                    b.OwnsMany("MoneyMe.Domain.LoanAggregate.Term", "Terms", b1 =>
+                    b.OwnsMany("MoneyMe.Domain.LoanAggregate.Payment", "MonthlyAmortization", b1 =>
                         {
                             b1.Property<Guid>("LoanId")
                                 .HasColumnType("uniqueidentifier");
@@ -189,30 +198,30 @@ namespace MoneyMe.Infrastructure.Migrations
                                 .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
                             b1.Property<decimal>("Interest")
-                                .HasColumnType("decimal(18,4)");
+                                .HasColumnType("decimal(18,2)");
 
                             b1.Property<int>("Period")
                                 .HasColumnType("int");
 
                             b1.Property<decimal>("Principal")
-                                .HasColumnType("decimal(18,4)");
+                                .HasColumnType("decimal(18,2)");
 
                             b1.HasKey("LoanId", "Id");
 
-                            b1.ToTable("Loans_Terms");
+                            b1.ToTable("Payment");
 
                             b1.WithOwner()
                                 .HasForeignKey("LoanId");
                         });
 
-                    b.Navigation("Terms");
+                    b.Navigation("MonthlyAmortization");
                 });
 
-            modelBuilder.Entity("MoneyMe.Domain.QuoteAggregate.Quote", b =>
+            modelBuilder.Entity("MoneyMe.Domain.ProductAggregate.Product", b =>
                 {
-                    b.OwnsMany("MoneyMe.Domain.LoanAggregate.Term", "MonthlyAmotization", b1 =>
+                    b.OwnsMany("MoneyMe.Domain.ProductAggregate.Fee", "Fees", b1 =>
                         {
-                            b1.Property<Guid>("QuoteId")
+                            b1.Property<Guid>("ProductId")
                                 .HasColumnType("uniqueidentifier");
 
                             b1.Property<int>("Id")
@@ -220,24 +229,21 @@ namespace MoneyMe.Infrastructure.Migrations
                                 .HasColumnType("int")
                                 .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                            b1.Property<decimal>("Interest")
-                                .HasColumnType("decimal(18,4)");
+                            b1.Property<decimal>("Amount")
+                                .HasColumnType("decimal(18,2)");
 
-                            b1.Property<int>("Period")
-                                .HasColumnType("int");
+                            b1.Property<string>("Name")
+                                .HasColumnType("nvarchar(max)");
 
-                            b1.Property<decimal>("Principal")
-                                .HasColumnType("decimal(18,4)");
+                            b1.HasKey("ProductId", "Id");
 
-                            b1.HasKey("QuoteId", "Id");
-
-                            b1.ToTable("Quotes_MonthlyAmotization");
+                            b1.ToTable("Fee");
 
                             b1.WithOwner()
-                                .HasForeignKey("QuoteId");
+                                .HasForeignKey("ProductId");
                         });
 
-                    b.Navigation("MonthlyAmotization");
+                    b.Navigation("Fees");
                 });
 #pragma warning restore 612, 618
         }

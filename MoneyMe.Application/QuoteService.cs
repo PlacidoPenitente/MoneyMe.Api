@@ -4,7 +4,6 @@ using MoneyMe.Domain;
 using MoneyMe.Domain.Factories;
 using MoneyMe.Domain.Repositories;
 using System;
-using System.Linq;
 using System.Threading.Tasks;
 
 namespace MoneyMe.Application
@@ -32,9 +31,9 @@ namespace MoneyMe.Application
         {
             var product = await _productRepository.GetAsync(partialQuoteDto.ProductId);
 
-            var quote = _quoteFactory.Create(partialQuoteDto.CustomerId, partialQuoteDto.AmountRequired, partialQuoteDto.Term);
+            var quote = _quoteFactory.Create(partialQuoteDto.CustomerId, partialQuoteDto.LoanAmount, partialQuoteDto.Term);
 
-            quote.ApplyProductTerms(product);
+            quote.ApplyProductTerm(product);
 
             await using (_unitOfWork)
             {
@@ -50,9 +49,12 @@ namespace MoneyMe.Application
                 DateAdded = quote.DateAdded,
                 DateModified = quote.DateModified,
                 CustomerId = quote.CustomerId,
+                ProductId = quote.ProductId,
                 LoanAmount = quote.LoanAmount,
-                Terms = quote.Term,
-                MonthlyPayment = 100
+                Term = quote.Term,
+                Interest = quote.Interest,
+                Fee = quote.Fee,
+                MonthlyPayment = quote.MonthlyPayment
             };
         }
 
@@ -62,13 +64,16 @@ namespace MoneyMe.Application
 
             return new QuoteDto
             {
-                Id = id,
+                Id = quote.Id,
                 DateAdded = quote.DateAdded,
                 DateModified = quote.DateModified,
                 CustomerId = quote.CustomerId,
+                ProductId = quote.ProductId,
                 LoanAmount = quote.LoanAmount,
-                MonthlyPayment = quote.MonthlyAmotization.Average(x => x.Principal + x.Interest),
-                Terms = quote.Term
+                Term = quote.Term,
+                Interest = quote.Interest,
+                Fee = quote.Fee,
+                MonthlyPayment = quote.MonthlyPayment
             };
         }
     }

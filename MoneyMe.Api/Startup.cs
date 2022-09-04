@@ -41,7 +41,7 @@ namespace MoneyMe.Api
 
             services.AddControllers();
 
-            services.Configure<MoneyMeSettings>(Configuration.GetSection(nameof(MoneyMeSettings)));
+            services.Configure<Settings>(Configuration.GetSection(nameof(Settings)));
 
             var logger = new LoggerConfiguration().WriteTo.File("log.txt").CreateLogger();
             services.AddSingleton(logger);

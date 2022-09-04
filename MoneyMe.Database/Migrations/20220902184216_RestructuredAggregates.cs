@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace MoneyMe.Infrastructure.Migrations
 {
-    public partial class UpdatatedStructure : Migration
+    public partial class RestructuredAggregates : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -34,7 +34,7 @@ namespace MoneyMe.Infrastructure.Migrations
                     DateAdded = table.Column<DateTime>(type: "datetime2", nullable: false),
                     DateModified = table.Column<DateTime>(type: "datetime2", nullable: false),
                     CustomerId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    LoanAmount = table.Column<decimal>(type: "decimal(5,4)", nullable: false),
+                    LoanAmount = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
                     Status = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
@@ -50,7 +50,7 @@ namespace MoneyMe.Infrastructure.Migrations
                     DateAdded = table.Column<DateTime>(type: "datetime2", nullable: false),
                     DateModified = table.Column<DateTime>(type: "datetime2", nullable: false),
                     Name = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    InterestRate = table.Column<decimal>(type: "decimal(5,4)", nullable: false),
+                    InterestRate = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
                     MaximumDuration = table.Column<int>(type: "int", nullable: false),
                     MinimumDuration = table.Column<int>(type: "int", nullable: false),
                     Rule = table.Column<string>(type: "nvarchar(max)", nullable: true)
@@ -68,9 +68,12 @@ namespace MoneyMe.Infrastructure.Migrations
                     DateAdded = table.Column<DateTime>(type: "datetime2", nullable: false),
                     DateModified = table.Column<DateTime>(type: "datetime2", nullable: false),
                     CustomerId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    LoanAmount = table.Column<decimal>(type: "decimal(5,4)", nullable: false),
+                    ProductId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    LoanAmount = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
                     Term = table.Column<int>(type: "int", nullable: false),
-                    InterestRate = table.Column<decimal>(type: "decimal(5,4)", nullable: false)
+                    Interest = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
+                    Fee = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
+                    MonthlyPayment = table.Column<decimal>(type: "decimal(18,2)", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -78,21 +81,21 @@ namespace MoneyMe.Infrastructure.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Loans_Terms",
+                name: "Payment",
                 columns: table => new
                 {
                     LoanId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     Period = table.Column<int>(type: "int", nullable: false),
-                    Interest = table.Column<decimal>(type: "decimal(5,4)", nullable: false),
-                    Principal = table.Column<decimal>(type: "decimal(5,4)", nullable: false)
+                    Interest = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
+                    Principal = table.Column<decimal>(type: "decimal(18,2)", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Loans_Terms", x => new { x.LoanId, x.Id });
+                    table.PrimaryKey("PK_Payment", x => new { x.LoanId, x.Id });
                     table.ForeignKey(
-                        name: "FK_Loans_Terms_Loans_LoanId",
+                        name: "FK_Payment_Loans_LoanId",
                         column: x => x.LoanId,
                         principalTable: "Loans",
                         principalColumn: "Id",
@@ -100,23 +103,22 @@ namespace MoneyMe.Infrastructure.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Quotes_MonthlyAmotization",
+                name: "Fee",
                 columns: table => new
                 {
-                    QuoteId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    ProductId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    Period = table.Column<int>(type: "int", nullable: false),
-                    Interest = table.Column<decimal>(type: "decimal(5,4)", nullable: false),
-                    Principal = table.Column<decimal>(type: "decimal(5,4)", nullable: false)
+                    Name = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Amount = table.Column<decimal>(type: "decimal(18,2)", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Quotes_MonthlyAmotization", x => new { x.QuoteId, x.Id });
+                    table.PrimaryKey("PK_Fee", x => new { x.ProductId, x.Id });
                     table.ForeignKey(
-                        name: "FK_Quotes_MonthlyAmotization_Quotes_QuoteId",
-                        column: x => x.QuoteId,
-                        principalTable: "Quotes",
+                        name: "FK_Fee_Products_ProductId",
+                        column: x => x.ProductId,
+                        principalTable: "Products",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
@@ -124,17 +126,17 @@ namespace MoneyMe.Infrastructure.Migrations
             migrationBuilder.InsertData(
                 table: "Products",
                 columns: new[] { "Id", "DateAdded", "DateModified", "InterestRate", "MaximumDuration", "MinimumDuration", "Name", "Rule" },
-                values: new object[] { new Guid("26e4541a-2ee6-4834-8f93-ed7ddfcffedb"), new DateTime(2022, 8, 29, 15, 56, 21, 412, DateTimeKind.Utc).AddTicks(3360), new DateTime(2022, 8, 29, 15, 56, 21, 412, DateTimeKind.Utc).AddTicks(3380), 0m, 3, 1, "Product A", "InterestFreeRule" });
+                values: new object[] { new Guid("3641545b-90ae-4adf-9132-01967878db20"), new DateTime(2022, 9, 2, 18, 42, 16, 115, DateTimeKind.Utc).AddTicks(9196), new DateTime(2022, 9, 2, 18, 42, 16, 115, DateTimeKind.Utc).AddTicks(9211), 0m, 5, 1, "Product A", "InterestFreeRule" });
 
             migrationBuilder.InsertData(
                 table: "Products",
                 columns: new[] { "Id", "DateAdded", "DateModified", "InterestRate", "MaximumDuration", "MinimumDuration", "Name", "Rule" },
-                values: new object[] { new Guid("d9ad31d7-83c6-4085-a2d3-233037a27eb1"), new DateTime(2022, 8, 29, 15, 56, 21, 412, DateTimeKind.Utc).AddTicks(9214), new DateTime(2022, 8, 29, 15, 56, 21, 412, DateTimeKind.Utc).AddTicks(9236), 0.0949m, 12, 6, "Product B", "FirstTwoMonthsInterestFreeRule" });
+                values: new object[] { new Guid("d3cfa251-9e38-49f4-87a9-c33e57f9d96e"), new DateTime(2022, 9, 2, 18, 42, 16, 116, DateTimeKind.Utc).AddTicks(2903), new DateTime(2022, 9, 2, 18, 42, 16, 116, DateTimeKind.Utc).AddTicks(2907), 0.0949m, 9, 6, "Product B", "FirstTwoMonthsInterestFreeRule" });
 
             migrationBuilder.InsertData(
                 table: "Products",
                 columns: new[] { "Id", "DateAdded", "DateModified", "InterestRate", "MaximumDuration", "MinimumDuration", "Name", "Rule" },
-                values: new object[] { new Guid("50ffc053-1243-4aee-b5cc-5bf8f9946c85"), new DateTime(2022, 8, 29, 15, 56, 21, 412, DateTimeKind.Utc).AddTicks(9457), new DateTime(2022, 8, 29, 15, 56, 21, 412, DateTimeKind.Utc).AddTicks(9459), 0.0949m, 36, 18, "Product C", "NoInterestFreeRule" });
+                values: new object[] { new Guid("445d8075-9782-46c5-9e6c-5020f2ed05bb"), new DateTime(2022, 9, 2, 18, 42, 16, 116, DateTimeKind.Utc).AddTicks(3011), new DateTime(2022, 9, 2, 18, 42, 16, 116, DateTimeKind.Utc).AddTicks(3012), 0.0949m, 36, 10, "Product C", "NoInterestFreeRule" });
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
@@ -143,19 +145,19 @@ namespace MoneyMe.Infrastructure.Migrations
                 name: "Customers");
 
             migrationBuilder.DropTable(
-                name: "Loans_Terms");
+                name: "Fee");
+
+            migrationBuilder.DropTable(
+                name: "Payment");
+
+            migrationBuilder.DropTable(
+                name: "Quotes");
 
             migrationBuilder.DropTable(
                 name: "Products");
 
             migrationBuilder.DropTable(
-                name: "Quotes_MonthlyAmotization");
-
-            migrationBuilder.DropTable(
                 name: "Loans");
-
-            migrationBuilder.DropTable(
-                name: "Quotes");
         }
     }
 }

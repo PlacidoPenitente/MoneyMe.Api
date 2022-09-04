@@ -1,4 +1,7 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using System;
+using System.Net;
+using System.Threading.Tasks;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
 using MoneyMe.Api.Requests;
 using MoneyMe.Api.Responses;
@@ -6,9 +9,6 @@ using MoneyMe.Api.Validations;
 using MoneyMe.Application.Contracts;
 using MoneyMe.Application.Contracts.Dtos;
 using Serilog.Core;
-using System;
-using System.Net;
-using System.Threading.Tasks;
 
 namespace MoneyMe.Api.Controllers
 {
@@ -20,7 +20,7 @@ namespace MoneyMe.Api.Controllers
         private readonly ICustomerService _customerService;
         private readonly IEmailService _emailService;
         private readonly ISecurityService _securityService;
-        private readonly MoneyMeSettings _moneyMeSettings;
+        private readonly Settings _settings;
         private readonly Logger _logger;
 
         public QuoteController(
@@ -28,21 +28,21 @@ namespace MoneyMe.Api.Controllers
             ICustomerService customerService,
             IEmailService emailService,
             ISecurityService securityService,
-            IOptions<MoneyMeSettings> options,
+            IOptions<Settings> options,
             Logger logger)
         {
             _quoteService = quoteService;
             _customerService = customerService;
             _emailService = emailService;
             _securityService = securityService;
-            _moneyMeSettings = options.Value;
+            _settings = options.Value;
             _logger = logger;
         }
 
         [HttpPost("request")]
         public async Task<IActionResult> RequestQuoteAsync([FromBody] QuoteRequest quoteRequest)
         {
-            if (!quoteRequest.IsValid(_moneyMeSettings))
+            if (!quoteRequest.IsValid(_settings))
             {
                 return BadRequest();
             }
@@ -59,24 +59,24 @@ namespace MoneyMe.Api.Controllers
                         FirstName = quoteRequest.FirstName,
                         LastName = quoteRequest.LastName,
                         DateOfBirth = quoteRequest.DateOfBirth.Value,
-                        Mobile = quoteRequest.Mobile,
-                        Email = quoteRequest.Email
+                        MobileNumber = quoteRequest.Mobile,
+                        EmailAddress = quoteRequest.Email
                     };
 
                     await _customerService.RegisterCustomerAsync(customerDto);
                 }
 
-                var quoteText = $"{customerDto.Email}|{quoteRequest.AmountRequired}|{quoteRequest.Term}";
+                var quoteText = $"{customerDto.EmailAddress}|{quoteRequest.LoanAmount}|{quoteRequest.Term}";
                 var encryptedQuoteText = _securityService.Encrypt(quoteText);
                 var redirectUrl = $"http://localhost:4200/quote/{WebUtility.UrlEncode(encryptedQuoteText)}";
 
-                await _emailService.SendMessageAsync(customerDto.Email, redirectUrl);
+                await _emailService.SendMessageAsync(customerDto.EmailAddress, redirectUrl);
 
                 return Ok(redirectUrl);
             }
             catch (Exception ex)
             {
-                _logger.Error(ex.Message);
+                _logger.Error(ex.StackTrace);
                 return StatusCode((int)HttpStatusCode.InternalServerError, "Failed to generate quote url.");
             }
         }
@@ -93,7 +93,7 @@ namespace MoneyMe.Api.Controllers
 
                 var quoteUrlSections = quoteUrl.Split('|');
                 var customerEmail = quoteUrlSections[0];
-                var amountRequired = decimal.Parse(quoteUrlSections[1]);
+                var loanAmount = decimal.Parse(quoteUrlSections[1]);
                 var term = int.Parse(quoteUrlSections[2]);
 
                 var customer = await _customerService.FindCustomerByEmailAsync(customerEmail);
@@ -101,7 +101,7 @@ namespace MoneyMe.Api.Controllers
                 var response = new
                 {
                     CustomerId = customer.Id,
-                    AmountRequired = amountRequired,
+                    LoanAmount = loanAmount,
                     Term = term,
                 };
 
@@ -109,7 +109,7 @@ namespace MoneyMe.Api.Controllers
             }
             catch (Exception ex)
             {
-                _logger.Error(ex.Message);
+                _logger.Error(ex.StackTrace);
                 return StatusCode((int)HttpStatusCode.InternalServerError, "Failed to retrieve quote request.");
             }
         }
@@ -124,17 +124,20 @@ namespace MoneyMe.Api.Controllers
                 var response = new QuoteResponse
                 {
                     Id = quoteDto.Id,
-                    AmountRequired = quoteDto.LoanAmount,
-                    Terms = quoteDto.Terms,
                     CustomerId = quoteDto.CustomerId,
-                    Monthly = quoteDto.MonthlyPayment
+                    ProductId = quoteDto.ProductId,
+                    LoanAmount = quoteDto.LoanAmount,
+                    Term = quoteDto.Term,
+                    Interest = quoteDto.Interest,
+                    Fee = quoteDto.Fee,
+                    MonthlyPayment = quoteDto.MonthlyPayment
                 };
 
                 return Ok(response);
             }
             catch (Exception ex)
             {
-                _logger.Error(ex.Message);
+                _logger.Error(ex.StackTrace);
                 return StatusCode((int)HttpStatusCode.InternalServerError, "Quote calculation failed.");
             }
         }
@@ -144,21 +147,23 @@ namespace MoneyMe.Api.Controllers
         {
             try
             {
-                var quote = await _quoteService.GetQuoteAsync(id);
+                var quoteDto = await _quoteService.GetQuoteAsync(id);
 
                 return Ok(new QuoteResponse
                 {
-                    Id = quote.Id,
-                    AmountRequired = quote.LoanAmount,
-                    CustomerId = quote.CustomerId,
-                    Monthly = quote.MonthlyPayment,
-                    Fee = 0,
-                    Terms = quote.Terms
+                    Id = quoteDto.Id,
+                    CustomerId = quoteDto.CustomerId,
+                    ProductId = quoteDto.ProductId,
+                    LoanAmount = quoteDto.LoanAmount,
+                    Term = quoteDto.Term,
+                    Interest = quoteDto.Interest,
+                    Fee = quoteDto.Fee,
+                    MonthlyPayment = quoteDto.MonthlyPayment
                 });
             }
             catch (Exception ex)
             {
-                _logger.Error(ex.Message);
+                _logger.Error(ex.StackTrace);
                 return StatusCode((int)HttpStatusCode.InternalServerError, "Unable to retrieve quote.");
             }
         }

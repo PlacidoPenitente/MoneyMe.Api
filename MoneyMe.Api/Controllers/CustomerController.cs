@@ -1,5 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using MoneyMe.Api.Requests;
 using MoneyMe.Application.Contracts;
+using MoneyMe.Application.Contracts.Dtos;
 using Serilog.Core;
 using System;
 using System.Net;
@@ -36,7 +38,40 @@ namespace MoneyMe.Api.Controllers
             }
             catch (Exception ex)
             {
-                _logger.Error(ex.Message);
+                _logger.Error(ex.StackTrace);
+                return StatusCode((int)HttpStatusCode.InternalServerError, "Unable to retrieve customer.");
+            }
+        }
+
+        [HttpPut]
+        public async Task<IActionResult> UpdateCustomerAsync([FromBody] UpdateCustomerRequest updateCustomerRequest)
+        {
+            try
+            {
+                var customerDto = await _customerService.GetCustomerAsync(updateCustomerRequest.Id);
+
+                if (customerDto == null)
+                {
+                    return NotFound();
+                }
+
+                var updatedCustomer = new CustomerDto
+                {
+                    Id = customerDto.Id,
+                    Title = updateCustomerRequest.Title,
+                    FirstName = updateCustomerRequest.FirstName,
+                    LastName = updateCustomerRequest.LastName,
+                    EmailAddress = updateCustomerRequest.Email,
+                    MobileNumber = customerDto.MobileNumber
+                };
+
+                var updatedCustomerDto = await _customerService.UpdateCustomerAsync(updatedCustomer);
+
+                return Ok(updatedCustomerDto);
+            }
+            catch (Exception ex)
+            {
+                _logger.Error(ex.StackTrace);
                 return StatusCode((int)HttpStatusCode.InternalServerError, "Unable to retrieve customer.");
             }
         }

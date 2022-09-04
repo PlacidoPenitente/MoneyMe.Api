@@ -96,9 +96,8 @@ export class QuoteCalculatorComponent implements OnInit, AfterViewInit {
             {
               next: partialQuote => {
                 this.partialQuote = partialQuote;
-                console.log(partialQuote.term)
                 this.selectedProduct = this.products.find(p => p.minimumDuration <= this.partialQuote.term && p.maximumDuration >= this.partialQuote.term) || products[products.length - 1];
-                this.updateSlider(partialQuote.amountRequired, this.sliderValue);
+                this.updateSlider(partialQuote.loanAmount, this.sliderValue);
 
                 this.httpClient.get<Customer>(`https://localhost:5001/api/customer/${this.partialQuote.customerId}`).subscribe(
                   {
@@ -107,8 +106,8 @@ export class QuoteCalculatorComponent implements OnInit, AfterViewInit {
                       this.formGroup.patchValue({ 'firstName': customer.firstName });
                       this.formGroup.patchValue({ 'lastName': customer.lastName });
                       this.formGroup.patchValue({ 'dateOfBirth': customer.dateOfBirth });
-                      this.formGroup.patchValue({ 'mobile': customer.mobile });
-                      this.formGroup.patchValue({ 'email': customer.email });
+                      this.formGroup.patchValue({ 'mobile': customer.mobileNumber });
+                      this.formGroup.patchValue({ 'email': customer.emailAddress });
                     }
                   });
               }
@@ -148,15 +147,14 @@ export class QuoteCalculatorComponent implements OnInit, AfterViewInit {
     if (this.formGroup.invalid) return;
 
     var quote = new Quote();
-    quote.AmountRequired = this.loanAmount ?? this.partialQuote.amountRequired;
-    console.log(this.partialQuote.term)
+    quote.LoanAmount = this.loanAmount ?? this.partialQuote.loanAmount;
     quote.Term = this.term || this.partialQuote.term;
     quote.Title = this.titles[this.formGroup.get('title')?.value];
     quote.FirstName = this.formGroup.get('firstName')?.value;
     quote.LastName = this.formGroup.get('lastName')?.value;
     quote.DateOfBirth = this.formGroup.get('dateOfBirth')?.value;
-    quote.Mobile = this.formGroup.get('mobile')?.value;
-    quote.Email = this.formGroup.get('email')?.value;
+    quote.MobileNumber = this.formGroup.get('mobile')?.value;
+    quote.EmailAddress = this.formGroup.get('email')?.value;
 
     this.partialQuote.productId = this.selectedProduct.id;
 

@@ -10,7 +10,7 @@ namespace MoneyMe.Domain.ApplicationAggregate
 {
     public class Loan : IAggregate<Guid>
     {
-        private readonly List<Term> _terms;
+        private readonly List<Payment> _monthlyAmortization;
 
         private Loan()
         {
@@ -23,26 +23,30 @@ namespace MoneyMe.Domain.ApplicationAggregate
             DateTime dateModified,
             Guid customerId,
             decimal loanAmount,
-            IReadOnlyCollection<Term> terms)
+            IReadOnlyCollection<Payment> term)
         {
             Id = id;
             DateAdded = dateAdded;
             DateModified = dateModified;
             CustomerId = customerId;
             LoanAmount = loanAmount;
-            _terms = terms.ToList();
+            _monthlyAmortization = term.ToList();
         }
 
         [Key]
         public Guid Id { get; private set; }
+
         public DateTime DateAdded { get; private set; }
+
         public DateTime DateModified { get; private set; }
+
         public Guid CustomerId { get; private set; }
 
-        [Column(TypeName = "decimal(18, 4)")]
+        [Column(TypeName = "decimal(18, 2)")]
         public decimal LoanAmount { get; private set; }
         
-        public IReadOnlyCollection<Term> Terms => _terms;
+        public IReadOnlyCollection<Payment> MonthlyAmortization => _monthlyAmortization;
+
         public LoanStatus Status { get; private set; }
 
         public void Approve()
@@ -70,15 +74,15 @@ namespace MoneyMe.Domain.ApplicationAggregate
 
             while (amount > 0)
             {
-                var unpaidTerm = _terms.OrderBy(term => term.Period).FirstOrDefault(term => term.Principal > 0);
+                var unpaidPeriodicPayment = _monthlyAmortization.OrderBy(term => term.Period).FirstOrDefault(term => term.Principal > 0);
 
-                if (unpaidTerm == null)
+                if (unpaidPeriodicPayment == null)
                 {
                     Status = LoanStatus.Completed;
                     break;
                 }
 
-                var remaining = unpaidTerm.Principal - amount;
+                var remaining = unpaidPeriodicPayment.Principal - amount;
                 amount = 0;
 
                 if (remaining < 0)
@@ -87,10 +91,10 @@ namespace MoneyMe.Domain.ApplicationAggregate
                     amount = decimal.Negate(remaining);
                 }
 
-                var paidTerm = new Term(unpaidTerm.Period, unpaidTerm.Interest, remaining);
+                var paidPeriodicPayment = new Payment(unpaidPeriodicPayment.Period, unpaidPeriodicPayment.Interest, remaining);
 
-                _terms.Add(paidTerm);
-                _terms.Remove(unpaidTerm);
+                _monthlyAmortization.Add(paidPeriodicPayment);
+                _monthlyAmortization.Remove(unpaidPeriodicPayment);
 
                 DateModified = DateTime.UtcNow;
             }

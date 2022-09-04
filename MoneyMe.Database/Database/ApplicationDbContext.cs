@@ -19,13 +19,13 @@ namespace MoneyMe.Infrastructure.Database
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            modelBuilder.Entity<Loan>().OwnsMany(x => x.Terms);
-            modelBuilder.Entity<Quote>().OwnsMany(x => x.MonthlyAmotization);
+            modelBuilder.Entity<Loan>().OwnsMany(x => x.MonthlyAmortization);
+            modelBuilder.Entity<Product>().OwnsMany(x => x.Fees);
 
             modelBuilder.Entity<Product>().HasData(
-                new Product(Guid.NewGuid(), DateTime.UtcNow, DateTime.UtcNow, "Product A", 0, 3, 1, nameof(InterestFreeRule)),
-                new Product(Guid.NewGuid(), DateTime.UtcNow, DateTime.UtcNow, "Product B", 0.0949m, 12, 6, nameof(FirstTwoMonthsInterestFreeRule)),
-                new Product(Guid.NewGuid(), DateTime.UtcNow, DateTime.UtcNow, "Product C", 0.0949m, 36, 18, nameof(NoInterestFreeRule))
+                new Product(Guid.NewGuid(), DateTime.UtcNow, DateTime.UtcNow, "Product A", 0, 5, 1, nameof(InterestFreeRule)),
+                new Product(Guid.NewGuid(), DateTime.UtcNow, DateTime.UtcNow, "Product B", 0.0949m, 9, 6, nameof(FirstTwoMonthsInterestFreeRule)),
+                new Product(Guid.NewGuid(), DateTime.UtcNow, DateTime.UtcNow, "Product C", 0.0949m, 36, 10, nameof(NoInterestFreeRule))
                 );
         }
     }

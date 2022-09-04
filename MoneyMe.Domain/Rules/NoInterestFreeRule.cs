@@ -11,17 +11,17 @@ namespace MoneyMe.Domain.Rules
 
         public string Name { get; private set; }
 
-        public IReadOnlyCollection<Term> GenerateTerms(decimal loanAmount, int terms, decimal interestRate, decimal monthlyPayment)
+        public IReadOnlyCollection<Payment> GenerateMonthlyAmortization(decimal loanAmount, int term, decimal interestRate, decimal monthlyPayment)
         {
-            var paymentTerms = new List<Term>();
+            var payments = new List<Payment>();
 
-            for (int period = 1; period < terms + 1; period++)
+            for (int period = 1; period < term + 1; period++)
             {
-                var interest = Convert.ToDecimal(Financial.IPmt(decimal.ToDouble(interestRate), period, terms, decimal.ToDouble(loanAmount)));
-                paymentTerms.Add(new Term(period, interest, monthlyPayment - interest));
+                var interest = Convert.ToDecimal(Financial.IPmt(decimal.ToDouble(interestRate)/12, period, term, decimal.ToDouble(decimal.Negate(loanAmount))));
+                payments.Add(new Payment(period, interest, monthlyPayment - interest));
             }
 
-            return paymentTerms;
+            return payments;
         }
     }
 }

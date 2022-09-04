@@ -16,28 +16,28 @@ export class LoanApplication {
         this._customerId = v;
     }
 
-    private _amountRequired: string = "";
-    public get amountRequired(): string {
-        return this._amountRequired;
+    private _loanAmount: number = 0;
+    public get loanAmount(): number {
+        return this._loanAmount;
     }
-    public set amountRequired(v: string) {
-        this._amountRequired = v;
-    }
-
-    private _terms: number = 0;
-    public get terms(): number {
-        return this._terms;
-    }
-    public set terms(v: number) {
-        this._terms = v;
+    public set loanAmount(v: number) {
+        this._loanAmount = v;
     }
 
-    private _monthly: number = 0;
-    public get monthly(): number {
-        return this._monthly;
+    private _term: number = 0;
+    public get term(): number {
+        return this._term;
     }
-    public set monthly(v: number) {
-        this._monthly = v;
+    public set term(v: number) {
+        this._term = v;
+    }
+
+    private _monthlyPayment: number = 0;
+    public get monthlyPayment(): number {
+        return this._monthlyPayment;
+    }
+    public set monthlyPayment(v: number) {
+        this._monthlyPayment = v;
     }
 
     private _fee: number = 0;
@@ -46,6 +46,14 @@ export class LoanApplication {
     }
     public set fee(v: number) {
         this._fee = v;
+    }
+
+    private _interest: number = 0;
+    public get interest(): number {
+        return this._interest;
+    }
+    public set interest(v: number) {
+        this._interest = v;
     }
 
     private _productId: string = "";

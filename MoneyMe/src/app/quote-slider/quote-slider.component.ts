@@ -162,7 +162,7 @@ export class QuoteSliderComponent implements OnInit, AfterViewInit {
   }
 
   ngAfterViewInit(): void {
-    var initialPercentage = ((this.partialQuote.amountRequired - (Math.round((this.minimum) / this.factor) * this.factor)) / this.factor);
+    var initialPercentage = ((this.partialQuote.loanAmount - (Math.round((this.minimum) / this.factor) * this.factor)) / this.factor);
     this.initial = initialPercentage;
     this.updateSliderValue(this.initial, this.slider.nativeElement.offsetWidth);
 

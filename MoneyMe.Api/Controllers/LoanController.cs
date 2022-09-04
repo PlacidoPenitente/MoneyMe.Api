@@ -36,13 +36,13 @@ namespace MoneyMe.Api.Controllers
                 var customer = await _customerService.GetCustomerAsync(loanApplication.CustomerId);
                 var loanDto = await _loanService.ApplyAsync(loanApplication.QuoteId, loanApplication.ProductId);
 
-                await _emailService.SendMessageAsync(customer.Email, $"{loanDto.Id}");
+                await _emailService.SendMessageAsync(customer.EmailAddress, $"{loanDto.Id}");
 
                 return Ok();
             }
             catch (Exception ex)
             {
-                _logger.Error(ex.Message);
+                _logger.Error(ex.StackTrace);
                 return StatusCode((int)HttpStatusCode.InternalServerError, "Failed to process your application.");
             }
         }

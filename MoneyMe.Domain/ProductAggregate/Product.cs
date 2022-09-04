@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.Linq;
 using Microsoft.VisualBasic;
 using MoneyMe.Domain.Factories;
 using MoneyMe.Domain.LoanAggregate;
@@ -11,10 +12,12 @@ namespace MoneyMe.Domain.ProductAggregate
     public class Product : IAggregate<Guid>
     {
         private readonly RuleFactory _ruleFactory;
+        private readonly List<Fee> _fees;
 
         private Product()
         {
             _ruleFactory = new RuleFactory();
+            _fees = new List<Fee>();
         }
 
         public Product(
@@ -25,7 +28,7 @@ namespace MoneyMe.Domain.ProductAggregate
             decimal interestRate,
             int maximumDuration,
             int minimumDuration,
-            string rule)
+            string rule) : this()
         {
             Id = id;
             DateAdded = dateAdded;
@@ -35,8 +38,6 @@ namespace MoneyMe.Domain.ProductAggregate
             MaximumDuration = maximumDuration;
             MinimumDuration = minimumDuration;
             Rule = rule;
-
-            _ruleFactory = new RuleFactory();
         }
 
         [Key]
@@ -55,20 +56,29 @@ namespace MoneyMe.Domain.ProductAggregate
 
         public int MinimumDuration { get; private set; }
 
+        public IReadOnlyCollection<Fee> Fees => _fees;
+
         public string Rule { get; private set; }
 
-        public IReadOnlyCollection<Term> CalculateMonthlyAmortization(decimal loanAmount, int term)
+        public IReadOnlyCollection<Payment> CalculateMonthlyAmortization(decimal loanAmount, int term)
         {
             var rule = _ruleFactory.CreateRule(Rule);
 
-            if (term > MaximumDuration || term <MinimumDuration)
+            if (term > MaximumDuration || term < MinimumDuration)
             {
-                throw new Exception($"This product does not support the desired term.");
+                throw new ArgumentException($"This product does not support the desired term.");
             }
+
+            loanAmount += GetTotalFee();
 
             var payment = Financial.Pmt(decimal.ToDouble(InterestRate) / 12, term, decimal.ToDouble(decimal.Negate(loanAmount)));
 
-            return rule.GenerateTerms(loanAmount, term, InterestRate, Convert.ToDecimal(payment));
+            return rule.GenerateMonthlyAmortization(loanAmount, term, InterestRate, Convert.ToDecimal(Math.Round(payment, 2)));
+        }
+
+        public decimal GetTotalFee()
+        {
+            return Fees.Sum(fee => fee.Amount);
         }
     }
 }

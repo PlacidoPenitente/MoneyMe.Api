@@ -5,7 +5,7 @@ namespace MoneyMe.Domain
 {
     public interface IUnitOfWork : IAsyncDisposable, IDisposable
     {
-        Task<TResult> ExecuteAsync<TResult>(Func<Task<TResult>> task);
+        Task<T> ExecuteAsync<T>(Func<Task<T>> task);
         Task ExecuteAsync(Func<Task> task);
         Task<int> CommitAsync();
     }

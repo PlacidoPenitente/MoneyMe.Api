@@ -40,19 +40,19 @@ export class Customer {
         this._dateOfBirth = v;
     }
 
-    private _mobile!: string;
-    public get mobile(): string {
-        return this._mobile;
+    private _mobileNumber!: string;
+    public get mobileNumber(): string {
+        return this._mobileNumber;
     }
-    public set mobile(v: string) {
-        this._mobile = v;
+    public set mobileNumber(v: string) {
+        this._mobileNumber = v;
     }
 
-    private _email!: string;
-    public get email(): string {
-        return this._email;
+    private _emailAddress!: string;
+    public get emailAddress(): string {
+        return this._emailAddress;
     }
-    public set email(v: string) {
-        this._email = v;
+    public set emailAddress(v: string) {
+        this._emailAddress = v;
     }
 }

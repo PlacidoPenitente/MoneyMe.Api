@@ -11,9 +11,9 @@ namespace MoneyMe.Infrastructure.Services
     {
         private readonly string _key;
 
-        private readonly MoneyMeSettings _moneyMeSettings;
+        private readonly Settings _moneyMeSettings;
 
-        public SecurityService(IOptions<MoneyMeSettings> options)
+        public SecurityService(IOptions<Settings> options)
         {
             _moneyMeSettings = options.Value;
             _key = _moneyMeSettings.Secret;
