@@ -103,7 +103,7 @@ namespace MoneyMe.Tests
         {
             var rule = RuleFactory.Object.CreateRule(ruleName);
 
-            return new Product(Guid.NewGuid(), DateTime.UtcNow, DateTime.UtcNow, productName, interetestRate, maxDuration, minimumDuration, "");
+            return new Product(Guid.NewGuid(), DateTime.UtcNow, DateTime.UtcNow, productName, interetestRate, maxDuration, minimumDuration, "", null);
         }
     }
 }

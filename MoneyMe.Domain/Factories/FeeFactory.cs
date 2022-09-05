@@ -6,7 +6,7 @@ namespace MoneyMe.Domain.Factories
     {
         public Fee Create(string name, decimal amount)
         {
-            return null;
+            return new Fee(name, amount);
         }
     }
 }

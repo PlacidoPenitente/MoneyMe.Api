@@ -1,5 +1,4 @@
 ﻿using Microsoft.VisualBasic;
-using MoneyMe.Domain.ApplicationAggregate;
 using MoneyMe.Domain.LoanAggregate;
 using System;
 using System.Collections.Generic;

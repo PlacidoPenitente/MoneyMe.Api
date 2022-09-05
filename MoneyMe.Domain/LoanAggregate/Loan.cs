@@ -1,21 +1,13 @@
-﻿using MoneyMe.Domain.LoanAggregate;
-using MoneyMe.Domain.Shared;
+﻿using MoneyMe.Domain.Shared;
 using System;
 using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 
-namespace MoneyMe.Domain.ApplicationAggregate
+namespace MoneyMe.Domain.LoanAggregate
 {
     public class Loan : IAggregate<Guid>
     {
         private readonly List<Payment> _monthlyAmortization;
-
-        private Loan()
-        {
-
-        }
 
         public Loan(
             Guid id,
@@ -33,20 +25,12 @@ namespace MoneyMe.Domain.ApplicationAggregate
             _monthlyAmortization = term.ToList();
         }
 
-        [Key]
         public Guid Id { get; private set; }
-
         public DateTime DateAdded { get; private set; }
-
         public DateTime DateModified { get; private set; }
-
         public Guid CustomerId { get; private set; }
-
-        [Column(TypeName = "decimal(18, 2)")]
         public decimal LoanAmount { get; private set; }
-        
         public IReadOnlyCollection<Payment> MonthlyAmortization => _monthlyAmortization;
-
         public LoanStatus Status { get; private set; }
 
         public void Approve()

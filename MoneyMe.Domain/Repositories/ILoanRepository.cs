@@ -1,6 +1,6 @@
 ﻿using System.Threading.Tasks;
 using System;
-using MoneyMe.Domain.ApplicationAggregate;
+using MoneyMe.Domain.LoanAggregate;
 
 namespace MoneyMe.Domain.Repositories
 {

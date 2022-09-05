@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using AutoMapper;
+using Microsoft.EntityFrameworkCore;
 using MoneyMe.Domain.QuoteAggregate;
 using MoneyMe.Domain.Repositories;
 using MoneyMe.Infrastructure.Database;
@@ -10,10 +11,12 @@ namespace MoneyMe.Infrastructure.Repositories
     public class QuoteRepository : IQuoteRepository
     {
         private readonly ApplicationDbContext _context;
+        private readonly IMapper _mapper;
 
-        public QuoteRepository(ApplicationDbContext context)
+        public QuoteRepository(ApplicationDbContext context, IMapper mapper)
         {
             _context = context;
+            _mapper = mapper;
         }
 
         public async Task AddAsync(Quote quote)
@@ -23,7 +26,8 @@ namespace MoneyMe.Infrastructure.Repositories
 
         public async Task<Quote> GetAsync(Guid id)
         {
-            return await _context.Quotes.SingleOrDefaultAsync(quote => quote.Id == id);
+            var quote = await _context.Quotes.SingleOrDefaultAsync(quote => quote.Id == id);
+            return _mapper.Map<Quote>(quote);
         }
 
         public async Task RemoveAsync(Guid id)

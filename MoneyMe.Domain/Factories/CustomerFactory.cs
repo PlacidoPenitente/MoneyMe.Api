@@ -1,4 +1,5 @@
 ﻿using MoneyMe.Domain.CustomerAggregate;
+using MoneyMe.Domain.Shared;
 using System;
 
 namespace MoneyMe.Domain.Factories
@@ -17,7 +18,7 @@ namespace MoneyMe.Domain.Factories
                 Guid.NewGuid(),
                 DateTime.UtcNow,
                 DateTime.UtcNow,
-                title,
+                Enum.Parse<Title>(title),
                 firstName,
                 lastName,
                 dateOfBirth,

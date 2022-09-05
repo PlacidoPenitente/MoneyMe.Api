@@ -1,9 +1,5 @@
-﻿using MoneyMe.Domain.LoanAggregate;
-using MoneyMe.Domain.ProductAggregate;
+﻿using MoneyMe.Domain.ProductAggregate;
 using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 
 namespace MoneyMe.Domain.QuoteAggregate
@@ -26,29 +22,15 @@ namespace MoneyMe.Domain.QuoteAggregate
             Term = term;
         }
 
-        [Key]
         public Guid Id { get; private set; }
-
         public DateTime DateAdded { get; private set; }
-
         public DateTime DateModified { get; private set; }
-
         public Guid CustomerId { get; private set; }
-
         public Guid ProductId { get; private set; }
-
-        [Column(TypeName = "decimal(18, 2)")]
         public decimal LoanAmount { get; private set; }
-
         public int Term { get; private set; }
-
-        [Column(TypeName = "decimal(18, 2)")]
         public decimal Interest { get; private set; }
-
-        [Column(TypeName = "decimal(18, 2)")]
         public decimal Fee { get; private set; }
-
-        [Column(TypeName = "decimal(18, 2)")]
         public decimal MonthlyPayment { get; private set; }
 
         public void ChangeTerm(int term)

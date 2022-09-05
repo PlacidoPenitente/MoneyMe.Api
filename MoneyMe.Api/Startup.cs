@@ -1,3 +1,4 @@
+using AutoMapper;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
@@ -45,6 +46,14 @@ namespace MoneyMe.Api
 
             var logger = new LoggerConfiguration().WriteTo.File("log.txt").CreateLogger();
             services.AddSingleton(logger);
+
+            var mapperConfig = new MapperConfiguration(mc =>
+            {
+                mc.AddProfile(new InfrastructureProfile());
+            });
+
+            var mapper = mapperConfig.CreateMapper();
+            services.AddSingleton(mapper);
 
             services.AddSingleton<IEmailService, EmailService>();
             services.AddSingleton<ISecurityService, SecurityService>();

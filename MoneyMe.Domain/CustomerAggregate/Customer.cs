@@ -1,25 +1,16 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
-using System.Linq;
+using MoneyMe.Domain.Shared;
 using NodaTime;
 
 namespace MoneyMe.Domain.CustomerAggregate
 {
     public class Customer : IAggregate<Guid>
     {
-        private readonly IReadOnlyCollection<string> _titles = new List<string>() { "Mr.", "Ms.", "Mrs." };
-
-        private Customer()
-        {
-
-        }
-
         public Customer(
             Guid id,
             DateTime dateAdded,
             DateTime dateModified,
-            string title,
+            Title title,
             string firstName,
             string lastName,
             DateTime dateOfBirth,
@@ -37,32 +28,23 @@ namespace MoneyMe.Domain.CustomerAggregate
             EmailAddress = emailAddress;
         }
 
-        [Key]
         public Guid Id { get; private set; }
-
         public DateTime DateAdded { get; private set; }
-        
         public DateTime DateModified { get; private set; }
-        
-        public string Title { get; private set; }
-        
+        public Title Title { get; private set; }
         public string FirstName { get; private set; }
-        
         public string LastName { get; private set; }
-        
         public DateTime DateOfBirth { get; private set; }
-        
         public string MobileNumber { get; private set; }
-        
         public string EmailAddress { get; private set; }
 
         public void ChangeTitle(string title)
         {
             title = title?.Trim();
 
-            if (_titles.Any(x => x == title))
+            if (Enum.TryParse<Title>(title, out var newTitle))
             {
-                LastName = title;
+                Title = newTitle;
                 DateModified = DateTime.UtcNow;
             }
 

@@ -1,7 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using Microsoft.VisualBasic;
 using MoneyMe.Domain.Factories;
@@ -14,12 +12,6 @@ namespace MoneyMe.Domain.ProductAggregate
         private readonly RuleFactory _ruleFactory;
         private readonly List<Fee> _fees;
 
-        private Product()
-        {
-            _ruleFactory = new RuleFactory();
-            _fees = new List<Fee>();
-        }
-
         public Product(
             Guid id,
             DateTime dateAdded,
@@ -28,7 +20,8 @@ namespace MoneyMe.Domain.ProductAggregate
             decimal interestRate,
             int maximumDuration,
             int minimumDuration,
-            string rule) : this()
+            string rule,
+            IReadOnlyCollection<Fee> fees)
         {
             Id = id;
             DateAdded = dateAdded;
@@ -38,26 +31,17 @@ namespace MoneyMe.Domain.ProductAggregate
             MaximumDuration = maximumDuration;
             MinimumDuration = minimumDuration;
             Rule = rule;
+            _fees = fees.ToList();
         }
 
-        [Key]
         public Guid Id { get; private set; }
-
         public DateTime DateAdded { get; private set; }
-
         public DateTime DateModified { get; private set; }
-
         public string Name { get; private set; }
-
-        [Column(TypeName = "decimal(18, 4)")]
         public decimal InterestRate { get; private set; }
-
         public int MaximumDuration { get; private set; }
-
         public int MinimumDuration { get; private set; }
-
         public IReadOnlyCollection<Fee> Fees => _fees;
-
         public string Rule { get; private set; }
 
         public IReadOnlyCollection<Payment> CalculateMonthlyAmortization(decimal loanAmount, int term)
