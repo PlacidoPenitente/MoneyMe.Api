@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace MoneyMe.Infrastructure.Migrations
 {
-    public partial class CreatedPersistenceModels : Migration
+    public partial class AddedPersistenceModels : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -122,11 +122,11 @@ namespace MoneyMe.Infrastructure.Migrations
                 columns: table => new
                 {
                     FeesId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    ProductId = table.Column<Guid>(type: "uniqueidentifier", nullable: false)
+                    ProductsId = table.Column<Guid>(type: "uniqueidentifier", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_FeeProduct", x => new { x.FeesId, x.ProductId });
+                    table.PrimaryKey("PK_FeeProduct", x => new { x.FeesId, x.ProductsId });
                     table.ForeignKey(
                         name: "FK_FeeProduct_fees_FeesId",
                         column: x => x.FeesId,
@@ -134,17 +134,17 @@ namespace MoneyMe.Infrastructure.Migrations
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_FeeProduct_products_ProductId",
-                        column: x => x.ProductId,
+                        name: "FK_FeeProduct_products_ProductsId",
+                        column: x => x.ProductsId,
                         principalTable: "products",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateIndex(
-                name: "IX_FeeProduct_ProductId",
+                name: "IX_FeeProduct_ProductsId",
                 table: "FeeProduct",
-                column: "ProductId");
+                column: "ProductsId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_payments_LoanId",

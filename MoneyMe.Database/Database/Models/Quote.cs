@@ -5,7 +5,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 namespace MoneyMe.Infrastructure.Database.Models
 {
     [Table("quotes")]
-    public sealed class Quote : Entity
+    public class Quote : Entity
     {
         public Guid CustomerId { get; set; }
 

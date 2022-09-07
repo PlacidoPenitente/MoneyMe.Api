@@ -11,7 +11,11 @@ using Microsoft.Extensions.Logging;
 using MoneyMe.Application;
 using MoneyMe.Application.Contracts;
 using MoneyMe.Domain;
+using MoneyMe.Domain.CustomerAggregate;
 using MoneyMe.Domain.Factories;
+using MoneyMe.Domain.LoanAggregate;
+using MoneyMe.Domain.ProductAggregate;
+using MoneyMe.Domain.QuoteAggregate;
 using MoneyMe.Domain.Repositories;
 using MoneyMe.Infrastructure;
 using MoneyMe.Infrastructure.Database;
@@ -61,18 +65,21 @@ namespace MoneyMe.Api
             services.AddSingleton<IQuoteFactory, QuoteFactory>();
             services.AddSingleton<ICustomerFactory, CustomerFactory>();
             services.AddSingleton<ILoanFactory, LoanFactory>();
+            services.AddSingleton<IFeeFactory, FeeFactory>();
 
             services.AddScoped<IUnitOfWork, UnitOfWork>();
 
-            services.AddScoped<IProductRepository, ProductRepository>();
-            services.AddScoped<IQuoteRepository, QuoteRepository>();
             services.AddScoped<ICustomerRepository, CustomerRepository>();
+            services.AddScoped<IQuoteRepository, QuoteRepository>();
+            services.AddScoped<IProductRepository, ProductRepository>();
+            services.AddScoped<IFeeRepository, FeeRepository>();
             services.AddScoped<ILoanRepository, LoanRepository>();
 
             services.AddScoped<ICustomerService, CustomerService>();
             services.AddScoped<IQuoteService, QuoteService>();
             services.AddScoped<ILoanService, LoanService>();
             services.AddScoped<IProductService, ProductService>();
+            services.AddScoped<IFeeService, FeeService>();
 
             services.AddCors(options =>
             {

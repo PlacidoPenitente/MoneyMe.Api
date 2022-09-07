@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Microsoft.VisualBasic;
 using MoneyMe.Domain.Factories;
+using MoneyMe.Domain.FeeAggregate;
 using MoneyMe.Domain.LoanAggregate;
 
 namespace MoneyMe.Domain.ProductAggregate

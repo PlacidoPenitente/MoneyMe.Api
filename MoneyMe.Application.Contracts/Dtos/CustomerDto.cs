@@ -4,7 +4,17 @@ namespace MoneyMe.Application.Contracts.Dtos
 {
     public class CustomerDto
     {
-        public Guid Id { get; set; }
+        public CustomerDto()
+        {
+            Id = Guid.Empty;
+        }
+
+        public CustomerDto(Guid id)
+        {
+            Id = id;
+        }
+
+        public Guid Id { get; }
         public DateTime DateAdded { get; set; }
         public DateTime DateModified { get; set; }
         public string Title { get; set; }

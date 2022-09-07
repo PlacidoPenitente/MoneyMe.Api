@@ -24,12 +24,12 @@ namespace MoneyMe.Infrastructure.Migrations
                     b.Property<Guid>("FeesId")
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<Guid>("ProductId")
+                    b.Property<Guid>("ProductsId")
                         .HasColumnType("uniqueidentifier");
 
-                    b.HasKey("FeesId", "ProductId");
+                    b.HasKey("FeesId", "ProductsId");
 
-                    b.HasIndex("ProductId");
+                    b.HasIndex("ProductsId");
 
                     b.ToTable("FeeProduct");
                 });
@@ -85,9 +85,13 @@ namespace MoneyMe.Infrastructure.Migrations
                         .HasColumnType("datetime2");
 
                     b.Property<string>("Name")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(450)");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("Name")
+                        .IsUnique()
+                        .HasFilter("[Name] IS NOT NULL");
 
                     b.ToTable("fees");
                 });
@@ -226,7 +230,7 @@ namespace MoneyMe.Infrastructure.Migrations
 
                     b.HasOne("MoneyMe.Infrastructure.Database.Models.Product", null)
                         .WithMany()
-                        .HasForeignKey("ProductId")
+                        .HasForeignKey("ProductsId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });

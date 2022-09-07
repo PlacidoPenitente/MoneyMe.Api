@@ -4,7 +4,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 namespace MoneyMe.Infrastructure.Database.Models
 {
     [Table("payments")]
-    public sealed class Payment : Entity
+    public class Payment : Entity
     {
         public int Period { get; set; }
 

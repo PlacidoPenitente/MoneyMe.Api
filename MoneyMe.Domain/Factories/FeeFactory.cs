@@ -1,4 +1,5 @@
-﻿using MoneyMe.Domain.ProductAggregate;
+﻿using MoneyMe.Domain.FeeAggregate;
+using System;
 
 namespace MoneyMe.Domain.Factories
 {
@@ -6,7 +7,7 @@ namespace MoneyMe.Domain.Factories
     {
         public Fee Create(string name, decimal amount)
         {
-            return new Fee(name, amount);
+            return new Fee(Guid.NewGuid(), DateTime.UtcNow, DateTime.UtcNow, name, amount);
         }
     }
 }

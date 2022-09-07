@@ -2,16 +2,20 @@
 using System.Threading.Tasks;
 using System;
 using MoneyMe.Domain;
+using AutoMapper;
+using Microsoft.EntityFrameworkCore;
 
 namespace MoneyMe.Infrastructure
 {
     public class UnitOfWork : IUnitOfWork
     {
         private readonly ApplicationDbContext _context;
+        private readonly IMapper _mapper;
 
-        public UnitOfWork(ApplicationDbContext context)
+        public UnitOfWork(ApplicationDbContext context, IMapper mapper)
         {
             _context = context;
+            _mapper = mapper;
         }
 
         public async Task<TResult> ExecuteAsync<TResult>(Func<Task<TResult>> task)

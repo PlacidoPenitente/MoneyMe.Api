@@ -1,14 +1,10 @@
 ﻿using MoneyMe.Domain.CustomerAggregate;
-using System;
 using System.Threading.Tasks;
 
 namespace MoneyMe.Domain.Repositories
 {
-    public interface ICustomerRepository
+    public interface ICustomerRepository : IRepository<Customer>
     {
-        Task AddAsync(Customer customer);
-        Task<Customer> GetAsync(Guid id);
-        Task<Customer> FindByEmailAsync(string email);
-        Task RemoveAsync(Guid id);
+        Task<Customer> FindByEmailAsync(string emailAddress);
     }
 }

@@ -55,9 +55,8 @@ namespace MoneyMe.Api.Controllers
                     return NotFound();
                 }
 
-                var updatedCustomer = new CustomerDto
+                var updatedCustomer = new CustomerDto(customerDto.Id)
                 {
-                    Id = customerDto.Id,
                     Title = updateCustomerRequest.Title,
                     FirstName = updateCustomerRequest.FirstName,
                     LastName = updateCustomerRequest.LastName,

@@ -1,16 +1,8 @@
-﻿using MoneyMe.Domain.CustomerAggregate;
-using MoneyMe.Domain.ProductAggregate;
-using System;
-using System.Collections.Generic;
-using System.Threading.Tasks;
+﻿using MoneyMe.Domain.ProductAggregate;
 
 namespace MoneyMe.Domain.Repositories
 {
-    public interface IProductRepository
+    public interface IProductRepository : IRepository<Product>
     {
-        Task AddAsync(Product product);
-        Task<IReadOnlyCollection<Product>> GetAllAsync();
-        Task<Product> GetAsync(Guid id);
-        Task RemoveAsync(Guid id);
     }
 }

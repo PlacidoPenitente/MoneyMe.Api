@@ -1,4 +1,4 @@
-﻿using MoneyMe.Domain.ProductAggregate;
+﻿using MoneyMe.Domain.FeeAggregate;
 
 namespace MoneyMe.Domain.Factories
 {

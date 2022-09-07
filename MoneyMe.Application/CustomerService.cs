@@ -1,4 +1,5 @@
-﻿using MoneyMe.Application.Contracts;
+﻿using AutoMapper;
+using MoneyMe.Application.Contracts;
 using MoneyMe.Application.Contracts.Dtos;
 using MoneyMe.Domain;
 using MoneyMe.Domain.Factories;
@@ -13,12 +14,14 @@ namespace MoneyMe.Application
         private readonly ICustomerFactory _customerFactory;
         private readonly ICustomerRepository _customerRepository;
         private readonly IUnitOfWork _unitOfWork;
+        private readonly IMapper _mapper;
 
-        public CustomerService(ICustomerFactory customerFactory, ICustomerRepository customerRepository, IUnitOfWork unitOfWork)
+        public CustomerService(ICustomerFactory customerFactory, ICustomerRepository customerRepository, IUnitOfWork unitOfWork, IMapper mapper)
         {
             _customerFactory = customerFactory;
             _customerRepository = customerRepository;
             _unitOfWork = unitOfWork;
+            _mapper = mapper;
         }
 
         public async Task<CustomerDto> FindCustomerByEmailAsync(string email)
@@ -27,9 +30,8 @@ namespace MoneyMe.Application
 
             if (customer == null) return null;
 
-            return new CustomerDto
+            return new CustomerDto(customer.Id)
             {
-                Id = customer.Id,
                 DateAdded = customer.DateAdded,
                 DateModified = customer.DateModified,
                 Title = customer.Title.ToString(),
@@ -45,9 +47,8 @@ namespace MoneyMe.Application
         {
             var customer = await _customerRepository.GetAsync(customerId);
 
-            return new CustomerDto
+            return new CustomerDto(customer.Id)
             {
-                Id = customer.Id,
                 DateAdded = customer.DateAdded,
                 DateModified = customer.DateModified,
                 Title = customer.ToString(),
@@ -59,7 +60,7 @@ namespace MoneyMe.Application
             };
         }
 
-        public async Task RegisterCustomerAsync(CustomerDto customerDto)
+        public async Task<CustomerDto> RegisterCustomerAsync(CustomerDto customerDto)
         {
             var customer = _customerFactory.Create(
                 customerDto.Title,
@@ -75,7 +76,17 @@ namespace MoneyMe.Application
                 await _unitOfWork.ExecuteAsync(async () => await _customerRepository.AddAsync(customer));
             };
 
-            customerDto.Id = customer.Id;
+            return new CustomerDto(customer.Id)
+            {
+                DateAdded = customer.DateAdded,
+                DateModified = customer.DateModified,
+                Title = customer.Title.ToString(),
+                FirstName = customer.FirstName,
+                LastName = customer.LastName,
+                DateOfBirth = customer.DateOfBirth,
+                MobileNumber = customer.MobileNumber,
+                EmailAddress = customer.EmailAddress
+            };
         }
 
         public async Task<CustomerDto> UpdateCustomerAsync(CustomerDto customerDto)
@@ -92,6 +103,8 @@ namespace MoneyMe.Application
                     customer.ChangeDateOfBirth(customerDto.DateOfBirth);
                     customer.ChangeMobileNumber(customerDto.MobileNumber);
                     customer.ChangeEmailAddress(customerDto.EmailAddress);
+
+                    _customerRepository.Update(customer);
 
                     return customerDto;
                 });

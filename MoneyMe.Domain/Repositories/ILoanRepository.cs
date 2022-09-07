@@ -1,14 +1,8 @@
-﻿using System.Threading.Tasks;
-using System;
-using MoneyMe.Domain.LoanAggregate;
+﻿using MoneyMe.Domain.LoanAggregate;
 
 namespace MoneyMe.Domain.Repositories
 {
-    public interface ILoanRepository
+    public interface ILoanRepository : IRepository<Loan>
     {
-        Task AddAsync(Loan loan);
-        Task<Loan> GetAsync(Guid id);
-        Task<Loan> FindByCustomerIdAsync(Guid customerId);
-        Task RemoveAsync(Guid id);
     }
 }

@@ -4,7 +4,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 namespace MoneyMe.Infrastructure.Database.Models
 {
     [Table("customers")]
-    public sealed class Customer : Entity
+    public class Customer : Entity
     {
         public string Title { get; set; }
          
