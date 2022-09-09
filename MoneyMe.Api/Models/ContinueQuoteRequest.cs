@@ -1,4 +1,4 @@
-﻿namespace MoneyMe.Api.Requests
+﻿namespace MoneyMe.Api.Models
 {
     public class ContinueQuoteRequest
     {

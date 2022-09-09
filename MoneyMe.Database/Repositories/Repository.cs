@@ -35,7 +35,7 @@ namespace MoneyMe.Infrastructure.Repositories
         }
 
         public virtual async Task<T> GetAsync(Guid id)
-        {
+        { 
             var entity = await _context.Set<U>().AsNoTracking().FirstOrDefaultAsync(x => x.Id == id);
             return _mapper.Map<T>(entity);
         }

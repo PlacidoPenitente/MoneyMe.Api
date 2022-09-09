@@ -1,31 +1,21 @@
 using AutoMapper;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.HttpsPolicy;
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Microsoft.Extensions.Logging;
+using Microsoft.OpenApi.Models;
 using MoneyMe.Application;
 using MoneyMe.Application.Contracts;
 using MoneyMe.Domain;
-using MoneyMe.Domain.CustomerAggregate;
 using MoneyMe.Domain.Factories;
-using MoneyMe.Domain.LoanAggregate;
-using MoneyMe.Domain.ProductAggregate;
-using MoneyMe.Domain.QuoteAggregate;
 using MoneyMe.Domain.Repositories;
 using MoneyMe.Infrastructure;
 using MoneyMe.Infrastructure.Database;
 using MoneyMe.Infrastructure.Repositories;
 using MoneyMe.Infrastructure.Services;
 using Serilog;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace MoneyMe.Api
 {
@@ -44,16 +34,21 @@ namespace MoneyMe.Api
             services.AddDbContext<ApplicationDbContext>(options =>
                     options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
 
-            services.AddControllers();
+            services.AddControllers().ConfigureApiBehaviorOptions(options =>
+            {
+                options.SuppressMapClientErrors = true;
+            });
 
             services.Configure<Settings>(Configuration.GetSection(nameof(Settings)));
 
             var logger = new LoggerConfiguration().WriteTo.File("log.txt").CreateLogger();
-            services.AddSingleton(logger);
+            services.AddSingleton<ILogger>(logger);
 
             var mapperConfig = new MapperConfiguration(mc =>
             {
-                mc.AddProfile(new InfrastructureProfile());
+                mc.AddProfile(new InfrastructureMappingProfile());
+                mc.AddProfile(new ApplicationMappingProfile());
+                mc.AddProfile(new ApiMappingProfile());
             });
 
             var mapper = mapperConfig.CreateMapper();
@@ -90,7 +85,18 @@ namespace MoneyMe.Api
                                   });
             });
 
-            services.AddSwaggerGen();
+            services.AddApiVersioning();
+
+            services.AddVersionedApiExplorer(o =>
+            {
+                o.GroupNameFormat = "'v'VVV";
+                o.SubstituteApiVersionInUrl = true;
+            });
+
+            services.AddSwaggerGen(c=>
+            {
+                c.SwaggerDoc("v1", new OpenApiInfo { Title = "MoneyMe API", Version = "v1" });
+            });
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

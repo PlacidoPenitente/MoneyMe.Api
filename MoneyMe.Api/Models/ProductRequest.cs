@@ -1,22 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace MoneyMe.Application.Contracts.Dtos
+namespace MoneyMe.Api.Models
 {
-    public class ProductDto
+    public class ProductRequest
     {
-        public ProductDto()
-        {
-            Id = Guid.NewGuid();
-        }
-
-        public ProductDto(Guid id)
-        {
-            Id = id;
-        }
-
-        public Guid Id { get; }
         public string Name { get; set; }
+        public decimal? InterestRate { get; set; }
         public int? MaximumDuration { get; set; }
         public int? MinimumDuration { get; set; }
         public List<Guid> FeeIds { get; set; }

@@ -25,9 +25,8 @@ namespace MoneyMe.Application
 
         private ProductDto ToProductDto(Product product)
         {
-            return new ProductDto
+            return new ProductDto(product.Id)
             {
-                Id = product.Id,
                 Name = product.Name,
                 MinimumDuration = product.MinimumDuration,
                 MaximumDuration = product.MaximumDuration

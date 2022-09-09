@@ -3,9 +3,9 @@ using MoneyMe.Infrastructure.Database.Models;
 
 namespace MoneyMe.Infrastructure
 {
-    public class InfrastructureProfile : Profile
+    public class InfrastructureMappingProfile : Profile
     {
-        public InfrastructureProfile()
+        public InfrastructureMappingProfile()
         {
             CreateMap<Customer, Domain.CustomerAggregate.Customer>().ReverseMap();
             CreateMap<Product, Domain.ProductAggregate.Product>().ReverseMap();

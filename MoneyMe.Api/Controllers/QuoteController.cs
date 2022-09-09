@@ -3,12 +3,12 @@ using System.Net;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
-using MoneyMe.Api.Requests;
+using MoneyMe.Api.Models;
 using MoneyMe.Api.Responses;
 using MoneyMe.Api.Validations;
 using MoneyMe.Application.Contracts;
 using MoneyMe.Application.Contracts.Dtos;
-using Serilog.Core;
+using Serilog;
 
 namespace MoneyMe.Api.Controllers
 {
@@ -20,23 +20,23 @@ namespace MoneyMe.Api.Controllers
         private readonly ICustomerService _customerService;
         private readonly IEmailService _emailService;
         private readonly ISecurityService _securityService;
+        private readonly ILogger _logger;
         private readonly Settings _settings;
-        private readonly Logger _logger;
 
         public QuoteController(
             IQuoteService quoteService,
             ICustomerService customerService,
             IEmailService emailService,
             ISecurityService securityService,
-            IOptions<Settings> options,
-            Logger logger)
+            ILogger logger,
+            IOptions<Settings> options)
         {
             _quoteService = quoteService;
             _customerService = customerService;
             _emailService = emailService;
             _securityService = securityService;
-            _settings = options.Value;
             _logger = logger;
+            _settings = options.Value;
         }
 
         [HttpPost("request")]

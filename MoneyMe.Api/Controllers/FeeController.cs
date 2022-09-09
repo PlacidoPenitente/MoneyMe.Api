@@ -1,57 +1,55 @@
-﻿using Microsoft.AspNetCore.Mvc;
-using MoneyMe.Api.Requests;
+﻿using AutoMapper;
+using Microsoft.AspNetCore.Mvc;
+using MoneyMe.Api.Models;
+using MoneyMe.Api.Validations;
 using MoneyMe.Application.Contracts;
 using MoneyMe.Application.Contracts.Dtos;
-using Serilog.Core;
+using Serilog;
 using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
 
 namespace MoneyMe.Api.Controllers
 {
     [ApiController]
-    [Route("api/fee")]
+    [ApiVersion("1.0")]
+    [Route("api/v{version:apiVersion}/fees")]
     public class FeeController : ControllerBase
     {
         private readonly IFeeService _feeService;
-        private readonly Logger _logger;
+        private readonly IMapper _mapper;
+        private readonly ILogger _logger;
 
-        public FeeController(IFeeService feeService, Logger logger)
+        public FeeController(IFeeService feeService, IMapper mapper, ILogger logger)
         {
             _feeService = feeService;
+            _mapper = mapper;
             _logger = logger;
         }
 
-        [HttpGet("{id}")]
-        public async Task<IActionResult> GetFeeAsync([FromRoute] Guid id)
-        {
-            try
-            {
-                var fee = await _feeService.ReadFeeAsync(id);
-
-                return Ok(fee);
-            }
-            catch (Exception ex)
-            {
-                _logger.Error(ex.StackTrace);
-                return StatusCode((int)HttpStatusCode.InternalServerError, "Failed to get fee.");
-            }
-        }
-
         [HttpPost]
-        public async Task<IActionResult> CreateFeeAsync([FromBody] FeeRequest createFeeRequest)
+        [ProducesResponseType(typeof(Fee), (int)HttpStatusCode.OK)]
+        [ProducesResponseType((int)HttpStatusCode.InternalServerError)]
+        public async Task<IActionResult> CreateFeeAsync([FromBody] Fee feeRequest)
         {
             try
             {
+                if (feeRequest == null || !feeRequest.IsValid())
+                {
+                    return BadRequest();
+                }
+
                 var feeDto = new FeeDto
                 {
-                    Name = createFeeRequest.Name,
-                    Amount = createFeeRequest.Amount
+                    Name = feeRequest.Name,
+                    Amount = feeRequest.Amount
                 };
 
                 var fee = await _feeService.CreateFeeAsync(feeDto);
 
-                return Ok(fee);
+                return Ok(_mapper.Map<Fee>(fee));
             }
             catch (Exception ex)
             {
@@ -60,20 +58,74 @@ namespace MoneyMe.Api.Controllers
             }
         }
 
-        [HttpPut("{id}")]
-        public async Task<IActionResult> UpdateFeeAsync([FromRoute] Guid id, [FromBody] FeeRequest createFeeRequest)
+        [HttpGet("{id}")]
+        [ProducesResponseType(typeof(Fee), (int)HttpStatusCode.OK)]
+        [ProducesResponseType((int)HttpStatusCode.NotFound)]
+        [ProducesResponseType((int)HttpStatusCode.InternalServerError)]
+        public async Task<IActionResult> ReadFeeAsync([FromRoute] string id)
         {
             try
             {
-                var feeDto = new FeeDto(id)
+                if (!Guid.TryParse(id, out var feeId))
                 {
-                    Name = createFeeRequest.Name,
-                    Amount = createFeeRequest.Amount
+                    return BadRequest();
+                }
+
+                var fee = await _feeService.ReadFeeAsync(feeId);
+
+                if (fee == null)
+                {
+                    return NotFound();
+                }
+
+                return Ok(_mapper.Map<Fee>(fee));
+            }
+            catch (Exception ex)
+            {
+                _logger.Error(ex.StackTrace);
+                return StatusCode((int)HttpStatusCode.InternalServerError, "Failed to get fee.");
+            }
+        }
+
+        [HttpGet]
+        [ProducesResponseType(typeof(IEnumerable<Fee>), (int)HttpStatusCode.OK)]
+        [ProducesResponseType((int)HttpStatusCode.InternalServerError)]
+        public async Task<IActionResult> ReadAllFeesAsync()
+        {
+            try
+            {
+                var fees = await _feeService.ReadAllFeesAsync();
+
+                return Ok(fees.Select(_mapper.Map<Fee>));
+            }
+            catch (Exception ex)
+            {
+                _logger.Error(ex.StackTrace);
+                return StatusCode((int)HttpStatusCode.InternalServerError, "Failed to get fee.");
+            }
+        }
+
+        [HttpPut("{id}")]
+        [ProducesResponseType(typeof(Fee), (int)HttpStatusCode.OK)]
+        [ProducesResponseType((int)HttpStatusCode.InternalServerError)]
+        public async Task<IActionResult> UpdateFeeAsync([FromRoute] string id, [FromBody] Fee feeRequest)
+        {
+            try
+            {
+                if (feeRequest == null || feeRequest.IsValid() || !Guid.TryParse(id, out var feeId))
+                {
+                    return BadRequest();
+                }
+
+                var feeDto = new FeeDto(feeId)
+                {
+                    Name = feeRequest.Name,
+                    Amount = feeRequest.Amount
                 };
 
                 var fee = await _feeService.UpdateFeeAsync(feeDto);
 
-                return Ok(fee);
+                return Ok(_mapper.Map<Fee>(fee));
             }
             catch (Exception ex)
             {
@@ -83,11 +135,18 @@ namespace MoneyMe.Api.Controllers
         }
 
         [HttpDelete("{id}")]
-        public async Task<IActionResult> DeleteFeeAsync([FromRoute] Guid id)
+        [ProducesResponseType((int)HttpStatusCode.InternalServerError)]
+        [ProducesResponseType((int)HttpStatusCode.OK)]
+        public async Task<IActionResult> DeleteFeeAsync([FromRoute] string id)
         {
             try
             {
-                await _feeService.DeleteFeeAsync(id);
+                if (!Guid.TryParse(id, out var feeId))
+                {
+                    return BadRequest();
+                }
+
+                await _feeService.DeleteFeeAsync(feeId);
 
                 return Ok();
             }

@@ -1,4 +1,4 @@
-﻿using MoneyMe.Api.Requests;
+﻿using MoneyMe.Api.Models;
 using MoneyMe.Application.Contracts;
 using System;
 
@@ -17,6 +17,16 @@ namespace MoneyMe.Api.Validations
                     quoteRequest.LoanAmount > moneyMeSettings.MaximumLoanAmount ||
                     quoteRequest.Term < 1 ||
                     !quoteRequest.IsAgeAccepted())
+            {
+                return false;
+            }
+
+            return true;
+        }
+
+        public static bool IsValid(this Fee feeRequest)
+        {
+            if (string.IsNullOrWhiteSpace(feeRequest.Name) || !feeRequest.Amount.HasValue)
             {
                 return false;
             }

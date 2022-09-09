@@ -1,8 +1,8 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using MoneyMe.Api.Requests;
+using MoneyMe.Api.Models;
 using MoneyMe.Application.Contracts;
 using MoneyMe.Application.Contracts.Dtos;
-using Serilog.Core;
+using Serilog;
 using System;
 using System.Net;
 using System.Threading.Tasks;
@@ -14,9 +14,9 @@ namespace MoneyMe.Api.Controllers
     public class CustomerController : ControllerBase
     {
         private readonly ICustomerService _customerService;
-        private readonly Logger _logger;
+        private readonly ILogger _logger;
 
-        public CustomerController(ICustomerService customerService, Logger logger)
+        public CustomerController(ICustomerService customerService, ILogger logger)
         {
             _customerService = customerService;
             _logger = logger;
