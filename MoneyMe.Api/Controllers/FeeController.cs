@@ -1,15 +1,16 @@
-﻿using AutoMapper;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Net;
+using System.Threading.Tasks;
+using AutoMapper;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using MoneyMe.Api.Models;
 using MoneyMe.Api.Validations;
 using MoneyMe.Application.Contracts;
 using MoneyMe.Application.Contracts.Dtos;
 using Serilog;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Net;
-using System.Threading.Tasks;
 
 namespace MoneyMe.Api.Controllers
 {
@@ -30,8 +31,8 @@ namespace MoneyMe.Api.Controllers
         }
 
         [HttpPost]
-        [ProducesResponseType(typeof(Fee), (int)HttpStatusCode.OK)]
-        [ProducesResponseType((int)HttpStatusCode.InternalServerError)]
+        [ProducesResponseType(typeof(Fee), StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public async Task<IActionResult> CreateFeeAsync([FromBody] Fee feeRequest)
         {
             try
@@ -59,9 +60,9 @@ namespace MoneyMe.Api.Controllers
         }
 
         [HttpGet("{id}")]
-        [ProducesResponseType(typeof(Fee), (int)HttpStatusCode.OK)]
-        [ProducesResponseType((int)HttpStatusCode.NotFound)]
-        [ProducesResponseType((int)HttpStatusCode.InternalServerError)]
+        [ProducesResponseType(typeof(Fee), StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public async Task<IActionResult> ReadFeeAsync([FromRoute] string id)
         {
             try
@@ -88,8 +89,8 @@ namespace MoneyMe.Api.Controllers
         }
 
         [HttpGet]
-        [ProducesResponseType(typeof(IEnumerable<Fee>), (int)HttpStatusCode.OK)]
-        [ProducesResponseType((int)HttpStatusCode.InternalServerError)]
+        [ProducesResponseType(typeof(IEnumerable<Fee>), StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public async Task<IActionResult> ReadAllFeesAsync()
         {
             try
@@ -106,8 +107,8 @@ namespace MoneyMe.Api.Controllers
         }
 
         [HttpPut("{id}")]
-        [ProducesResponseType(typeof(Fee), (int)HttpStatusCode.OK)]
-        [ProducesResponseType((int)HttpStatusCode.InternalServerError)]
+        [ProducesResponseType(typeof(Fee), StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public async Task<IActionResult> UpdateFeeAsync([FromRoute] string id, [FromBody] Fee feeRequest)
         {
             try
@@ -135,8 +136,8 @@ namespace MoneyMe.Api.Controllers
         }
 
         [HttpDelete("{id}")]
-        [ProducesResponseType((int)HttpStatusCode.InternalServerError)]
-        [ProducesResponseType((int)HttpStatusCode.OK)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        [ProducesResponseType(StatusCodes.Status200OK)]
         public async Task<IActionResult> DeleteFeeAsync([FromRoute] string id)
         {
             try
