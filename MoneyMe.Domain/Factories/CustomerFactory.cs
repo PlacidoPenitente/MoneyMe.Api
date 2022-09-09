@@ -17,7 +17,7 @@ namespace MoneyMe.Domain.Factories
             return new Customer(
                 Guid.NewGuid(),
                 DateTime.UtcNow,
-                DateTime.UtcNow,
+                null,
                 Enum.Parse<Title>(title),
                 firstName,
                 lastName,

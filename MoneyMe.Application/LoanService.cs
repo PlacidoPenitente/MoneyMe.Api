@@ -50,8 +50,8 @@ namespace MoneyMe.Application
             return new LoanDto
             {
                 Id = loan.Id,
-                DateAdded = loan.DateAdded,
-                DateModified = loan.DateModified,
+                DateAdded = loan.DateCreated,
+                DateModified = loan.DateModified.Value,
                 PeriodicPayments = loan.MonthlyAmortization.Select(CreateTermDto).ToList(),
                 Status = loan.Status
             };

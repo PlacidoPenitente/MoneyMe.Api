@@ -16,7 +16,7 @@ namespace MoneyMe.Domain.ProductAggregate
         public Product(
             Guid id,
             DateTime dateAdded,
-            DateTime dateModified,
+            DateTime? dateModified,
             string name,
             decimal interestRate,
             int maximumDuration,
@@ -25,7 +25,7 @@ namespace MoneyMe.Domain.ProductAggregate
             IReadOnlyCollection<Fee> fees)
         {
             Id = id;
-            DateAdded = dateAdded;
+            DateCreated = dateAdded;
             DateModified = dateModified;
             Name = name;
             InterestRate = interestRate;
@@ -36,8 +36,8 @@ namespace MoneyMe.Domain.ProductAggregate
         }
 
         public Guid Id { get; private set; }
-        public DateTime DateAdded { get; private set; }
-        public DateTime DateModified { get; private set; }
+        public DateTime DateCreated { get; private set; }
+        public DateTime? DateModified { get; private set; }
         public string Name { get; private set; }
         public decimal InterestRate { get; private set; }
         public int MaximumDuration { get; private set; }

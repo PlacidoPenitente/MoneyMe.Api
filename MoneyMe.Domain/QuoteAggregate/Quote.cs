@@ -9,13 +9,13 @@ namespace MoneyMe.Domain.QuoteAggregate
         public Quote(
             Guid id,
             DateTime dateAdded,
-            DateTime dateModified,
+            DateTime? dateModified,
             Guid customerId,
             decimal loanAmount,
             int term)
         {
             Id = id;
-            DateAdded = dateAdded;
+            DateCreated = dateAdded;
             DateModified = dateModified;
             CustomerId = customerId;
             LoanAmount = loanAmount;
@@ -23,8 +23,8 @@ namespace MoneyMe.Domain.QuoteAggregate
         }
 
         public Guid Id { get; private set; }
-        public DateTime DateAdded { get; private set; }
-        public DateTime DateModified { get; private set; }
+        public DateTime DateCreated { get; private set; }
+        public DateTime? DateModified { get; private set; }
         public Guid CustomerId { get; private set; }
         public Guid ProductId { get; private set; }
         public decimal LoanAmount { get; private set; }

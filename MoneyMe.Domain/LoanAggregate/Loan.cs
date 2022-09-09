@@ -12,13 +12,13 @@ namespace MoneyMe.Domain.LoanAggregate
         public Loan(
             Guid id,
             DateTime dateAdded,
-            DateTime dateModified,
+            DateTime? dateModified,
             Guid customerId,
             decimal loanAmount,
             IReadOnlyCollection<Payment> term)
         {
             Id = id;
-            DateAdded = dateAdded;
+            DateCreated = dateAdded;
             DateModified = dateModified;
             CustomerId = customerId;
             LoanAmount = loanAmount;
@@ -26,8 +26,8 @@ namespace MoneyMe.Domain.LoanAggregate
         }
 
         public Guid Id { get; private set; }
-        public DateTime DateAdded { get; private set; }
-        public DateTime DateModified { get; private set; }
+        public DateTime DateCreated { get; private set; }
+        public DateTime? DateModified { get; private set; }
         public Guid CustomerId { get; private set; }
         public decimal LoanAmount { get; private set; }
         public IReadOnlyCollection<Payment> MonthlyAmortization => _monthlyAmortization;

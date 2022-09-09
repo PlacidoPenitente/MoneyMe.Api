@@ -9,7 +9,7 @@ namespace MoneyMe.Domain.CustomerAggregate
         public Customer(
             Guid id,
             DateTime dateAdded,
-            DateTime dateModified,
+            DateTime? dateModified,
             Title title,
             string firstName,
             string lastName,
@@ -18,7 +18,7 @@ namespace MoneyMe.Domain.CustomerAggregate
             string emailAddress)
         {
             Id = id;
-            DateAdded = dateAdded;
+            DateCreated = dateAdded;
             DateModified = dateModified;
             Title = title;
             FirstName = firstName;
@@ -29,8 +29,8 @@ namespace MoneyMe.Domain.CustomerAggregate
         }
 
         public Guid Id { get; private set; }
-        public DateTime DateAdded { get; private set; }
-        public DateTime DateModified { get; private set; }
+        public DateTime DateCreated { get; private set; }
+        public DateTime? DateModified { get; private set; }
         public Title Title { get; private set; }
         public string FirstName { get; private set; }
         public string LastName { get; private set; }

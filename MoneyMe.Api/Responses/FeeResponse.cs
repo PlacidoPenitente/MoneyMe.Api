@@ -4,10 +4,19 @@ namespace MoneyMe.Api.Responses
 {
     public class FeeResponse
     {
-        public Guid Id { get; set; }
-        public DateTime DateAdded { get; set; }
-        public DateTime DateModified { get; set; }
-        public string Name { get; set; }
-        public decimal Amount { get; set; }
+        public FeeResponse(Guid id, DateTime dateCreated, DateTime? dateModified, string name, decimal amount)
+        {
+            Id = id;
+            DateCreated = dateCreated;
+            DateModified = dateModified;
+            Name = name;
+            Amount = amount;
+        }
+
+        public Guid Id { get; }
+        public DateTime DateCreated { get; }
+        public DateTime? DateModified { get; }
+        public string Name { get; }
+        public decimal Amount { get; }
     }
 }

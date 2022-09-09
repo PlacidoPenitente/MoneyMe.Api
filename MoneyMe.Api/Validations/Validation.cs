@@ -1,4 +1,5 @@
 ﻿using MoneyMe.Api.Models;
+using MoneyMe.Api.Requests;
 using MoneyMe.Application.Contracts;
 using System;
 
@@ -24,7 +25,7 @@ namespace MoneyMe.Api.Validations
             return true;
         }
 
-        public static bool IsValid(this Fee feeRequest)
+        public static bool IsValid(this FeeRequest feeRequest)
         {
             if (string.IsNullOrWhiteSpace(feeRequest.Name) || !feeRequest.Amount.HasValue)
             {

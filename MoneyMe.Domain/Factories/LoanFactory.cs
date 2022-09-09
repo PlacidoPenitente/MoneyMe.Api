@@ -14,7 +14,7 @@ namespace MoneyMe.Domain.Factories
             decimal interestRate,
             IReadOnlyCollection<Payment> monthlyAmortization)
         {
-            return new Loan(Guid.NewGuid(), DateTime.UtcNow, DateTime.UtcNow, customerId, loanAmount, monthlyAmortization);
+            return new Loan(Guid.NewGuid(), DateTime.UtcNow, null, customerId, loanAmount, monthlyAmortization);
         }
     }
 }

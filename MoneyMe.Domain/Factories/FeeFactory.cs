@@ -7,7 +7,7 @@ namespace MoneyMe.Domain.Factories
     {
         public Fee Create(string name, decimal amount)
         {
-            return new Fee(Guid.NewGuid(), DateTime.UtcNow, DateTime.UtcNow, name, amount);
+            return new Fee(Guid.NewGuid(), DateTime.UtcNow, null, name.Trim(), amount);
         }
     }
 }

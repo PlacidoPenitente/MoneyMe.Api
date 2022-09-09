@@ -58,7 +58,7 @@ namespace MoneyMe.Application
             {
                 return await _unitOfWork.ExecuteAsync(async () =>
                 {
-                    var fee = await _feeRepository.GetAsync(feeDto.Id);
+                    var fee = await _feeRepository.GetAsync(feeDto.Id.Value);
 
                     fee.ChangeName(feeDto.Name);
                     fee.ChangeAmount(feeDto.Amount);

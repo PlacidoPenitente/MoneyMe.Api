@@ -1,12 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Net;
 using System.Threading.Tasks;
 using AutoMapper;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Http.Extensions;
 using Microsoft.AspNetCore.Mvc;
-using MoneyMe.Api.Models;
+using MoneyMe.Api.Requests;
+using MoneyMe.Api.Responses;
 using MoneyMe.Api.Validations;
 using MoneyMe.Application.Contracts;
 using MoneyMe.Application.Contracts.Dtos;
@@ -31,9 +32,9 @@ namespace MoneyMe.Api.Controllers
         }
 
         [HttpPost]
-        [ProducesResponseType(typeof(Fee), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(FeeResponse), StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public async Task<IActionResult> CreateFeeAsync([FromBody] Fee feeRequest)
+        public async Task<IActionResult> CreateFeeAsync([FromBody] FeeRequest feeRequest)
         {
             try
             {
@@ -48,19 +49,20 @@ namespace MoneyMe.Api.Controllers
                     Amount = feeRequest.Amount
                 };
 
-                var fee = await _feeService.CreateFeeAsync(feeDto);
+                var createdFeeDto = await _feeService.CreateFeeAsync(feeDto);
+                var fee = _mapper.Map<FeeResponse>(createdFeeDto);
 
-                return Ok(_mapper.Map<Fee>(fee));
+                return Created($"{Request.GetEncodedUrl()}/{fee.Id}", fee);
             }
             catch (Exception ex)
             {
                 _logger.Error(ex.StackTrace);
-                return StatusCode((int)HttpStatusCode.InternalServerError, "Failed to create fee.");
+                return StatusCode(StatusCodes.Status500InternalServerError, "Failed to create fee.");
             }
         }
 
         [HttpGet("{id}")]
-        [ProducesResponseType(typeof(Fee), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(FeeResponse), StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public async Task<IActionResult> ReadFeeAsync([FromRoute] string id)
@@ -79,17 +81,17 @@ namespace MoneyMe.Api.Controllers
                     return NotFound();
                 }
 
-                return Ok(_mapper.Map<Fee>(fee));
+                return Ok(_mapper.Map<FeeResponse>(fee));
             }
             catch (Exception ex)
             {
                 _logger.Error(ex.StackTrace);
-                return StatusCode((int)HttpStatusCode.InternalServerError, "Failed to get fee.");
+                return StatusCode(StatusCodes.Status500InternalServerError, "Failed to read fee.");
             }
         }
 
         [HttpGet]
-        [ProducesResponseType(typeof(IEnumerable<Fee>), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(IEnumerable<FeeResponse>), StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public async Task<IActionResult> ReadAllFeesAsync()
         {
@@ -97,41 +99,41 @@ namespace MoneyMe.Api.Controllers
             {
                 var fees = await _feeService.ReadAllFeesAsync();
 
-                return Ok(fees.Select(_mapper.Map<Fee>));
+                return Ok(fees.Select(_mapper.Map<FeeResponse>));
             }
             catch (Exception ex)
             {
                 _logger.Error(ex.StackTrace);
-                return StatusCode((int)HttpStatusCode.InternalServerError, "Failed to get fee.");
+                return StatusCode(StatusCodes.Status500InternalServerError, "Failed to read fees.");
             }
         }
 
         [HttpPut("{id}")]
-        [ProducesResponseType(typeof(Fee), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(FeeResponse), StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public async Task<IActionResult> UpdateFeeAsync([FromRoute] string id, [FromBody] Fee feeRequest)
+        public async Task<IActionResult> UpdateFeeAsync([FromRoute] Guid id, [FromBody] FeeRequest feeRequest)
         {
             try
             {
-                if (feeRequest == null || feeRequest.IsValid() || !Guid.TryParse(id, out var feeId))
+                if (feeRequest == null || !feeRequest.IsValid())
                 {
                     return BadRequest();
                 }
 
-                var feeDto = new FeeDto(feeId)
+                var feeDto = new FeeDto(id)
                 {
                     Name = feeRequest.Name,
                     Amount = feeRequest.Amount
                 };
 
-                var fee = await _feeService.UpdateFeeAsync(feeDto);
+                var updatedFeeDto = await _feeService.UpdateFeeAsync(feeDto);
 
-                return Ok(_mapper.Map<Fee>(fee));
+                return Ok(_mapper.Map<FeeResponse>(updatedFeeDto));
             }
             catch (Exception ex)
             {
                 _logger.Error(ex.StackTrace);
-                return StatusCode((int)HttpStatusCode.InternalServerError, "Failed to update fee.");
+                return StatusCode(StatusCodes.Status500InternalServerError, "Failed to update fee.");
             }
         }
 
@@ -154,7 +156,7 @@ namespace MoneyMe.Api.Controllers
             catch (Exception ex)
             {
                 _logger.Error(ex.StackTrace);
-                return StatusCode((int)HttpStatusCode.InternalServerError, "Failed to delete fee.");
+                return StatusCode(StatusCodes.Status500InternalServerError, "Failed to delete fee.");
             }
         }
     }

@@ -12,7 +12,7 @@ namespace MoneyMe.Application.Contracts
         {
             CreateMap<Customer, CustomerDto>().ConstructUsing(x => new CustomerDto(x.Id));
             CreateMap<Product, ProductDto>().ConstructUsing(x => new ProductDto(x.Id));
-            CreateMap<Fee, FeeDto>().ConstructUsing(x => new FeeDto(x.Id));
+            CreateMap<Fee, FeeDto>().ConstructUsing(x => new FeeDto(x.Id, x.DateCreated, x.DateModified));
         }
     }
 }

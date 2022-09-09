@@ -18,7 +18,7 @@ namespace MoneyMe.Domain.Factories
             string rule,
             IReadOnlyCollection<Fee> fees)
         {
-            return new Product(Guid.NewGuid(), DateTime.UtcNow, DateTime.UtcNow, name, interestRate, maximumDuration, minimumDuration, rule, fees);
+            return new Product(Guid.NewGuid(), DateTime.UtcNow, null, name, interestRate, maximumDuration, minimumDuration, rule, fees);
         }
     }
 }

@@ -7,7 +7,7 @@ namespace MoneyMe.Domain.Factories
     {
         public Quote Create(Guid customerId, decimal loanAmount, int term)
         {
-            return new Quote(Guid.NewGuid(), DateTime.UtcNow, DateTime.UtcNow, customerId, loanAmount, term);
+            return new Quote(Guid.NewGuid(), DateTime.UtcNow, null, customerId, loanAmount, term);
         }
     }
 }

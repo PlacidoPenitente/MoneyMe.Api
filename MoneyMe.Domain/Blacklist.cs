@@ -10,20 +10,20 @@ namespace MoneyMe.Domain
     {
         private readonly List<string> _collection;
 
-        public Blacklist(Guid id, DateTime dateAdded, DateTime dateModified)
+        public Blacklist(Guid id, DateTime dateAdded)
         {
             Id = id;
-            DateAdded = dateAdded;
-            DateModified = dateModified;
+            DateCreated = dateAdded;
+            DateModified = null;
             _collection = new List<string>();
         }
 
         [Key]
         public Guid Id { get; private set; }
 
-        public DateTime DateAdded { get; private set; }
+        public DateTime DateCreated { get; private set; }
 
-        public DateTime DateModified { get; private set; }
+        public DateTime? DateModified { get; private set; }
 
         public IReadOnlyCollection<string> Collection => _collection;
 

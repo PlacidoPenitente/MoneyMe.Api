@@ -46,8 +46,8 @@ namespace MoneyMe.Application
             return new QuoteDto
             {
                 Id = quote.Id,
-                DateAdded = quote.DateAdded,
-                DateModified = quote.DateModified,
+                DateAdded = quote.DateCreated,
+                DateModified = quote.DateModified.Value,
                 CustomerId = quote.CustomerId,
                 ProductId = quote.ProductId,
                 LoanAmount = quote.LoanAmount,
@@ -65,8 +65,8 @@ namespace MoneyMe.Application
             return new QuoteDto
             {
                 Id = quote.Id,
-                DateAdded = quote.DateAdded,
-                DateModified = quote.DateModified,
+                DateAdded = quote.DateCreated,
+                DateModified = quote.DateModified.Value,
                 CustomerId = quote.CustomerId,
                 ProductId = quote.ProductId,
                 LoanAmount = quote.LoanAmount,
