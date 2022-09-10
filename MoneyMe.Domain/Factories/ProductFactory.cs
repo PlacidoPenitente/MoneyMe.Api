@@ -8,17 +8,13 @@ namespace MoneyMe.Domain.Factories
     public class ProductFactory : IProductFactory
     {
         public Product Create(
-            Guid id,
-            DateTime dateAdded,
-            DateTime dateModified,
             string name,
             decimal interestRate,
-            int maximumDuration,
             int minimumDuration,
-            string rule,
-            IReadOnlyCollection<Fee> fees)
+            int maximumDuration,
+            string rule)
         {
-            return new Product(Guid.NewGuid(), DateTime.UtcNow, null, name, interestRate, maximumDuration, minimumDuration, rule, fees);
+            return new Product(Guid.NewGuid(), DateTime.UtcNow, null, name, interestRate, minimumDuration, maximumDuration, rule);
         }
     }
 }

@@ -16,8 +16,6 @@ namespace MoneyMe.Infrastructure.Database.Models
 
         public int MinimumDuration { get; set; }
 
-        public ICollection<Fee> Fees { get; set; }
-
         public string Rule { get; set; }
     }
 }

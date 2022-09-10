@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 
 namespace MoneyMe.Application.Contracts.Dtos
 {
@@ -7,19 +6,32 @@ namespace MoneyMe.Application.Contracts.Dtos
     {
         public ProductDto()
         {
-            Id = Guid.NewGuid();
+            Id = null;
+            DateCreated = null;
+            DateModified = null;
         }
 
         public ProductDto(Guid id)
         {
             Id = id;
+            DateCreated = null;
+            DateModified = null;
         }
 
-        public Guid Id { get; }
+        public ProductDto(Guid id, DateTime dateCreated, DateTime? dateModified)
+        {
+            Id = id;
+            DateCreated = dateCreated;
+            DateModified = dateModified;
+        }
+
+        public Guid? Id { get; }
+        public DateTime? DateCreated { get; }
+        public DateTime? DateModified { get; }
         public string Name { get; set; }
+        public decimal? InterestRate { get; set; }
         public int? MaximumDuration { get; set; }
         public int? MinimumDuration { get; set; }
-        public List<Guid> FeeIds { get; set; }
         public string Rule { get; set; }
     }
 }

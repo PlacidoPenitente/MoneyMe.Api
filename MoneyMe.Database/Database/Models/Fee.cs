@@ -11,7 +11,5 @@ namespace MoneyMe.Infrastructure.Database.Models
 
         [Column(TypeName = "decimal(18, 2)")]
         public decimal Amount { get; set; }
-
-        public virtual ICollection<Product> Products { get; set; }
     }
 }

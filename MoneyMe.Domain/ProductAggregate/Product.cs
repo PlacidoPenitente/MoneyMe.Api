@@ -1,17 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using Microsoft.VisualBasic;
 using MoneyMe.Domain.Factories;
-using MoneyMe.Domain.FeeAggregate;
-using MoneyMe.Domain.LoanAggregate;
+using MoneyMe.Domain.Shared;
 
 namespace MoneyMe.Domain.ProductAggregate
 {
     public class Product : IAggregate<Guid>
     {
         private readonly RuleFactory _ruleFactory;
-        private readonly List<Fee> _fees;
 
         public Product(
             Guid id,
@@ -19,20 +16,18 @@ namespace MoneyMe.Domain.ProductAggregate
             DateTime? dateModified,
             string name,
             decimal interestRate,
-            int maximumDuration,
             int minimumDuration,
-            string rule,
-            IReadOnlyCollection<Fee> fees)
+            int maximumDuration,
+            string rule)
         {
             Id = id;
             DateCreated = dateAdded;
             DateModified = dateModified;
             Name = name;
             InterestRate = interestRate;
-            MaximumDuration = maximumDuration;
             MinimumDuration = minimumDuration;
+            MaximumDuration = maximumDuration;
             Rule = rule;
-            _fees = fees.ToList();
         }
 
         public Guid Id { get; private set; }
@@ -42,7 +37,6 @@ namespace MoneyMe.Domain.ProductAggregate
         public decimal InterestRate { get; private set; }
         public int MaximumDuration { get; private set; }
         public int MinimumDuration { get; private set; }
-        public IReadOnlyCollection<Fee> Fees => _fees;
         public string Rule { get; private set; }
 
         public IReadOnlyCollection<Payment> CalculateMonthlyAmortization(decimal loanAmount, int term)
@@ -54,16 +48,49 @@ namespace MoneyMe.Domain.ProductAggregate
                 throw new ArgumentException($"This product does not support the desired term.");
             }
 
-            loanAmount += GetTotalFee();
-
             var payment = Financial.Pmt(decimal.ToDouble(InterestRate) / 12, term, decimal.ToDouble(decimal.Negate(loanAmount)));
 
             return rule.GenerateMonthlyAmortization(loanAmount, term, InterestRate, Convert.ToDecimal(Math.Round(payment, 2)));
         }
 
-        public decimal GetTotalFee()
+        public void ChangeName(string name)
         {
-            return Fees.Sum(fee => fee.Amount);
+            if (string.IsNullOrWhiteSpace(name))
+            {
+                throw new ArgumentException("Invalid product name.");
+            }
+
+            Name = name.Trim();
+            DateModified = DateTime.UtcNow;
+        }
+
+        public void ChangeInterestRate(decimal interestRate)
+        {
+            InterestRate = interestRate;
+            DateModified = DateTime.UtcNow;
+        }
+
+        public void ChangeDurationRange(int minimumDuration, int maximumDuration)
+        {
+            if (maximumDuration < minimumDuration || minimumDuration < 0)
+            {
+                throw new ArgumentException("Invalid duration range.");
+            }
+
+            MinimumDuration = minimumDuration;
+            MaximumDuration = maximumDuration;
+            DateModified = DateTime.UtcNow;
+        }
+
+        public void ChangeRule(string rule)
+        {
+            if (string.IsNullOrWhiteSpace(rule))
+            {
+                throw new ArgumentException("Invalid rule.");
+            }
+
+            Rule = rule.Trim();
+            DateModified = DateTime.UtcNow;
         }
     }
 }

@@ -11,7 +11,7 @@ namespace MoneyMe.Application.Contracts
         public ApplicationMappingProfile()
         {
             CreateMap<Customer, CustomerDto>().ConstructUsing(x => new CustomerDto(x.Id));
-            CreateMap<Product, ProductDto>().ConstructUsing(x => new ProductDto(x.Id));
+            CreateMap<Product, ProductDto>().ConstructUsing(x => new ProductDto(x.Id, x.DateCreated, x.DateModified));
             CreateMap<Fee, FeeDto>().ConstructUsing(x => new FeeDto(x.Id, x.DateCreated, x.DateModified));
         }
     }

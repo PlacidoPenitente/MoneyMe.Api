@@ -1,20 +1,14 @@
-﻿using MoneyMe.Domain.FeeAggregate;
-using MoneyMe.Domain.ProductAggregate;
-using System.Collections.Generic;
-using System;
+﻿using MoneyMe.Domain.ProductAggregate;
 
 namespace MoneyMe.Domain.Factories
 {
     public interface IProductFactory
     {
-        Product Create(Guid id,
-            DateTime dateAdded,
-            DateTime dateModified,
+        Product Create(
             string name,
             decimal interestRate,
-            int maximumDuration,
             int minimumDuration,
-            string rule,
-            IReadOnlyCollection<Fee> fees);
+            int maximumDuration,
+            string rule);
     }
 }

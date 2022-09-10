@@ -17,6 +17,7 @@ namespace MoneyMe.Infrastructure.Database
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.Entity<Fee>().HasIndex(fee => fee.Name).IsUnique();
+            modelBuilder.Entity<Product>().HasIndex(product => product.Name).IsUnique();
         }
     }
 }

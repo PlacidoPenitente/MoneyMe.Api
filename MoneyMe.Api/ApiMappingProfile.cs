@@ -15,6 +15,17 @@ namespace MoneyMe.Api
                     fee.DateModified,
                     fee.Name,
                     fee.Amount.Value));
+
+            CreateMap<ProductDto, ProductResponse>()
+                .ConstructUsing(product => new ProductResponse(
+                    product.Id.Value,
+                    product.DateCreated.Value,
+                    product.DateModified,
+                    product.Name,
+                    product.InterestRate.Value,
+                    product.MaximumDuration.Value,
+                    product.MinimumDuration.Value,
+                    product.Rule));
         }
     }
 }

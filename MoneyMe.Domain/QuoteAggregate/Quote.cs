@@ -44,8 +44,6 @@ namespace MoneyMe.Domain.QuoteAggregate
         {
             ProductId = product.Id;
 
-            Fee = product.GetTotalFee();
-
             var payments = product.CalculateMonthlyAmortization(LoanAmount, Term);
 
             Interest = payments.Sum(payment => payment.Interest);
@@ -53,6 +51,11 @@ namespace MoneyMe.Domain.QuoteAggregate
             MonthlyPayment = payments.Average(payment => payment.Interest + payment.Principal);
 
             DateModified = DateTime.UtcNow;
+        }
+
+        public void ApplyFee()
+        {
+
         }
     }
 }

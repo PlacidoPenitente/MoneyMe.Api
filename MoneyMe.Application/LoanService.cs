@@ -4,6 +4,7 @@ using MoneyMe.Domain;
 using MoneyMe.Domain.Factories;
 using MoneyMe.Domain.LoanAggregate;
 using MoneyMe.Domain.Repositories;
+using MoneyMe.Domain.Shared;
 using System;
 using System.Linq;
 using System.Threading.Tasks;

@@ -35,6 +35,20 @@ namespace MoneyMe.Api.Validations
             return true;
         }
 
+        public static bool IsValid(this ProductRequest productRequest)
+        {
+            if (string.IsNullOrWhiteSpace(productRequest.Name) ||
+                !productRequest.InterestRate.HasValue ||
+                !productRequest.MaximumDuration.HasValue ||
+                !productRequest.MinimumDuration.HasValue ||
+                string.IsNullOrWhiteSpace(productRequest.Rule))
+            {
+                return false;
+            }
+
+            return true;
+        }
+
         private static bool IsAgeAccepted(this QuoteRequest quoteRequest)
         {
             var currentDate = DateTime.UtcNow;

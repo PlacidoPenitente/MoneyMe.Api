@@ -60,6 +60,7 @@ namespace MoneyMe.Api
             services.AddSingleton<IQuoteFactory, QuoteFactory>();
             services.AddSingleton<ICustomerFactory, CustomerFactory>();
             services.AddSingleton<ILoanFactory, LoanFactory>();
+            services.AddSingleton<IProductFactory, ProductFactory>();
             services.AddSingleton<IFeeFactory, FeeFactory>();
 
             services.AddScoped<IUnitOfWork, UnitOfWork>();
