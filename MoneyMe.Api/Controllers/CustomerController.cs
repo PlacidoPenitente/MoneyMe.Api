@@ -10,7 +10,8 @@ using System.Threading.Tasks;
 namespace MoneyMe.Api.Controllers
 {
     [ApiController]
-    [Route("api/customer")]
+    [ApiVersion("1.0")]
+    [Route("api/v{version:apiVersion}/customers")]
     public class CustomerController : ControllerBase
     {
         private readonly ICustomerService _customerService;

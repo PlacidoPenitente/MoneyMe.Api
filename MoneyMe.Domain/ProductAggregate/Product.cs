@@ -28,6 +28,7 @@ namespace MoneyMe.Domain.ProductAggregate
             MinimumDuration = minimumDuration;
             MaximumDuration = maximumDuration;
             Rule = rule;
+            _ruleFactory = new RuleFactory();
         }
 
         public Guid Id { get; private set; }

@@ -13,7 +13,8 @@ using Serilog;
 namespace MoneyMe.Api.Controllers
 {
     [ApiController]
-    [Route("api/quote")]
+    [ApiVersion("1.0")]
+    [Route("api/v{version:apiVersion}/quotes")]
     public class QuoteController : ControllerBase
     {
         private readonly IQuoteService _quoteService;

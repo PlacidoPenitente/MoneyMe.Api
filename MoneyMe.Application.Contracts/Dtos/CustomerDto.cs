@@ -16,7 +16,7 @@ namespace MoneyMe.Application.Contracts.Dtos
 
         public Guid Id { get; }
         public DateTime DateAdded { get; set; }
-        public DateTime DateModified { get; set; }
+        public DateTime? DateModified { get; set; }
         public string Title { get; set; }
         public string FirstName { get; set; }
         public string LastName { get; set; }

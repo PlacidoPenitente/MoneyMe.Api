@@ -1,4 +1,5 @@
-﻿using MoneyMe.Domain.ProductAggregate;
+﻿using MoneyMe.Domain.FeeAggregate;
+using MoneyMe.Domain.ProductAggregate;
 using System;
 using System.Linq;
 
@@ -6,6 +7,11 @@ namespace MoneyMe.Domain.QuoteAggregate
 {
     public class Quote : IAggregate<Guid>
     {
+        private Quote()
+        {
+
+        }
+
         public Quote(
             Guid id,
             DateTime dateAdded,
@@ -44,7 +50,7 @@ namespace MoneyMe.Domain.QuoteAggregate
         {
             ProductId = product.Id;
 
-            var payments = product.CalculateMonthlyAmortization(LoanAmount, Term);
+            var payments = product.CalculateMonthlyAmortization(LoanAmount+Fee, Term);
 
             Interest = payments.Sum(payment => payment.Interest);
 
@@ -53,9 +59,11 @@ namespace MoneyMe.Domain.QuoteAggregate
             DateModified = DateTime.UtcNow;
         }
 
-        public void ApplyFee()
+        public void ApplyFee(Fee fee)
         {
+            Fee += fee.Amount;
 
+            DateModified = DateModified;
         }
     }
 }
