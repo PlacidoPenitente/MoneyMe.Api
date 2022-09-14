@@ -5,6 +5,7 @@ using MoneyMe.Domain.Factories;
 using MoneyMe.Domain.ProductAggregate;
 using MoneyMe.Domain.QuoteAggregate;
 using MoneyMe.Domain.Repositories;
+using MoneyMe.Domain.Rules;
 using Moq;
 using System;
 using System.Collections.Generic;
@@ -42,7 +43,7 @@ namespace MoneyMe.Tests
 
         public Mock<QuoteService> Sut { get; }
         public Mock<IQuoteFactory> QuoteFactory { get; }
-        public Mock<IRuleFactory> RuleFactory { get; }
+        public Mock<IRuleRepository> RuleFactory { get; }
         public Mock<IQuoteRepository> QuoteRepository { get; }
         public Mock<IProductRepository> ProductRepository { get; }
         public Mock<IUnitOfWork> UnitOfWork { get; }
@@ -101,7 +102,7 @@ namespace MoneyMe.Tests
 
         private Product CreateProduct(string productName, decimal interetestRate, int maxDuration, int minimumDuration, string ruleName)
         {
-            var rule = RuleFactory.Object.CreateRule(ruleName);
+            var rule = RuleFactory.Object.GetAsync(Guid.NewGuid());
 
             return new Product(Guid.NewGuid(), DateTime.UtcNow, DateTime.UtcNow, productName, interetestRate, maxDuration, minimumDuration, "");
         }

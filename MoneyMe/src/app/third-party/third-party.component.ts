@@ -26,7 +26,7 @@ export class ThirdPartyComponent implements OnInit {
     quote.MobileNumber = "+6412345678";
     quote.EmailAddress = "jaymark.estrera@gmail.com";
 
-    var redirectUrlObservable = await this.httpClient.post<string>("https://localhost:5001/api/quote/request", quote, {
+    var redirectUrlObservable = await this.httpClient.post<string>("https://localhost:5001/api/v1/quote/request", quote, {
       headers: new HttpHeaders({
         'Content-Type': 'application/json'
       })

@@ -28,9 +28,24 @@ namespace MoneyMe.Infrastructure
                     fee.Name,
                     fee.Amount)).ReverseMap();
 
+            CreateMap<Rule, Domain.RuleAggregate.Rule>()
+                .ConstructUsing(rule => new Domain.RuleAggregate.Rule(
+                    rule.Id,
+                    rule.DateCreated,
+                    rule.DateModified,
+                    rule.Name)).ReverseMap();
+
+            CreateMap<Quote, Domain.QuoteAggregate.Quote>()
+                .ConstructUsing(quote => new Domain.QuoteAggregate.Quote(
+                    quote.Id,
+                    quote.DateCreated,
+                    quote.DateModified,
+                    quote.CustomerId,
+                    quote.LoanAmount,
+                    quote.Term)).ReverseMap();
+
             CreateMap<Loan, Domain.LoanAggregate.Loan>().ReverseMap();
             CreateMap<Payment, Domain.Shared.Payment>().ReverseMap();
-            CreateMap<Quote, Domain.QuoteAggregate.Quote>().ReverseMap();
         }
     }
 }

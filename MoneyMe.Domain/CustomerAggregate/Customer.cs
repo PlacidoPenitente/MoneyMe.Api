@@ -33,7 +33,7 @@ namespace MoneyMe.Domain.CustomerAggregate
             EmailAddress = emailAddress;
         }
 
-        public Guid Id { get; private set; }
+        public Guid Id { get; }
         public DateTime DateCreated { get; private set; }
         public DateTime? DateModified { get; private set; }
         public Title Title { get; private set; }

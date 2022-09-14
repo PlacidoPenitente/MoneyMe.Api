@@ -1,14 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
 using Microsoft.VisualBasic;
-using MoneyMe.Domain.Factories;
+using MoneyMe.Domain.RuleAggregate;
 using MoneyMe.Domain.Shared;
 
 namespace MoneyMe.Domain.ProductAggregate
 {
     public class Product : IAggregate<Guid>
     {
-        private readonly RuleFactory _ruleFactory;
+        private readonly RuleSelector _ruleFactory;
 
         public Product(
             Guid id,
@@ -28,10 +28,10 @@ namespace MoneyMe.Domain.ProductAggregate
             MinimumDuration = minimumDuration;
             MaximumDuration = maximumDuration;
             Rule = rule;
-            _ruleFactory = new RuleFactory();
+            _ruleFactory = new RuleSelector();
         }
 
-        public Guid Id { get; private set; }
+        public Guid Id { get; }
         public DateTime DateCreated { get; private set; }
         public DateTime? DateModified { get; private set; }
         public string Name { get; private set; }
@@ -42,7 +42,7 @@ namespace MoneyMe.Domain.ProductAggregate
 
         public IReadOnlyCollection<Payment> CalculateMonthlyAmortization(decimal loanAmount, int term)
         {
-            var rule = _ruleFactory.CreateRule(Rule);
+            var rule = _ruleFactory.Select(Rule);
 
             if (term > MaximumDuration || term < MinimumDuration)
             {

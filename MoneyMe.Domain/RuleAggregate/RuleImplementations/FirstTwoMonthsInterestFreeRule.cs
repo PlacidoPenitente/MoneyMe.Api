@@ -3,23 +3,21 @@ using MoneyMe.Domain.Shared;
 using System;
 using System.Collections.Generic;
 
-namespace MoneyMe.Domain.Rules
+namespace MoneyMe.Domain.RuleAggregate.RuleImplementations
 {
-    public sealed class InterestFreeRule : IRule
+    public sealed class FirstTwoMonthsInterestFreeRule : IRuleImplementation
     {
-        public string Name { get; private set; }
-
         public IReadOnlyCollection<Payment> GenerateMonthlyAmortization(decimal loanAmount, int term, decimal interestRate, decimal monthlyPayment)
         {
-            var periodicPayments = new List<Payment>();
+            var monthlyAmortization = new List<Payment>();
 
             for (int period = 1; period < term + 1; period++)
             {
                 var interest = Financial.IPmt(decimal.ToDouble(interestRate), period, term, decimal.ToDouble(loanAmount));
-                periodicPayments.Add(new Payment(period, 0, monthlyPayment - Convert.ToDecimal(interest)));
+                monthlyAmortization.Add(new Payment(period, 0, monthlyPayment - Convert.ToDecimal(interest)));
             }
 
-            return periodicPayments;
+            return monthlyAmortization;
         }
     }
 }

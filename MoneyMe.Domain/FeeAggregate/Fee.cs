@@ -13,7 +13,7 @@ namespace MoneyMe.Domain.FeeAggregate
             Amount = amount;
         }
 
-        public Guid Id { get; private set; }
+        public Guid Id { get; }
         public DateTime DateCreated { get; private set; }
         public DateTime? DateModified { get; private set; }
         public string Name { get; private set; }

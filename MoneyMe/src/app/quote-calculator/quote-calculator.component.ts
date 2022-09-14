@@ -82,13 +82,13 @@ export class QuoteCalculatorComponent implements OnInit, AfterViewInit {
   }
 
   ngOnInit(): void {
-    this.httpClient.get<Product[]>(`https://localhost:5001/api/product/all`).subscribe(
+    this.httpClient.get<Product[]>(`https://localhost:5001/api/v1/products`).subscribe(
       {
         next: products => {
           this.products = products;
 
           var encryptedQuoteUrl = this._activatedRoute.snapshot.paramMap.get('encryptedQuoteUrl') || '';
-          this.httpClient.post<PartialQuote>(`https://localhost:5001/api/quote/continue`, { "encryptedQuoteUrl": encodeURIComponent(encryptedQuoteUrl) }, {
+          this.httpClient.post<PartialQuote>(`https://localhost:5001/api/v1/quotes/continue`, { "encryptedQuoteUrl": encodeURIComponent(encryptedQuoteUrl) }, {
             headers: new HttpHeaders({
               'Content-Type': 'application/json'
             })
@@ -99,7 +99,7 @@ export class QuoteCalculatorComponent implements OnInit, AfterViewInit {
                 this.selectedProduct = this.products.find(p => p.minimumDuration <= this.partialQuote.term && p.maximumDuration >= this.partialQuote.term) || products[products.length - 1];
                 this.updateSlider(partialQuote.loanAmount, this.sliderValue);
 
-                this.httpClient.get<Customer>(`https://localhost:5001/api/customer/${this.partialQuote.customerId}`).subscribe(
+                this.httpClient.get<Customer>(`https://localhost:5001/api/v1/customers/${this.partialQuote.customerId}`).subscribe(
                   {
                     next: customer => {
                       this.formGroup.patchValue({ 'title': this.titles.indexOf(customer.title) + 1 });
@@ -158,7 +158,7 @@ export class QuoteCalculatorComponent implements OnInit, AfterViewInit {
 
     this.partialQuote.productId = this.selectedProduct.id;
 
-    var redirectUrlObservable = await this.httpClient.post<LoanApplication>("https://localhost:5001/api/quote/calculate", this.partialQuote, {
+    var redirectUrlObservable = await this.httpClient.post<LoanApplication>("https://localhost:5001/api/v1/quotes/calculate", this.partialQuote, {
       headers: new HttpHeaders({
         'Content-Type': 'application/json'
       })

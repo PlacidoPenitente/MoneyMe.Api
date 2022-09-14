@@ -33,11 +33,11 @@ export class LoanApplicationComponent implements OnInit {
   ngOnInit(): void {
     var quoteId = this._activatedRoute.snapshot.paramMap.get('id') || '';
 
-    this.httpClient.get<LoanApplication>(`https://localhost:5001/api/quote/${quoteId}`).subscribe(
+    this.httpClient.get<LoanApplication>(`https://localhost:5001/api/v1/quotes/${quoteId}`).subscribe(
       {
         next: loanApplication => {
           this.loanApplication = loanApplication;
-          this.httpClient.get<Customer>(`https://localhost:5001/api/customer/${loanApplication.customerId}`).subscribe({
+          this.httpClient.get<Customer>(`https://localhost:5001/api/v1/customers/${loanApplication.customerId}`).subscribe({
             next: customer => this.customer = customer
           });
         }

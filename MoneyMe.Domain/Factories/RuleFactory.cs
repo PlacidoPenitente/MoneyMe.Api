@@ -1,27 +1,13 @@
-﻿using MoneyMe.Domain.Rules;
+﻿using MoneyMe.Domain.RuleAggregate;
+using System;
 
 namespace MoneyMe.Domain.Factories
 {
     public class RuleFactory : IRuleFactory
     {
-        public IRule CreateRule(string ruleName)
+        public Rule Create(string name)
         {
-            switch (ruleName)
-            {
-                case nameof(InterestFreeRule):
-                    return new InterestFreeRule();
-
-                case nameof(FirstTwoMonthsInterestFreeRule):
-                    return new FirstTwoMonthsInterestFreeRule();
-
-                case nameof(LastPaymentInterestFree):
-                    return new LastPaymentInterestFree();
-
-                default:
-                    break;
-            }
-
-            return new NoInterestFreeRule();
+            return new Rule(Guid.NewGuid(), DateTime.UtcNow, null, name.Trim());
         }
     }
 }

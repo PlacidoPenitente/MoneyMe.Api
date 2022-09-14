@@ -62,6 +62,7 @@ namespace MoneyMe.Api
             services.AddSingleton<ILoanFactory, LoanFactory>();
             services.AddSingleton<IProductFactory, ProductFactory>();
             services.AddSingleton<IFeeFactory, FeeFactory>();
+            services.AddSingleton<IRuleFactory, RuleFactory>();
 
             services.AddScoped<IUnitOfWork, UnitOfWork>();
 
@@ -70,12 +71,14 @@ namespace MoneyMe.Api
             services.AddScoped<IProductRepository, ProductRepository>();
             services.AddScoped<IFeeRepository, FeeRepository>();
             services.AddScoped<ILoanRepository, LoanRepository>();
+            services.AddScoped<IRuleRepository, RuleRepository>();
 
             services.AddScoped<ICustomerService, CustomerService>();
             services.AddScoped<IQuoteService, QuoteService>();
             services.AddScoped<ILoanService, LoanService>();
             services.AddScoped<IProductService, ProductService>();
             services.AddScoped<IFeeService, FeeService>();
+            services.AddScoped<IRuleService, RuleService>();
 
             services.AddCors(options =>
             {

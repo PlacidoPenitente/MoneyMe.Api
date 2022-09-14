@@ -16,6 +16,13 @@ namespace MoneyMe.Api
                     fee.Name,
                     fee.Amount.Value));
 
+            CreateMap<RuleDto, RuleResponse>()
+                .ConstructUsing(fee => new RuleResponse(
+                    fee.Id.Value,
+                    fee.DateCreated.Value,
+                    fee.DateModified,
+                    fee.Name));
+
             CreateMap<ProductDto, ProductResponse>()
                 .ConstructUsing(product => new ProductResponse(
                     product.Id.Value,

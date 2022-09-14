@@ -49,6 +49,16 @@ namespace MoneyMe.Api.Validations
             return true;
         }
 
+        public static bool IsValid(this RuleRequest ruleRequest)
+        {
+            if (string.IsNullOrWhiteSpace(ruleRequest.Name))
+            {
+                return false;
+            }
+
+            return true;
+        }
+
         private static bool IsAgeAccepted(this QuoteRequest quoteRequest)
         {
             var currentDate = DateTime.UtcNow;

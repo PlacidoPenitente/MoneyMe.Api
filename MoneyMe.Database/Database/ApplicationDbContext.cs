@@ -18,6 +18,7 @@ namespace MoneyMe.Infrastructure.Database
         {
             modelBuilder.Entity<Fee>().HasIndex(fee => fee.Name).IsUnique();
             modelBuilder.Entity<Product>().HasIndex(product => product.Name).IsUnique();
+            modelBuilder.Entity<Rule>().HasIndex(rule => rule.Name).IsUnique();
         }
     }
 }

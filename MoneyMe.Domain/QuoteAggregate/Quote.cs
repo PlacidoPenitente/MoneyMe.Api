@@ -28,7 +28,7 @@ namespace MoneyMe.Domain.QuoteAggregate
             Term = term;
         }
 
-        public Guid Id { get; private set; }
+        public Guid Id { get; }
         public DateTime DateCreated { get; private set; }
         public DateTime? DateModified { get; private set; }
         public Guid CustomerId { get; private set; }

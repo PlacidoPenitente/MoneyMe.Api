@@ -1,9 +1,9 @@
-﻿using MoneyMe.Domain.Rules;
+﻿using MoneyMe.Domain.RuleAggregate;
 
 namespace MoneyMe.Domain.Factories
 {
     public interface IRuleFactory
     {
-        IRule CreateRule(string ruleName);
+        Rule Create(string name);
     }
 }
