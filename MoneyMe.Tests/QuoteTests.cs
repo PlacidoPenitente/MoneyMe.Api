@@ -97,14 +97,15 @@ namespace MoneyMe.Tests
 
         private Quote CreateQuote(decimal loanAmount, int term)
         {
-            return new Quote(Guid.NewGuid(), DateTime.UtcNow, DateTime.UtcNow, Guid.NewGuid(), loanAmount, term);
+            //return new Quote(Guid.NewGuid(), DateTime.UtcNow, DateTime.UtcNow, Guid.NewGuid(), loanAmount, term);
+            return null;
         }
 
         private Product CreateProduct(string productName, decimal interetestRate, int maxDuration, int minimumDuration, string ruleName)
         {
             var rule = RuleFactory.Object.GetAsync(Guid.NewGuid());
 
-            return new Product(Guid.NewGuid(), DateTime.UtcNow, DateTime.UtcNow, productName, interetestRate, maxDuration, minimumDuration, "");
+            return new Product(Guid.NewGuid(), DateTime.UtcNow, DateTime.UtcNow, productName, interetestRate, maxDuration, minimumDuration, Guid.Empty);
         }
     }
 }

@@ -39,9 +39,9 @@ namespace MoneyMe.Application
 
             var product = await _productRepository.GetAsync(productId);
 
-            var monthlyAmortization = product.CalculateMonthlyAmortization(quote.LoanAmount, quote.Term);
+            //var monthlyAmortization = product.CalculateMonthlyAmortization(quote.LoanAmount, quote.Term);
 
-            var loan = _loanFactory.Create(quote.CustomerId, quote.LoanAmount, quote.Term, quote.Interest, monthlyAmortization);
+            var loan = _loanFactory.Create(quote.CustomerId, quote.LoanAmount, quote.Term, quote.Interest, null);
 
             using (_unitOfWork)
             {

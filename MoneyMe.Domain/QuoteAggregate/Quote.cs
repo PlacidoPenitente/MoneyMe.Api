@@ -1,16 +1,11 @@
-﻿using MoneyMe.Domain.FeeAggregate;
-using MoneyMe.Domain.ProductAggregate;
-using System;
-using System.Linq;
+﻿using System;
+using System.Collections.Generic;
 
 namespace MoneyMe.Domain.QuoteAggregate
 {
     public class Quote : IAggregate<Guid>
     {
-        private Quote()
-        {
-
-        }
+        private readonly List<Guid> _feedIds;
 
         public Quote(
             Guid id,
@@ -18,7 +13,8 @@ namespace MoneyMe.Domain.QuoteAggregate
             DateTime? dateModified,
             Guid customerId,
             decimal loanAmount,
-            int term)
+            int term,
+            List<Guid> feeIds)
         {
             Id = id;
             DateCreated = dateAdded;
@@ -26,6 +22,7 @@ namespace MoneyMe.Domain.QuoteAggregate
             CustomerId = customerId;
             LoanAmount = loanAmount;
             Term = term;
+            _feedIds = feeIds;
         }
 
         public Guid Id { get; }
@@ -36,34 +33,43 @@ namespace MoneyMe.Domain.QuoteAggregate
         public decimal LoanAmount { get; private set; }
         public int Term { get; private set; }
         public decimal Interest { get; private set; }
-        public decimal Fee { get; private set; }
+        public IReadOnlyCollection<Guid> FeeIds => _feedIds;
         public decimal MonthlyPayment { get; private set; }
 
-        public void ChangeTerm(int term)
+        internal void ChangeLoanAmount(decimal loanAmont)
+        {
+            LoanAmount = loanAmont;
+            DateModified = DateTime.UtcNow;
+        }
+
+        internal void ChangeTerm(int term)
         {
             Term = term;
-
             DateModified = DateTime.UtcNow;
         }
 
-        public void ApplyProductTerm(Product product)
+        internal void ChangeInterest(decimal interest)
         {
-            ProductId = product.Id;
-
-            var payments = product.CalculateMonthlyAmortization(LoanAmount+Fee, Term);
-
-            Interest = payments.Sum(payment => payment.Interest);
-
-            MonthlyPayment = payments.Average(payment => payment.Interest + payment.Principal);
-
+            Interest = interest;
             DateModified = DateTime.UtcNow;
         }
 
-        public void ApplyFee(Fee fee)
+        internal void ChangeMonthlypayment(decimal monthlyPayment)
         {
-            Fee += fee.Amount;
+            MonthlyPayment = monthlyPayment;
+            DateModified = DateTime.UtcNow;
+        }
 
-            DateModified = DateModified;
+        internal void AddFee(Guid feeId)
+        {
+            _feedIds.Add(feeId);
+            DateModified = DateTime.UtcNow;
+        }
+
+        internal void RemoveFee(Guid fee)
+        {
+            _feedIds.Remove(fee);
+            DateModified = DateTime.UtcNow;
         }
     }
 }

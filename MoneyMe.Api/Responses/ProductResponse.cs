@@ -13,7 +13,7 @@ namespace MoneyMe.Api.Responses
             decimal interestRate,
             int maximumDuration,
             int minimumDuration,
-            string rule)
+            Guid ruleId)
         {
             Id = id;
             DateAdded = dateAdded;
@@ -22,7 +22,7 @@ namespace MoneyMe.Api.Responses
             InterestRate = interestRate;
             MaximumDuration = maximumDuration;
             MinimumDuration = minimumDuration;
-            Rule = rule;
+            RuleId = ruleId;
         }
 
         public Guid Id { get; }
@@ -32,6 +32,6 @@ namespace MoneyMe.Api.Responses
         public decimal InterestRate { get; }
         public int MaximumDuration { get; }
         public int MinimumDuration { get; }
-        public string Rule { get; }
+        public Guid RuleId { get; }
     }
 }

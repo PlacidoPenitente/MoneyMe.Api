@@ -32,7 +32,7 @@ namespace MoneyMe.Api
                     product.InterestRate.Value,
                     product.MaximumDuration.Value,
                     product.MinimumDuration.Value,
-                    product.Rule));
+                    product.RuleId));
         }
     }
 }

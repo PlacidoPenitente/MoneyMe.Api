@@ -11,6 +11,7 @@ using MoneyMe.Application.Contracts;
 using MoneyMe.Domain;
 using MoneyMe.Domain.Factories;
 using MoneyMe.Domain.Repositories;
+using MoneyMe.Domain.Services;
 using MoneyMe.Infrastructure;
 using MoneyMe.Infrastructure.Database;
 using MoneyMe.Infrastructure.Repositories;
@@ -79,6 +80,8 @@ namespace MoneyMe.Api
             services.AddScoped<IProductService, ProductService>();
             services.AddScoped<IFeeService, FeeService>();
             services.AddScoped<IRuleService, RuleService>();
+
+            services.AddScoped<IQuoteAggregateService, QuoteAggregateService>();
 
             services.AddCors(options =>
             {

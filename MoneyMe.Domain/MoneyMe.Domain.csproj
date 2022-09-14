@@ -13,4 +13,8 @@
     <ProjectReference Include="..\MoneyMe.Domain.Shared\MoneyMe.Domain.Shared.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="NewFolder\" />
+  </ItemGroup>
+
 </Project>

@@ -33,7 +33,7 @@ namespace MoneyMe.Application
                 productDto.InterestRate.Value,
                 productDto.MinimumDuration.Value,
                 productDto.MaximumDuration.Value,
-                productDto.Rule);
+                productDto.RuleId);
 
             using (_unitOfWork)
             {
@@ -68,7 +68,7 @@ namespace MoneyMe.Application
                     product.ChangeName(productDto.Name);
                     product.ChangeInterestRate(productDto.InterestRate.Value);
                     product.ChangeDurationRange(productDto.MinimumDuration.Value, productDto.MaximumDuration.Value);
-                    product.ChangeRule(productDto.Rule);
+                    product.ChangeRule(productDto.RuleId);
 
                     _productRepository.Update(product);
 

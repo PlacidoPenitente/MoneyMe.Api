@@ -1,4 +1,5 @@
 ﻿using MoneyMe.Domain.ProductAggregate;
+using System;
 
 namespace MoneyMe.Domain.Factories
 {
@@ -9,6 +10,6 @@ namespace MoneyMe.Domain.Factories
             decimal interestRate,
             int minimumDuration,
             int maximumDuration,
-            string rule);
+            Guid ruleId);
     }
 }

@@ -49,7 +49,7 @@ namespace MoneyMe.Api.Controllers
                     InterestRate = productRequest.InterestRate,
                     MinimumDuration = productRequest.MinimumDuration,
                     MaximumDuration = productRequest.MaximumDuration,
-                    Rule = productRequest.Rule
+                    RuleId = productRequest.RuleId
                 };
 
                 var createdProductDto = await _productService.CreateProductAsync(productDto);
@@ -129,7 +129,7 @@ namespace MoneyMe.Api.Controllers
                     InterestRate = productRequest.InterestRate,
                     MinimumDuration = productRequest.MinimumDuration,
                     MaximumDuration = productRequest.MaximumDuration,
-                    Rule = productRequest.Rule
+                    RuleId = productRequest.RuleId
                 };
 
                 var updatedProductDto = await _productService.UpdateProductAsync(productDto);

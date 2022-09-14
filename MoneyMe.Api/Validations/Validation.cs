@@ -41,7 +41,7 @@ namespace MoneyMe.Api.Validations
                 !productRequest.InterestRate.HasValue ||
                 !productRequest.MaximumDuration.HasValue ||
                 !productRequest.MinimumDuration.HasValue ||
-                string.IsNullOrWhiteSpace(productRequest.Rule))
+                Guid.Empty == productRequest.RuleId)
             {
                 return false;
             }

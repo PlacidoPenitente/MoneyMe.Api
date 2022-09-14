@@ -9,6 +9,6 @@ namespace MoneyMe.Api.Requests
         public decimal? InterestRate { get; set; }
         public int? MinimumDuration { get; set; }
         public int? MaximumDuration { get; set; }
-        public string Rule { get; set; }
+        public Guid RuleId { get; set; }
     }
 }

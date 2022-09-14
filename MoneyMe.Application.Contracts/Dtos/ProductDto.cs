@@ -32,6 +32,6 @@ namespace MoneyMe.Application.Contracts.Dtos
         public decimal? InterestRate { get; set; }
         public int? MaximumDuration { get; set; }
         public int? MinimumDuration { get; set; }
-        public string Rule { get; set; }
+        public Guid RuleId { get; set; }
     }
 }

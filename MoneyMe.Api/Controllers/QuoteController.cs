@@ -148,7 +148,7 @@ namespace MoneyMe.Api.Controllers
         {
             try
             {
-                var quoteDto = await _quoteService.GetQuoteAsync(id);
+                var quoteDto = await _quoteService.ReadQuoteAsync(id);
 
                 return Ok(new QuoteResponse
                 {

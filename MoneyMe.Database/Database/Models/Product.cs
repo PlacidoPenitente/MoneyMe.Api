@@ -1,5 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore.Metadata.Internal;
-using System.Collections.Generic;
+using System;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace MoneyMe.Infrastructure.Database.Models
@@ -16,6 +16,6 @@ namespace MoneyMe.Infrastructure.Database.Models
 
         public int MinimumDuration { get; set; }
 
-        public string Rule { get; set; }
+        public Guid RuleId { get; set; }
     }
 }

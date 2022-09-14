@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using System;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace MoneyMe.Infrastructure.Database.Models
@@ -20,7 +21,7 @@ namespace MoneyMe.Infrastructure.Database.Models
         public decimal Interest { get; set; }
 
         [Column(TypeName = "decimal(18, 2)")]
-        public decimal Fee { get; set; }
+        public ICollection<Fee> Fees { get; set; }
 
         [Column(TypeName = "decimal(18, 2)")]
         public decimal MonthlyPayment { get; set; }

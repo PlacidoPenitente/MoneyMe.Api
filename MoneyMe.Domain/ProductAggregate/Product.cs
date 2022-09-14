@@ -1,15 +1,9 @@
 ﻿using System;
-using System.Collections.Generic;
-using Microsoft.VisualBasic;
-using MoneyMe.Domain.RuleAggregate;
-using MoneyMe.Domain.Shared;
 
 namespace MoneyMe.Domain.ProductAggregate
 {
     public class Product : IAggregate<Guid>
     {
-        private readonly RuleSelector _ruleFactory;
-
         public Product(
             Guid id,
             DateTime dateAdded,
@@ -18,7 +12,7 @@ namespace MoneyMe.Domain.ProductAggregate
             decimal interestRate,
             int minimumDuration,
             int maximumDuration,
-            string rule)
+            Guid ruleId)
         {
             Id = id;
             DateCreated = dateAdded;
@@ -27,8 +21,7 @@ namespace MoneyMe.Domain.ProductAggregate
             InterestRate = interestRate;
             MinimumDuration = minimumDuration;
             MaximumDuration = maximumDuration;
-            Rule = rule;
-            _ruleFactory = new RuleSelector();
+            RuleId = ruleId;
         }
 
         public Guid Id { get; }
@@ -38,21 +31,7 @@ namespace MoneyMe.Domain.ProductAggregate
         public decimal InterestRate { get; private set; }
         public int MaximumDuration { get; private set; }
         public int MinimumDuration { get; private set; }
-        public string Rule { get; private set; }
-
-        public IReadOnlyCollection<Payment> CalculateMonthlyAmortization(decimal loanAmount, int term)
-        {
-            var rule = _ruleFactory.Select(Rule);
-
-            if (term > MaximumDuration || term < MinimumDuration)
-            {
-                throw new ArgumentException($"This product does not support the desired term.");
-            }
-
-            var payment = Financial.Pmt(decimal.ToDouble(InterestRate) / 12, term, decimal.ToDouble(decimal.Negate(loanAmount)));
-
-            return rule.GenerateMonthlyAmortization(loanAmount, term, InterestRate, Convert.ToDecimal(Math.Round(payment, 2)));
-        }
+        public Guid RuleId { get; private set; }
 
         public void ChangeName(string name)
         {
@@ -83,14 +62,9 @@ namespace MoneyMe.Domain.ProductAggregate
             DateModified = DateTime.UtcNow;
         }
 
-        public void ChangeRule(string rule)
+        public void ChangeRule(Guid ruleId)
         {
-            if (string.IsNullOrWhiteSpace(rule))
-            {
-                throw new ArgumentException("Invalid rule.");
-            }
-
-            Rule = rule.Trim();
+            RuleId = ruleId;
             DateModified = DateTime.UtcNow;
         }
     }

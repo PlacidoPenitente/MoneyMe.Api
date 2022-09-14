@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using MoneyMe.Infrastructure.Database.Models;
+using System.Linq;
 
 namespace MoneyMe.Infrastructure
 {
@@ -18,7 +19,7 @@ namespace MoneyMe.Infrastructure
                     product.InterestRate,
                     product.MaximumDuration,
                     product.MinimumDuration,
-                    product.Rule)).ReverseMap();
+                    product.RuleId)).ReverseMap();
 
             CreateMap<Fee, Domain.FeeAggregate.Fee>()
                 .ConstructUsing(fee => new Domain.FeeAggregate.Fee(
@@ -42,7 +43,8 @@ namespace MoneyMe.Infrastructure
                     quote.DateModified,
                     quote.CustomerId,
                     quote.LoanAmount,
-                    quote.Term)).ReverseMap();
+                    quote.Term,
+                    quote.Fees.Select(fee => fee.Id).ToList())).ReverseMap();
 
             CreateMap<Loan, Domain.LoanAggregate.Loan>().ReverseMap();
             CreateMap<Payment, Domain.Shared.Payment>().ReverseMap();

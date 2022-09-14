@@ -12,9 +12,9 @@ namespace MoneyMe.Domain.Factories
             decimal interestRate,
             int minimumDuration,
             int maximumDuration,
-            string rule)
+            Guid ruleId)
         {
-            return new Product(Guid.NewGuid(), DateTime.UtcNow, null, name, interestRate, minimumDuration, maximumDuration, rule);
+            return new Product(Guid.NewGuid(), DateTime.UtcNow, null, name, interestRate, minimumDuration, maximumDuration, ruleId);
         }
     }
 }
