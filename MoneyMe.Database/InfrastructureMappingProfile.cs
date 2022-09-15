@@ -27,7 +27,8 @@ namespace MoneyMe.Infrastructure
                     fee.DateCreated,
                     fee.DateModified,
                     fee.Name,
-                    fee.Amount)).ReverseMap();
+                    fee.Amount,
+                    fee.IsPercentage)).ReverseMap();
 
             CreateMap<Rule, Domain.RuleAggregate.Rule>()
                 .ConstructUsing(rule => new Domain.RuleAggregate.Rule(

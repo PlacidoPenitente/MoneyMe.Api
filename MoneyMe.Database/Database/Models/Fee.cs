@@ -1,5 +1,4 @@
 ﻿using Microsoft.EntityFrameworkCore.Metadata.Internal;
-using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace MoneyMe.Infrastructure.Database.Models
@@ -11,5 +10,7 @@ namespace MoneyMe.Infrastructure.Database.Models
 
         [Column(TypeName = "decimal(18, 2)")]
         public decimal Amount { get; set; }
+
+        public bool IsPercentage { get; set; }
     }
 }

@@ -28,7 +28,7 @@ namespace MoneyMe.Application
 
         public async Task<FeeDto> CreateFeeAsync(FeeDto feeDto)
         {
-            var fee = _feeFactory.Create(feeDto.Name, feeDto.Amount.Value);
+            var fee = _feeFactory.Create(feeDto.Name, feeDto.Amount.Value, feeDto.IsPercentage.Value);
 
             using (_unitOfWork)
             {
@@ -62,6 +62,16 @@ namespace MoneyMe.Application
 
                     fee.ChangeName(feeDto.Name);
                     fee.ChangeAmount(feeDto.Amount);
+
+                    if (feeDto.IsPercentage.HasValue && feeDto.IsPercentage.Value)
+                    {
+                        fee.SetAsPercentage();
+                    }
+
+                    if (feeDto.IsPercentage.HasValue && !feeDto.IsPercentage.Value)
+                    {
+                        fee.SetAsFixedAmount();
+                    }
 
                     _feeRepository.Update(fee);
 

@@ -38,13 +38,22 @@ namespace MoneyMe.Domain.Services
         {
             var product = await _productRepository.GetAsync(quote.ProductId);
             var rule = await _ruleRepository.GetAsync(product.RuleId);
-
             var totalFee = 0m;
 
             foreach (var feeId in quote.FeeIds)
             {
                 var fee = await _feeRepository.GetAsync(feeId);
-                totalFee += fee.Amount;
+
+                if (fee.IsPercentage)
+                {
+                    var amount = (fee.Amount / 100) * quote.LoanAmount;
+
+                    totalFee += amount;
+                }
+                else
+                {
+                    totalFee += fee.Amount;
+                }
             }
 
             var loanAmount = quote.LoanAmount + totalFee;

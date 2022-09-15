@@ -46,7 +46,8 @@ namespace MoneyMe.Api.Controllers
                 var feeDto = new FeeDto
                 {
                     Name = feeRequest.Name,
-                    Amount = feeRequest.Amount
+                    Amount = feeRequest.Amount,
+                    IsPercentage = feeRequest.IsPercentage
                 };
 
                 var createdFeeDto = await _feeService.CreateFeeAsync(feeDto);
@@ -115,7 +116,7 @@ namespace MoneyMe.Api.Controllers
         {
             try
             {
-                if (feeRequest == null || !feeRequest.IsValid())
+                if (feeRequest == null)
                 {
                     return BadRequest();
                 }
@@ -123,7 +124,8 @@ namespace MoneyMe.Api.Controllers
                 var feeDto = new FeeDto(id)
                 {
                     Name = feeRequest.Name,
-                    Amount = feeRequest.Amount
+                    Amount = feeRequest.Amount,
+                    IsPercentage = feeRequest.IsPercentage
                 };
 
                 var updatedFeeDto = await _feeService.UpdateFeeAsync(feeDto);

@@ -30,5 +30,6 @@ namespace MoneyMe.Application.Contracts.Dtos
         public DateTime? DateModified { get; }
         public string Name { get; set; }
         public decimal? Amount { get; set; }
+        public bool? IsPercentage { get; set; }
     }
 }

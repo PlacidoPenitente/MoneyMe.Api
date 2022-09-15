@@ -14,7 +14,8 @@ namespace MoneyMe.Api
                     fee.DateCreated.Value,
                     fee.DateModified,
                     fee.Name,
-                    fee.Amount.Value));
+                    fee.Amount.Value,
+                    fee.IsPercentage.Value));
 
             CreateMap<RuleDto, RuleResponse>()
                 .ConstructUsing(fee => new RuleResponse(
