@@ -1,13 +1,12 @@
-﻿using MoneyMe.Domain.Shared;
-using System;
+﻿using System;
 using System.Collections.Generic;
+using MoneyMe.Domain.Shared;
 
 namespace MoneyMe.Domain.RuleAggregate
 {
     public class Rule : IAggregate<Guid>, IRuleImplementation
     {
         private IRuleImplementation _ruleImplementation;
-        private readonly RuleSelector _ruleSelector = new RuleSelector();
 
         public Rule(Guid id, DateTime dateCreated, DateTime? dateModified, string name)
         {
@@ -39,7 +38,7 @@ namespace MoneyMe.Domain.RuleAggregate
 
         private string SelectRule(string ruleName)
         {
-            _ruleImplementation = _ruleSelector.Select(ruleName);
+            _ruleImplementation = RuleSelector.Instance.Select(ruleName);
 
             return _ruleImplementation == null ? throw new ArgumentException($"Unable to find rule named {ruleName}.") : ruleName;
         }

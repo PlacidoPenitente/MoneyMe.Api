@@ -1,14 +1,10 @@
-﻿using Microsoft.VisualBasic;
-using MoneyMe.Domain.LoanAggregate;
-using MoneyMe.Domain.RuleAggregate;
+﻿using System.Collections.Generic;
+using Microsoft.VisualBasic;
 using MoneyMe.Domain.Shared;
-using System;
-using System.Collections.Generic;
-using System.Linq;
 
 namespace MoneyMe.Domain.RuleAggregate.RuleImplementations
 {
-    public sealed class LastPaymentInterestFree : IRuleImplementation
+    public sealed class LastPaymentInterestFreeRule : IRuleImplementation
     {
         public IReadOnlyCollection<Payment> GenerateMonthlyAmortization(decimal loanAmount, int term, decimal interestRate, decimal monthlyPayment)
         {

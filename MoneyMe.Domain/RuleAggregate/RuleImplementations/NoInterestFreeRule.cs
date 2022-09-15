@@ -1,8 +1,8 @@
-﻿using Microsoft.VisualBasic;
+﻿using System;
+using System.Collections.Generic;
+using Microsoft.VisualBasic;
 using MoneyMe.Domain.RuleAggregate;
 using MoneyMe.Domain.Shared;
-using System;
-using System.Collections.Generic;
 
 namespace MoneyMe.Domain.Rules
 {

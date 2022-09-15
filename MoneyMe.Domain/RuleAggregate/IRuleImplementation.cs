@@ -1,5 +1,5 @@
-﻿using MoneyMe.Domain.Shared;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
+using MoneyMe.Domain.Shared;
 
 namespace MoneyMe.Domain.RuleAggregate
 {

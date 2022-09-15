@@ -10,13 +10,15 @@ namespace MoneyMe.Domain.RuleAggregate
         private readonly IRuleImplementation _lastPaymentInterestFree;
         private readonly IRuleImplementation _noInterestFreeRule;
 
-        public RuleSelector()
+        private RuleSelector()
         {
             _interestFreeRule = new InterestFreeRule();
             _firstTwoMonthsInterestFreeRule = new FirstTwoMonthsInterestFreeRule();
-            _lastPaymentInterestFree = new LastPaymentInterestFree();
+            _lastPaymentInterestFree = new LastPaymentInterestFreeRule();
             _noInterestFreeRule = new NoInterestFreeRule();
         }
+
+        public static RuleSelector Instance { get; } = new RuleSelector();
 
         public IRuleImplementation Select(string ruleName)
         {
@@ -28,7 +30,7 @@ namespace MoneyMe.Domain.RuleAggregate
                 case nameof(FirstTwoMonthsInterestFreeRule):
                     return _firstTwoMonthsInterestFreeRule;
 
-                case nameof(LastPaymentInterestFree):
+                case nameof(LastPaymentInterestFreeRule):
                     return _lastPaymentInterestFree;
 
                 case nameof(NoInterestFreeRule):
