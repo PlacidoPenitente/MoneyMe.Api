@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
+using System.Linq;
 using MoneyMe.Domain.Shared;
 
 namespace MoneyMe.Domain.RuleAggregate
@@ -38,7 +40,11 @@ namespace MoneyMe.Domain.RuleAggregate
 
         private string SelectRule(string ruleName)
         {
-            _ruleImplementation = RuleSelector.Instance.Select(ruleName);
+            var nameWords = ruleName.Split(' ');
+            TextInfo info = new CultureInfo("en-US", false).TextInfo;
+            var name = string.Join(string.Empty, nameWords.Select(x => info.ToTitleCase(x)).ToArray());
+
+            _ruleImplementation = RuleSelector.Instance.Select(name);
 
             return _ruleImplementation == null ? throw new ArgumentException($"Unable to find rule named {ruleName}.") : ruleName;
         }

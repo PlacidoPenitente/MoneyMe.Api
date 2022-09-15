@@ -35,37 +35,51 @@ namespace MoneyMe.Domain.ProductAggregate
 
         public void ChangeName(string name)
         {
-            if (string.IsNullOrWhiteSpace(name))
+            if (!string.IsNullOrWhiteSpace(name))
             {
-                throw new ArgumentException("Invalid product name.");
+                Name = name.Trim();
+                DateModified = DateTime.UtcNow;
+            }
+        }
+
+        public void ChangeInterestRate(decimal? interestRate)
+        {
+            if (interestRate.HasValue)
+            {
+                InterestRate = interestRate.Value;
+                DateModified = DateTime.UtcNow;
+            }
+        }
+
+        public void ChangeDurationRange(int? minimumDuration, int? maximumDuration)
+        {
+            if (!minimumDuration.HasValue)
+            {
+                minimumDuration = MinimumDuration;
             }
 
-            Name = name.Trim();
-            DateModified = DateTime.UtcNow;
-        }
+            if (!maximumDuration.HasValue)
+            {
+                maximumDuration = MaximumDuration;
+            }
 
-        public void ChangeInterestRate(decimal interestRate)
-        {
-            InterestRate = interestRate;
-            DateModified = DateTime.UtcNow;
-        }
-
-        public void ChangeDurationRange(int minimumDuration, int maximumDuration)
-        {
-            if (maximumDuration < minimumDuration || minimumDuration < 0)
+            if (maximumDuration.Value < minimumDuration.Value || minimumDuration.Value < 0)
             {
                 throw new ArgumentException("Invalid duration range.");
             }
 
-            MinimumDuration = minimumDuration;
-            MaximumDuration = maximumDuration;
+            MinimumDuration = minimumDuration.Value;
+            MaximumDuration = maximumDuration.Value;
             DateModified = DateTime.UtcNow;
         }
 
-        public void ChangeRule(Guid ruleId)
+        public void ChangeRule(Guid? ruleId)
         {
-            RuleId = ruleId;
-            DateModified = DateTime.UtcNow;
+            if (ruleId.HasValue && ruleId != Guid.Empty)
+            {
+                RuleId = ruleId.Value;
+                DateModified = DateTime.UtcNow;
+            }
         }
     }
 }

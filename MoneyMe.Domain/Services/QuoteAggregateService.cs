@@ -57,9 +57,10 @@ namespace MoneyMe.Domain.Services
             }
 
             var loanAmount = quote.LoanAmount + totalFee;
-            var payment = Financial.Pmt(decimal.ToDouble(product.InterestRate) / 12, quote.Term, decimal.ToDouble(decimal.Negate(loanAmount)));
+            var interestRate = product.InterestRate / 100;
 
-            var payments = rule.GenerateMonthlyAmortization(loanAmount, quote.Term, product.InterestRate, Convert.ToDecimal(Math.Round(payment, 2)));
+            var payment = Financial.Pmt(decimal.ToDouble(interestRate) / 12, quote.Term, decimal.ToDouble(decimal.Negate(loanAmount)));
+            var payments = rule.GenerateMonthlyAmortization(loanAmount, quote.Term, interestRate, Convert.ToDecimal(Math.Round(payment, 2)));
 
             quote.ChangeInterest(payments.Sum(payment => payment.Interest));
             quote.ChangeMonthlypayment(payments.Average(payment => payment.Interest + payment.Principal));

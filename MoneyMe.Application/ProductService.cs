@@ -66,8 +66,8 @@ namespace MoneyMe.Application
                     var product = await _productRepository.GetAsync(productDto.Id.Value);
 
                     product.ChangeName(productDto.Name);
-                    product.ChangeInterestRate(productDto.InterestRate.Value);
-                    product.ChangeDurationRange(productDto.MinimumDuration.Value, productDto.MaximumDuration.Value);
+                    product.ChangeInterestRate(productDto.InterestRate);
+                    product.ChangeDurationRange(productDto.MinimumDuration, productDto.MaximumDuration);
                     product.ChangeRule(productDto.RuleId);
 
                     _productRepository.Update(product);

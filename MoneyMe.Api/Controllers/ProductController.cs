@@ -118,7 +118,7 @@ namespace MoneyMe.Api.Controllers
         {
             try
             {
-                if (productRequest == null || !productRequest.IsValid())
+                if (productRequest == null)
                 {
                     return BadRequest();
                 }
