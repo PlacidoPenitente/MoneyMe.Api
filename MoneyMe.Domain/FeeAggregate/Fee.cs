@@ -50,7 +50,7 @@ namespace MoneyMe.Domain.FeeAggregate
 
         public void ChangeAmount(decimal? amount)
         {
-            if (amount.HasValue)
+            if (amount.HasValue && amount > -1)
             {
                 Amount = amount.Value;
                 DateModified = DateTime.UtcNow;

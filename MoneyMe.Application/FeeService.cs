@@ -45,6 +45,13 @@ namespace MoneyMe.Application
             return _mapper.Map<FeeDto>(fee);
         }
 
+        public async Task<FeeDto> ReadFeeAsync(string name)
+        {
+            var fee = await _feeRepository.GetByNameAsync(name);
+
+            return _mapper.Map<FeeDto>(fee);
+        }
+
         public async Task<IEnumerable<FeeDto>> ReadAllFeesAsync()
         {
             var fees = await _feeRepository.GetAllAsync();
@@ -59,6 +66,11 @@ namespace MoneyMe.Application
                 return await _unitOfWork.ExecuteAsync(async () =>
                 {
                     var fee = await _feeRepository.GetAsync(feeDto.Id.Value);
+
+                    if (fee == null)
+                    {
+                        return null;
+                    }
 
                     fee.ChangeName(feeDto.Name);
                     fee.ChangeAmount(feeDto.Amount);

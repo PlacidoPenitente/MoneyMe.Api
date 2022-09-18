@@ -17,6 +17,9 @@ using MoneyMe.Infrastructure.Database;
 using MoneyMe.Infrastructure.Repositories;
 using MoneyMe.Infrastructure.Services;
 using Serilog;
+using System.IO;
+using System.Reflection;
+using System;
 
 namespace MoneyMe.Api
 {
@@ -100,9 +103,12 @@ namespace MoneyMe.Api
                 o.SubstituteApiVersionInUrl = true;
             });
 
-            services.AddSwaggerGen(c=>
+            services.AddSwaggerGen(options=>
             {
-                c.SwaggerDoc("v1", new OpenApiInfo { Title = "MoneyMe API", Version = "v1" });
+                options.SwaggerDoc("v1", new OpenApiInfo { Title = "MoneyMe API", Version = "v1" });
+
+                var xmlFilename = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
+                options.IncludeXmlComments(Path.Combine(AppContext.BaseDirectory, xmlFilename));
             });
         }
 

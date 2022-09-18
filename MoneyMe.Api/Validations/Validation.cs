@@ -27,7 +27,10 @@ namespace MoneyMe.Api.Validations
 
         public static bool IsValid(this FeeRequest feeRequest)
         {
-            if (string.IsNullOrWhiteSpace(feeRequest.Name) || !feeRequest.Amount.HasValue)
+            if (string.IsNullOrWhiteSpace(feeRequest.Name) ||
+                !feeRequest.Amount.HasValue ||
+                !feeRequest.IsPercentage.HasValue ||
+                feeRequest.Amount < 1)
             {
                 return false;
             }
@@ -55,6 +58,17 @@ namespace MoneyMe.Api.Validations
             {
                 return false;
             }
+
+            return true;
+        }
+
+        public static bool CanUpdate(this FeeRequest feeRequest)
+        {
+            if (feeRequest.Name != null && feeRequest.Name == string.Empty)
+                return false;
+
+            if (feeRequest.Amount.HasValue && feeRequest.Amount < 1)
+                return false;
 
             return true;
         }

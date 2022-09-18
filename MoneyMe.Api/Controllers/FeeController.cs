@@ -31,6 +31,11 @@ namespace MoneyMe.Api.Controllers
             _logger = logger;
         }
 
+        /// <summary>
+        /// Creates a new fee.
+        /// </summary>
+        /// <param name="feeRequest"></param>
+        /// <returns></returns>
         [HttpPost]
         [ProducesResponseType(typeof(FeeResponse), StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
@@ -40,7 +45,14 @@ namespace MoneyMe.Api.Controllers
             {
                 if (feeRequest == null || !feeRequest.IsValid())
                 {
-                    return BadRequest();
+                    return BadRequest("Please check your request.");
+                }
+
+                var existingFee = await _feeService.ReadFeeAsync(feeRequest.Name);
+
+                if (existingFee != null)
+                {
+                    return BadRequest($"A fee named \"{feeRequest.Name}\" already exists.");
                 }
 
                 var feeDto = new FeeDto
@@ -62,6 +74,11 @@ namespace MoneyMe.Api.Controllers
             }
         }
 
+        /// <summary>
+        /// Gets a specific fee.
+        /// </summary>
+        /// <param name="feeRequest"></param>
+        /// <returns></returns>
         [HttpGet("{id}")]
         [ProducesResponseType(typeof(FeeResponse), StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
@@ -91,6 +108,11 @@ namespace MoneyMe.Api.Controllers
             }
         }
 
+        /// <summary>
+        /// Gets all existing fees.
+        /// </summary>
+        /// <param name="feeRequest"></param>
+        /// <returns></returns>
         [HttpGet]
         [ProducesResponseType(typeof(IEnumerable<FeeResponse>), StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
@@ -109,16 +131,30 @@ namespace MoneyMe.Api.Controllers
             }
         }
 
+        /// <summary>
+        /// Updates a specific fee.
+        /// </summary>
+        /// <param name="id"></param>
+        /// <param name="feeRequest"></param>
+        /// <returns></returns>
         [HttpPut("{id}")]
         [ProducesResponseType(typeof(FeeResponse), StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public async Task<IActionResult> UpdateFeeAsync([FromRoute] Guid id, [FromBody] FeeRequest feeRequest)
         {
             try
-            {
-                if (feeRequest == null)
+            {   
+                FeeDto possibleDuplicateFee = null;
+
+                if (feeRequest != null && feeRequest.Name != null)
+                    possibleDuplicateFee = await _feeService.ReadFeeAsync(feeRequest.Name);
+
+                if (possibleDuplicateFee != null)
+                    return BadRequest($"A fee named \"{feeRequest.Name}\" already exists.");
+
+                if (feeRequest == null || !feeRequest.CanUpdate())
                 {
-                    return BadRequest();
+                    return BadRequest("Please check your request.");
                 }
 
                 var feeDto = new FeeDto(id)
@@ -139,6 +175,11 @@ namespace MoneyMe.Api.Controllers
             }
         }
 
+        /// <summary>
+        /// Deletes an existing fee.
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
         [HttpDelete("{id}")]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         [ProducesResponseType(StatusCodes.Status200OK)]

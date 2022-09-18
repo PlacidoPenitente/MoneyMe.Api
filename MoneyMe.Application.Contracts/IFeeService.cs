@@ -9,6 +9,7 @@ namespace MoneyMe.Application.Contracts
     {
         Task<FeeDto> CreateFeeAsync(FeeDto feeDto);
         Task<FeeDto> ReadFeeAsync(Guid id);
+        Task<FeeDto> ReadFeeAsync(string name);
         Task<IEnumerable<FeeDto>> ReadAllFeesAsync();
         Task<FeeDto> UpdateFeeAsync(FeeDto feeDto);
         Task DeleteFeeAsync(Guid id);
