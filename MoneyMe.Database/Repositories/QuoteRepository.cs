@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using Microsoft.EntityFrameworkCore;
 using MoneyMe.Domain.QuoteAggregate;
 using MoneyMe.Domain.Repositories;
 using MoneyMe.Infrastructure.Database;

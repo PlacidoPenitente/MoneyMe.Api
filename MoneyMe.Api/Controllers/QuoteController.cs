@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
@@ -18,6 +19,7 @@ namespace MoneyMe.Api.Controllers
     public class QuoteController : ControllerBase
     {
         private readonly IQuoteService _quoteService;
+        private readonly IProductService _productService;
         private readonly ICustomerService _customerService;
         private readonly IEmailService _emailService;
         private readonly ISecurityService _securityService;
@@ -30,7 +32,8 @@ namespace MoneyMe.Api.Controllers
             IEmailService emailService,
             ISecurityService securityService,
             ILogger logger,
-            IOptions<Settings> options)
+            IOptions<Settings> options,
+            IProductService productService)
         {
             _quoteService = quoteService;
             _customerService = customerService;
@@ -38,6 +41,7 @@ namespace MoneyMe.Api.Controllers
             _securityService = securityService;
             _logger = logger;
             _settings = options.Value;
+            _productService = productService;
         }
 
         [HttpPost("request")]
@@ -149,6 +153,20 @@ namespace MoneyMe.Api.Controllers
             try
             {
                 var quoteDto = await _quoteService.ReadQuoteAsync(id);
+                var productDto = await _productService.ReadProductAsync(quoteDto.ProductId);
+                var totalFee = 0m;
+
+                foreach (var fee in productDto.Fees)
+                {
+                    if (fee.IsPercentage.Value)
+                    {
+                        totalFee += quoteDto.LoanAmount * fee.Amount.Value;
+                    }
+                    else
+                    {
+                        totalFee += fee.Amount.Value;
+                    }
+                }
 
                 return Ok(new QuoteResponse
                 {
@@ -158,7 +176,7 @@ namespace MoneyMe.Api.Controllers
                     LoanAmount = quoteDto.LoanAmount,
                     Term = quoteDto.Term,
                     Interest = quoteDto.Interest,
-                    Fee = quoteDto.Fee,
+                    Fee = totalFee,
                     MonthlyPayment = quoteDto.MonthlyPayment
                 });
             }

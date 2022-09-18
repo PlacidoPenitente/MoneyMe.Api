@@ -18,7 +18,7 @@ namespace MoneyMe.Domain.Factories
                 Guid.NewGuid(),
                 DateTime.UtcNow,
                 null,
-                Enum.Parse<Title>(title),
+                Enum.Parse<Title>(title.Replace(".", string.Empty)),
                 firstName,
                 lastName,
                 dateOfBirth,

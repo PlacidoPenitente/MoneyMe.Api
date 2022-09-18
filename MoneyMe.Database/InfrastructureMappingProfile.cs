@@ -9,7 +9,16 @@ namespace MoneyMe.Infrastructure
     {
         public InfrastructureMappingProfile()
         {
-            CreateMap<Customer, Domain.CustomerAggregate.Customer>().ReverseMap();
+            CreateMap<Customer, Domain.CustomerAggregate.Customer>().ConstructUsing(x => new Domain.CustomerAggregate.Customer(
+                x.Id,
+                x.DateCreated,
+                x.DateModified,
+                Enum.Parse<Domain.Shared.Title>(x.Title),
+                x.FirstName,
+                x.LastName,
+                x.DateOfBirth,
+                x.MobileNumber,
+                x.EmailAddress)).ReverseMap();
 
             CreateMap<Product, Domain.ProductAggregate.Product>()
                 .ConstructUsing(product => new Domain.ProductAggregate.Product(
@@ -61,8 +70,17 @@ namespace MoneyMe.Infrastructure
                     quote.DateModified,
                     quote.CustomerId,
                     quote.LoanAmount,
-                    quote.Term))
-                .ReverseMap();
+                    quote.Term,
+                    quote.ProductId))
+                .ReverseMap()
+                .ConstructUsing(x=> new Quote()
+                {
+                    Id = x.Id,
+                    CustomerId = x.CustomerId,
+                    LoanAmount = x.LoanAmount,
+                    Term = x.Term,
+                    ProductId = x.ProductId
+                });
 
             CreateMap<Loan, Domain.LoanAggregate.Loan>().ReverseMap();
             CreateMap<Payment, Domain.Shared.Payment>().ReverseMap();

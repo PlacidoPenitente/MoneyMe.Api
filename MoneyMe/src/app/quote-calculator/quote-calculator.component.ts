@@ -15,7 +15,7 @@ import { Quote } from 'src/quote.model';
 })
 export class QuoteCalculatorComponent implements OnInit, AfterViewInit {
 
-  private titles: string[] = ['Mr.', 'Ms.', 'Mrs.'];
+  private titles: string[] = ['Mr', 'Ms', 'Mrs'];
 
   private _formGroup: FormGroup = new FormGroup({});
   public get formGroup(): FormGroup {
@@ -96,6 +96,7 @@ export class QuoteCalculatorComponent implements OnInit, AfterViewInit {
             {
               next: partialQuote => {
                 this.partialQuote = partialQuote;
+                console.log(partialQuote)
                 this.selectedProduct = this.products.find(p => p.minimumDuration <= this.partialQuote.term && p.maximumDuration >= this.partialQuote.term) || products[products.length - 1];
                 this.updateSlider(partialQuote.loanAmount, this.sliderValue);
 
@@ -148,7 +149,7 @@ export class QuoteCalculatorComponent implements OnInit, AfterViewInit {
 
     var quote = new Quote();
     quote.LoanAmount = this.loanAmount ?? this.partialQuote.loanAmount;
-    quote.Term = this.term || this.partialQuote.term;
+    quote.Term = this.term ?? this.partialQuote.term;
     quote.Title = this.titles[this.formGroup.get('title')?.value];
     quote.FirstName = this.formGroup.get('firstName')?.value;
     quote.LastName = this.formGroup.get('lastName')?.value;
@@ -157,6 +158,8 @@ export class QuoteCalculatorComponent implements OnInit, AfterViewInit {
     quote.EmailAddress = this.formGroup.get('email')?.value;
 
     this.partialQuote.productId = this.selectedProduct.id;
+    this.partialQuote.loanAmount = this.loanAmount;
+    this.partialQuote.term = this.term ?? this.partialQuote.term;
 
     var redirectUrlObservable = await this.httpClient.post<LoanApplication>("https://localhost:5001/api/v1/quotes/calculate", this.partialQuote, {
       headers: new HttpHeaders({

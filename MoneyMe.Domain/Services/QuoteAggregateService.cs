@@ -22,19 +22,19 @@ namespace MoneyMe.Domain.Services
             _feeRepository = feeRepository;
         }
 
-        public async Task ChangeTermAsync(Quote quote, int term)
+        public async Task<decimal> ChangeTermAsync(Quote quote, int term)
         {
             quote.ChangeTerm(term);
-            await CalculateQuoteAsync(quote);
+            return await CalculateQuoteAsync(quote);
         }
 
-        public async Task ChangeLoanAmountAsync(Quote quote, decimal loanAmount)
+        public async Task<decimal> ChangeLoanAmountAsync(Quote quote, decimal loanAmount)
         {
             quote.ChangeLoanAmount(loanAmount);
-            await CalculateQuoteAsync(quote);
+            return await CalculateQuoteAsync(quote);
         }
 
-        private async Task CalculateQuoteAsync(Quote quote)
+        public async Task<decimal> CalculateQuoteAsync(Quote quote)
         {
             var product = await _productRepository.GetAsync(quote.ProductId);
             var rule = await _ruleRepository.GetAsync(product.RuleId);
@@ -65,7 +65,7 @@ namespace MoneyMe.Domain.Services
             quote.ChangeInterest(payments.Sum(payment => payment.Interest));
             quote.ChangeMonthlypayment(payments.Average(payment => payment.Interest + payment.Principal));
 
-            _quoteRepository.Update(quote);
+            return totalFee;
         }
     }
 }

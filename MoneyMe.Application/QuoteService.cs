@@ -39,31 +39,32 @@ namespace MoneyMe.Application
 
         public async Task<QuoteDto> CalculateAsync(PartialQuoteDto partialQuoteDto)
         {
-            var product = await _productRepository.GetAsync(partialQuoteDto.ProductId);
-
-            var quote = _quoteFactory.Create(partialQuoteDto.CustomerId, partialQuoteDto.LoanAmount, partialQuoteDto.Term);
-
-
-
             await using (_unitOfWork)
             {
-                await _unitOfWork.ExecuteAsync(async () =>
+                return await _unitOfWork.ExecuteAsync(async () =>
                 {
-                    await _quoteRepository.AddAsync(quote);
-                });
-            };
+                    var product = await _productRepository.GetAsync(partialQuoteDto.ProductId);
 
-            return new QuoteDto
-            {
-                Id = quote.Id,
-                DateAdded = quote.DateCreated,
-                DateModified = quote.DateModified.Value,
-                CustomerId = quote.CustomerId,
-                ProductId = quote.ProductId,
-                LoanAmount = quote.LoanAmount,
-                Term = quote.Term,
-                Interest = quote.Interest,
-                MonthlyPayment = quote.MonthlyPayment
+                    var quote = _quoteFactory.Create(partialQuoteDto.CustomerId, partialQuoteDto.LoanAmount, partialQuoteDto.Term, product.Id);
+
+                    var totalFee = await _quoteAggregateService.CalculateQuoteAsync(quote);
+
+                    await _quoteRepository.AddAsync(quote);
+
+                    return new QuoteDto
+                    {
+                        Id = quote.Id,
+                        DateAdded = quote.DateCreated,
+                        DateModified = quote.DateModified,
+                        CustomerId = quote.CustomerId,
+                        ProductId = quote.ProductId,
+                        LoanAmount = quote.LoanAmount,
+                        Term = quote.Term,
+                        Interest = quote.Interest,
+                        MonthlyPayment = quote.MonthlyPayment,
+                        Fee = totalFee
+                    };
+                });
             };
         }
 

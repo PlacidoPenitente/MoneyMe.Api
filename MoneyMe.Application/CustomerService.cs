@@ -51,7 +51,7 @@ namespace MoneyMe.Application
             {
                 DateAdded = customer.DateCreated,
                 DateModified = customer.DateModified,
-                Title = customer.ToString(),
+                Title = customer.Title.ToString(),
                 FirstName = customer.FirstName,
                 LastName = customer.LastName,
                 DateOfBirth = customer.DateOfBirth,
@@ -79,7 +79,7 @@ namespace MoneyMe.Application
             return new CustomerDto(customer.Id)
             {
                 DateAdded = customer.DateCreated,
-                DateModified = customer.DateModified.Value,
+                DateModified = customer.DateModified,
                 Title = customer.Title.ToString(),
                 FirstName = customer.FirstName,
                 LastName = customer.LastName,

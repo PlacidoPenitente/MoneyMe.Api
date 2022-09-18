@@ -11,7 +11,8 @@ namespace MoneyMe.Domain.QuoteAggregate
             DateTime? dateModified,
             Guid customerId,
             decimal loanAmount,
-            int term)
+            int term,
+            Guid productId)
         {
             Id = id;
             DateCreated = dateAdded;
@@ -19,6 +20,7 @@ namespace MoneyMe.Domain.QuoteAggregate
             CustomerId = customerId;
             LoanAmount = loanAmount;
             Term = term;
+            ProductId = productId;
         }
 
         public Guid Id { get; }

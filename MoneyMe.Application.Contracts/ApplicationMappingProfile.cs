@@ -4,6 +4,7 @@ using MoneyMe.Application.Contracts.Dtos;
 using MoneyMe.Domain.CustomerAggregate;
 using MoneyMe.Domain.FeeAggregate;
 using MoneyMe.Domain.ProductAggregate;
+using MoneyMe.Domain.QuoteAggregate;
 using MoneyMe.Domain.RuleAggregate;
 
 namespace MoneyMe.Application.Contracts
@@ -13,6 +14,8 @@ namespace MoneyMe.Application.Contracts
         public ApplicationMappingProfile()
         {
             CreateMap<Customer, CustomerDto>().ConstructUsing(x => new CustomerDto(x.Id));
+
+            CreateMap<Quote, QuoteDto>().ReverseMap();
 
             CreateMap<Product, ProductDto>()
                 .ConstructUsing(x => new ProductDto(x.Id, x.DateCreated, x.DateModified)

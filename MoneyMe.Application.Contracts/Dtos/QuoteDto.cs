@@ -6,7 +6,7 @@ namespace MoneyMe.Application.Contracts.Dtos
     {
         public Guid Id { get; set; }
         public DateTime DateAdded { get; set; }
-        public DateTime DateModified { get; set; }
+        public DateTime? DateModified { get; set; }
         public Guid CustomerId { get; set; }
         public Guid ProductId { get; set; }
         public decimal LoanAmount { get; set; }
