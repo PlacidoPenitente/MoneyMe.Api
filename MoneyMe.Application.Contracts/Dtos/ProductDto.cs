@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 
 namespace MoneyMe.Application.Contracts.Dtos
 {
@@ -33,5 +34,6 @@ namespace MoneyMe.Application.Contracts.Dtos
         public int? MaximumDuration { get; set; }
         public int? MinimumDuration { get; set; }
         public Guid RuleId { get; set; }
+        public List<FeeDto> Fees { get; set; } = new List<FeeDto>();
     }
 }

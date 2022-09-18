@@ -1,9 +1,13 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace MoneyMe.Domain.ProductAggregate
 {
     public class Product : IAggregate<Guid>
     {
+        private List<Guid> _feeIds;
+
         public Product(
             Guid id,
             DateTime dateAdded,
@@ -12,7 +16,8 @@ namespace MoneyMe.Domain.ProductAggregate
             decimal interestRate,
             int minimumDuration,
             int maximumDuration,
-            Guid ruleId)
+            Guid ruleId,
+            List<Guid> feeIds)
         {
             Id = id;
             DateCreated = dateAdded;
@@ -22,6 +27,7 @@ namespace MoneyMe.Domain.ProductAggregate
             MinimumDuration = minimumDuration;
             MaximumDuration = maximumDuration;
             RuleId = ruleId;
+            _feeIds = feeIds;
         }
 
         public Guid Id { get; }
@@ -32,6 +38,7 @@ namespace MoneyMe.Domain.ProductAggregate
         public int MaximumDuration { get; private set; }
         public int MinimumDuration { get; private set; }
         public Guid RuleId { get; private set; }
+        public IReadOnlyCollection<Guid> FeeIds => _feeIds;
 
         public void ChangeName(string name)
         {
@@ -73,11 +80,57 @@ namespace MoneyMe.Domain.ProductAggregate
             DateModified = DateTime.UtcNow;
         }
 
+        public void ChangeFees(List<Guid> feeIds)
+        {
+            if (feeIds != null)
+            {
+                var toRemove = new List<Guid>();
+
+                foreach (var feeId in _feeIds)
+                {
+                    if (!feeIds.Any(x => x == feeId))
+                    {
+                        toRemove.Add(feeId);
+                    }
+                }
+
+                foreach (var feeId in feeIds)
+                {
+                    if (!_feeIds.Any(x => x == feeId))
+                    {
+                        _feeIds.Add(feeId);
+                    }
+                }
+
+                _feeIds.RemoveAll(x => toRemove.Any(c => c == x));
+
+                DateModified = DateTime.UtcNow;
+            }
+        }
+
         public void ChangeRule(Guid? ruleId)
         {
-            if (ruleId.HasValue && ruleId != Guid.Empty)
+            if (ruleId.HasValue && ruleId.Value != Guid.Empty)
             {
                 RuleId = ruleId.Value;
+                DateModified = DateTime.UtcNow;
+            }
+        }
+
+        public void AddFee(Guid? feeId)
+        {
+            if (feeId.HasValue && feeId.Value != Guid.Empty && !_feeIds.Any(x => x == feeId.Value))
+            {
+                _feeIds.Add(feeId.Value);
+                DateModified = DateTime.UtcNow;
+            }
+        }
+
+        public void RemoveFee(Guid? feeId)
+        {
+            if (feeId.HasValue && feeId.Value != Guid.Empty && _feeIds.Any(x => x == feeId.Value))
+            {
+                _feeIds.Remove(feeId.Value);
                 DateModified = DateTime.UtcNow;
             }
         }

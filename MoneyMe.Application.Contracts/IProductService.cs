@@ -1,7 +1,7 @@
-﻿using MoneyMe.Application.Contracts.Dtos;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using MoneyMe.Application.Contracts.Dtos;
 
 namespace MoneyMe.Application.Contracts
 {
@@ -12,5 +12,7 @@ namespace MoneyMe.Application.Contracts
         Task<IEnumerable<ProductDto>> ReadAllProductsAsync();
         Task<ProductDto> UpdateProductAsync(ProductDto productDto);
         Task DeleteProductAsync(Guid id);
+        Task AddFeeToProductAsync(Guid id, Guid feeId);
+        Task RemoveFeeFromProductAsync(Guid id, Guid feeId);
     }
 }

@@ -1,7 +1,7 @@
-﻿using MoneyMe.Domain.Shared;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using MoneyMe.Domain.Shared;
 
 namespace MoneyMe.Domain.LoanAggregate
 {

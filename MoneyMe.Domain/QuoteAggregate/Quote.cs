@@ -5,16 +5,13 @@ namespace MoneyMe.Domain.QuoteAggregate
 {
     public class Quote : IAggregate<Guid>
     {
-        private readonly List<Guid> _feedIds;
-
         public Quote(
             Guid id,
             DateTime dateAdded,
             DateTime? dateModified,
             Guid customerId,
             decimal loanAmount,
-            int term,
-            List<Guid> feeIds)
+            int term)
         {
             Id = id;
             DateCreated = dateAdded;
@@ -22,7 +19,6 @@ namespace MoneyMe.Domain.QuoteAggregate
             CustomerId = customerId;
             LoanAmount = loanAmount;
             Term = term;
-            _feedIds = feeIds;
         }
 
         public Guid Id { get; }
@@ -33,7 +29,6 @@ namespace MoneyMe.Domain.QuoteAggregate
         public decimal LoanAmount { get; private set; }
         public int Term { get; private set; }
         public decimal Interest { get; private set; }
-        public IReadOnlyCollection<Guid> FeeIds => _feedIds;
         public decimal MonthlyPayment { get; private set; }
 
         internal void ChangeLoanAmount(decimal loanAmont)
@@ -57,18 +52,6 @@ namespace MoneyMe.Domain.QuoteAggregate
         internal void ChangeMonthlypayment(decimal monthlyPayment)
         {
             MonthlyPayment = monthlyPayment;
-            DateModified = DateTime.UtcNow;
-        }
-
-        internal void AddFee(Guid feeId)
-        {
-            _feedIds.Add(feeId);
-            DateModified = DateTime.UtcNow;
-        }
-
-        internal void RemoveFee(Guid fee)
-        {
-            _feedIds.Remove(fee);
             DateModified = DateTime.UtcNow;
         }
     }

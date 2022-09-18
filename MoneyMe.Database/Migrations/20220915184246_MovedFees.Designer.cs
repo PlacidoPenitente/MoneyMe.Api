@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using MoneyMe.Infrastructure.Database;
 
 namespace MoneyMe.Infrastructure.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20220915184246_MovedFees")]
+    partial class MovedFees
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -75,11 +77,16 @@ namespace MoneyMe.Infrastructure.Migrations
                     b.Property<string>("Name")
                         .HasColumnType("nvarchar(450)");
 
+                    b.Property<Guid?>("ProductId")
+                        .HasColumnType("uniqueidentifier");
+
                     b.HasKey("Id");
 
                     b.HasIndex("Name")
                         .IsUnique()
                         .HasFilter("[Name] IS NOT NULL");
+
+                    b.HasIndex("ProductId");
 
                     b.ToTable("fees");
                 });
@@ -174,27 +181,6 @@ namespace MoneyMe.Infrastructure.Migrations
                     b.ToTable("products");
                 });
 
-            modelBuilder.Entity("MoneyMe.Infrastructure.Database.Models.ProductFee", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<Guid>("FeeId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<Guid>("ProductId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("FeeId");
-
-                    b.HasIndex("ProductId");
-
-                    b.ToTable("product_fees");
-                });
-
             modelBuilder.Entity("MoneyMe.Infrastructure.Database.Models.Quote", b =>
                 {
                     b.Property<Guid>("Id")
@@ -254,35 +240,18 @@ namespace MoneyMe.Infrastructure.Migrations
                     b.ToTable("rules");
                 });
 
+            modelBuilder.Entity("MoneyMe.Infrastructure.Database.Models.Fee", b =>
+                {
+                    b.HasOne("MoneyMe.Infrastructure.Database.Models.Product", null)
+                        .WithMany("Fees")
+                        .HasForeignKey("ProductId");
+                });
+
             modelBuilder.Entity("MoneyMe.Infrastructure.Database.Models.Payment", b =>
                 {
                     b.HasOne("MoneyMe.Infrastructure.Database.Models.Loan", null)
                         .WithMany("MonthlyAmortization")
                         .HasForeignKey("LoanId");
-                });
-
-            modelBuilder.Entity("MoneyMe.Infrastructure.Database.Models.ProductFee", b =>
-                {
-                    b.HasOne("MoneyMe.Infrastructure.Database.Models.Fee", "Fee")
-                        .WithMany("ProductFees")
-                        .HasForeignKey("FeeId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("MoneyMe.Infrastructure.Database.Models.Product", "Product")
-                        .WithMany("ProductFees")
-                        .HasForeignKey("ProductId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Fee");
-
-                    b.Navigation("Product");
-                });
-
-            modelBuilder.Entity("MoneyMe.Infrastructure.Database.Models.Fee", b =>
-                {
-                    b.Navigation("ProductFees");
                 });
 
             modelBuilder.Entity("MoneyMe.Infrastructure.Database.Models.Loan", b =>
@@ -292,7 +261,7 @@ namespace MoneyMe.Infrastructure.Migrations
 
             modelBuilder.Entity("MoneyMe.Infrastructure.Database.Models.Product", b =>
                 {
-                    b.Navigation("ProductFees");
+                    b.Navigation("Fees");
                 });
 #pragma warning restore 612, 618
         }

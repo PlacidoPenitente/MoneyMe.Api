@@ -1,11 +1,12 @@
-﻿using System;
+﻿using MoneyMe.Api.Responses.Product;
+using System;
 using System.Collections.Generic;
 
-namespace MoneyMe.Api.Responses
+namespace MoneyMe.Api.Responses.ProductResponse
 {
-    public class ProductResponse
+    public class Product
     {
-        public ProductResponse(
+        public Product(
             Guid id,
             DateTime dateAdded,
             DateTime? dateModified,
@@ -13,7 +14,8 @@ namespace MoneyMe.Api.Responses
             decimal interestRate,
             int maximumDuration,
             int minimumDuration,
-            Guid ruleId)
+            Guid ruleId,
+            List<Fee> fees)
         {
             Id = id;
             DateAdded = dateAdded;
@@ -23,6 +25,7 @@ namespace MoneyMe.Api.Responses
             MaximumDuration = maximumDuration;
             MinimumDuration = minimumDuration;
             RuleId = ruleId;
+            Fees = fees;
         }
 
         public Guid Id { get; }
@@ -33,5 +36,6 @@ namespace MoneyMe.Api.Responses
         public int MaximumDuration { get; }
         public int MinimumDuration { get; }
         public Guid RuleId { get; }
+        public List<Fee> Fees { get; }
     }
 }

@@ -105,7 +105,7 @@ namespace MoneyMe.Tests
         {
             var rule = RuleFactory.Object.GetAsync(Guid.NewGuid());
 
-            return new Product(Guid.NewGuid(), DateTime.UtcNow, DateTime.UtcNow, productName, interetestRate, maxDuration, minimumDuration, Guid.Empty);
+            return new Product(Guid.NewGuid(), DateTime.UtcNow, DateTime.UtcNow, productName, interetestRate, maxDuration, minimumDuration, Guid.Empty, new List<Guid>());
         }
     }
 }

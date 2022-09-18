@@ -41,7 +41,7 @@ namespace MoneyMe.Application
         {
             var product = await _productRepository.GetAsync(partialQuoteDto.ProductId);
 
-            var quote = _quoteFactory.Create(partialQuoteDto.CustomerId, partialQuoteDto.LoanAmount, partialQuoteDto.Term, new List<Guid>());
+            var quote = _quoteFactory.Create(partialQuoteDto.CustomerId, partialQuoteDto.LoanAmount, partialQuoteDto.Term);
 
 
 

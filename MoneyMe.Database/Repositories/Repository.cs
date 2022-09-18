@@ -30,7 +30,7 @@ namespace MoneyMe.Infrastructure.Repositories
 
         public virtual async Task<IReadOnlyCollection<T>> GetAllAsync()
         {
-            var entities = await _context.Set<U>().ToListAsync();
+            var entities = await _context.Set<U>().AsNoTracking().ToListAsync();
             return entities.Select(_mapper.Map<T>).ToList();
         }
 

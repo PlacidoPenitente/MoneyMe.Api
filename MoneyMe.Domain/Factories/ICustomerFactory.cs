@@ -1,5 +1,5 @@
-﻿using MoneyMe.Domain.CustomerAggregate;
-using System;
+﻿using System;
+using MoneyMe.Domain.CustomerAggregate;
 
 namespace MoneyMe.Domain.Factories
 {

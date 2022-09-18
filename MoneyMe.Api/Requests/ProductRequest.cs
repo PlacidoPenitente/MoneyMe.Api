@@ -1,5 +1,5 @@
-﻿using System.Collections.Generic;
-using System;
+﻿using System;
+using System.Collections.Generic;
 
 namespace MoneyMe.Api.Requests
 {
@@ -10,5 +10,6 @@ namespace MoneyMe.Api.Requests
         public int? MinimumDuration { get; set; }
         public int? MaximumDuration { get; set; }
         public Guid RuleId { get; set; }
+        public List<Guid> FeeIds { get; set; }
     }
 }

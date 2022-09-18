@@ -1,7 +1,6 @@
-﻿using MoneyMe.Domain.FeeAggregate;
-using MoneyMe.Domain.ProductAggregate;
-using System;
+﻿using System;
 using System.Collections.Generic;
+using MoneyMe.Domain.ProductAggregate;
 
 namespace MoneyMe.Domain.Factories
 {
@@ -12,9 +11,24 @@ namespace MoneyMe.Domain.Factories
             decimal interestRate,
             int minimumDuration,
             int maximumDuration,
-            Guid ruleId)
+            Guid ruleId,
+            List<Guid> feeIds)
         {
-            return new Product(Guid.NewGuid(), DateTime.UtcNow, null, name, interestRate, minimumDuration, maximumDuration, ruleId);
+            return new Product(Guid.NewGuid(), DateTime.UtcNow, null, name, interestRate, minimumDuration, maximumDuration, ruleId, feeIds);
+        }
+
+        public Product Create(
+            Guid id,
+            DateTime dateCreated,
+            DateTime? dateModified,
+            string name,
+            decimal interestRate,
+            int minimumDuration,
+            int maximumDuration,
+            Guid ruleId,
+            List<Guid> feeIds)
+        {
+            return new Product(id, dateCreated, dateModified, name, interestRate, minimumDuration, maximumDuration, ruleId, feeIds);
         }
     }
 }

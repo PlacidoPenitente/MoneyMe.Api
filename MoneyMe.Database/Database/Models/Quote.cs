@@ -21,9 +21,6 @@ namespace MoneyMe.Infrastructure.Database.Models
         public decimal Interest { get; set; }
 
         [Column(TypeName = "decimal(18, 2)")]
-        public ICollection<Fee> Fees { get; set; }
-
-        [Column(TypeName = "decimal(18, 2)")]
         public decimal MonthlyPayment { get; set; }
     }
 }

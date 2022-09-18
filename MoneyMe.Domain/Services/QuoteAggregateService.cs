@@ -40,7 +40,7 @@ namespace MoneyMe.Domain.Services
             var rule = await _ruleRepository.GetAsync(product.RuleId);
             var totalFee = 0m;
 
-            foreach (var feeId in quote.FeeIds)
+            foreach (var feeId in product.FeeIds)
             {
                 var fee = await _feeRepository.GetAsync(feeId);
 

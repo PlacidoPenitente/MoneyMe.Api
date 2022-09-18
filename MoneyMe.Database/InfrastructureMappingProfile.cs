@@ -1,6 +1,7 @@
-﻿using AutoMapper;
-using MoneyMe.Infrastructure.Database.Models;
+﻿using System;
 using System.Linq;
+using AutoMapper;
+using MoneyMe.Infrastructure.Database.Models;
 
 namespace MoneyMe.Infrastructure
 {
@@ -19,7 +20,21 @@ namespace MoneyMe.Infrastructure
                     product.InterestRate,
                     product.MaximumDuration,
                     product.MinimumDuration,
-                    product.RuleId)).ReverseMap();
+                    product.RuleId,
+                    product.ProductFees.Select(fee => fee.Id).ToList()))
+                .ReverseMap()
+                .ConstructUsing(product => new Product()
+                {
+                    Id = product.Id,
+                    DateCreated = product.DateCreated,
+                    DateModified = product.DateModified,
+                    Name = product.Name,
+                    InterestRate = product.InterestRate,
+                    MaximumDuration = product.MaximumDuration,
+                    MinimumDuration = product.MinimumDuration,
+                    RuleId = product.RuleId,
+                    ProductFees = product.FeeIds.Select(x => new ProductFee { Id = Guid.NewGuid(), FeeId = x }).ToList()
+                });
 
             CreateMap<Fee, Domain.FeeAggregate.Fee>()
                 .ConstructUsing(fee => new Domain.FeeAggregate.Fee(
@@ -28,14 +43,16 @@ namespace MoneyMe.Infrastructure
                     fee.DateModified,
                     fee.Name,
                     fee.Amount,
-                    fee.IsPercentage)).ReverseMap();
+                    fee.IsPercentage))
+                .ReverseMap();
 
             CreateMap<Rule, Domain.RuleAggregate.Rule>()
                 .ConstructUsing(rule => new Domain.RuleAggregate.Rule(
                     rule.Id,
                     rule.DateCreated,
                     rule.DateModified,
-                    rule.Name)).ReverseMap();
+                    rule.Name))
+                .ReverseMap();
 
             CreateMap<Quote, Domain.QuoteAggregate.Quote>()
                 .ConstructUsing(quote => new Domain.QuoteAggregate.Quote(
@@ -44,8 +61,8 @@ namespace MoneyMe.Infrastructure
                     quote.DateModified,
                     quote.CustomerId,
                     quote.LoanAmount,
-                    quote.Term,
-                    quote.Fees.Select(fee => fee.Id).ToList())).ReverseMap();
+                    quote.Term))
+                .ReverseMap();
 
             CreateMap<Loan, Domain.LoanAggregate.Loan>().ReverseMap();
             CreateMap<Payment, Domain.Shared.Payment>().ReverseMap();
